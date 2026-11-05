@@ -4,7 +4,7 @@ import { DEFAULT_MODELS, inferOpenAICapabilities, inferGoogleCapabilities, infer
 
 export async function fetchOpenAIModels(apiKey: string, baseUrl?: string, providerId: 'openai' | 'custom' = 'openai'): Promise<ModelInfo[]> {
 	const url = baseUrl
-		? `${baseUrl}/models`
+		? `${baseUrl.replace(/\/$/, '')}/models`
 		: 'https://api.openai.com/v1/models';
 
 	const response = await getDefaultHttpPort().request({
@@ -41,10 +41,10 @@ export async function fetchOpenAIModels(apiKey: string, baseUrl?: string, provid
 
 export async function fetchGoogleModels(apiKey: string, baseUrl?: string): Promise<ModelInfo[]> {
 	const url = baseUrl
-		? `${baseUrl}/models?key=${apiKey}`
-		: `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+		? `${baseUrl.replace(/\/$/, '')}/models`
+		: 'https://generativelanguage.googleapis.com/v1beta/models';
 
-	const response = await getDefaultHttpPort().request({ url, method: 'GET' });
+	const response = await getDefaultHttpPort().request({ url, method: 'GET', headers: { 'x-goog-api-key': apiKey } });
 
 	if (response.status !== 200) {
 		throw new Error(`Failed to fetch models: ${response.status}`);
@@ -78,7 +78,7 @@ export async function fetchGoogleModels(apiKey: string, baseUrl?: string): Promi
 
 export async function fetchDeepSeekModels(apiKey: string, baseUrl?: string): Promise<ModelInfo[]> {
 	const url = baseUrl
-		? `${baseUrl}/models`
+		? `${baseUrl.replace(/\/$/, '')}/models`
 		: 'https://api.deepseek.com/v1/models';
 
 	const response = await getDefaultHttpPort().request({
@@ -114,7 +114,7 @@ export async function fetchDeepSeekModels(apiKey: string, baseUrl?: string): Pro
 
 export async function fetchOpenRouterModels(apiKey: string, baseUrl?: string): Promise<ModelInfo[]> {
 	const url = baseUrl
-		? `${baseUrl}/models`
+		? `${baseUrl.replace(/\/$/, '')}/models`
 		: 'https://openrouter.ai/api/v1/models';
 
 	const response = await getDefaultHttpPort().request({
@@ -206,4 +206,12 @@ function isOfficialOpenAI(baseUrl?: string): boolean {
 
 function isOpenAIChatOrEmbedding(id: string): boolean {
 	return id.startsWith('gpt') || id.startsWith('o1') || id.startsWith('o3') || id.includes('embedding');
+}
+
+export async function fetchAnthropicModels(apiKey: string, baseUrl = 'https://api.anthropic.com/v1'): Promise<ModelInfo[]> {
+	const response = await getDefaultHttpPort().request({ url: `${baseUrl.replace(/\/$/, '')}/models`, method: 'GET', headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' } });
+	if (!response.ok) throw new Error(`Anthropic model discovery failed: HTTP ${response.status}`);
+	const data = response.json as { data?: Array<{ id: string; display_name?: string }> };
+	if (!Array.isArray(data.data)) throw new Error('Anthropic model discovery returned no model list');
+	return data.data.map(model => ({ id: `anthropic:${model.id}`, name: model.display_name ?? model.id, provider: 'anthropic', enabled: true, capabilities: ['chat', 'streaming', 'vision', 'function_calling'] }));
 }

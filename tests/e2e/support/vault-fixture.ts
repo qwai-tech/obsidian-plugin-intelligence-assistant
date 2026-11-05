@@ -110,23 +110,25 @@ export async function seedReleaseProvider(): Promise<void> {
 	const settingsPath = path.join(LIVE_PLUGIN_DIR, 'config/user/settings.json');
 	const settings = await readJson<Record<string, unknown>>(settingsPath);
 	const providers = (settings.providers ?? {}) as Record<string, unknown>;
-	const list = Array.isArray(providers.list) ? providers.list : [];
-	list.unshift({
+	const modelId = env.provider === 'custom' ? `custom@release-live:${env.model ?? ''}` : env.model;
+	// A real release run must have no fallback to the deterministic CI server.
+	providers.list = [{
+		id: 'release-live',
+		name: 'Release real service',
 		provider: env.provider,
 		apiKey: env.apiKey,
 		baseUrl: env.baseUrl ?? '',
 		cachedModels: [{
-			id: env.model,
+			id: modelId,
 			name: env.model,
 			provider: env.provider,
 			capabilities: ['chat', 'streaming', 'function_calling'],
 			enabled: true,
 		}],
 		cacheTimestamp: Date.now(),
-	});
-	providers.list = list;
-	providers.defaultModel = env.model;
-	providers.titleSummaryModel = env.model;
+	}];
+	providers.defaultModel = modelId;
+	providers.titleSummaryModel = modelId;
 	settings.providers = providers;
 	await writeJson(settingsPath, settings);
 }

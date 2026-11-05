@@ -10,7 +10,7 @@ import { MACOS_APP_PRESETS } from './cli-presets/macos-apps';
 export const CLI_TOOL_DEFAULTS: Partial<CLIToolConfig> = {
 	enabled: true,
 	timeout: DEFAULT_CLI_TIMEOUT,
-	shell: true,
+	shell: false,
 	args: [],
 	parameters: []
 };

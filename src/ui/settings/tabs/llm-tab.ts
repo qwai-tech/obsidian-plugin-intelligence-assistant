@@ -41,7 +41,19 @@ export function displayLLMTab(
 			if (id === 'provider') {
 				displayProviderTab(content, plugin, app, refreshDisplay);
 			} else {
-				displayModelsTab(content, plugin, modelFilters, onModelFilterChange, refreshDisplay);
+				const refreshModels = () => {
+					const search = containerEl.querySelector<HTMLInputElement>('.ia-filter-search');
+					const focused = search !== null && search === search.ownerDocument.activeElement;
+					const from = search?.selectionStart ?? null;
+					const to = search?.selectionEnd ?? null;
+					refreshDisplay();
+					if (focused) {
+						const restored = containerEl.querySelector<HTMLInputElement>('.ia-filter-search');
+						restored?.focus({ preventScroll: true });
+						if (from !== null && to !== null) restored?.setSelectionRange(from, to);
+					}
+				};
+				displayModelsTab(content, plugin, modelFilters, onModelFilterChange, refreshModels);
 			}
 		},
 	});

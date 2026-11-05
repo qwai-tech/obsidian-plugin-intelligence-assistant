@@ -9,6 +9,7 @@ import { createTable } from '@/ui/utils/ui-helpers';
 import { t } from '@/i18n';
 import type { PluginHost } from '@/ui/plugin-host';
 import { getProviderMeta } from '@/ui/provider-meta';
+import { modelDisplayLabel } from '@/ui/utils/model-label';
 
 export async function displayUsageTab(
 	containerEl: HTMLElement,
@@ -147,8 +148,10 @@ export async function displayUsageTab(
 				const row = tbody.insertRow();
 				const nameCell = row.insertCell();
 				nameCell.addClass('ia-table-cell');
-				nameCell.addClass('ia-code');
-				nameCell.setText(name);
+				nameCell.setText(modelDisplayLabel(name, plugin.settings.llmConfigs));
+				const details = nameCell.createEl('details');
+				details.createEl('summary', { text: t('ux.modelId') });
+				details.createEl('code', { text: name });
 				[s.promptTokens.toLocaleString(), s.completionTokens.toLocaleString(), s.totalTokens.toLocaleString(), String(s.callCount)]
 					.forEach(text => {
 						const c = row.insertCell();
@@ -187,8 +190,8 @@ export async function displayUsageTab(
 
 				const modelCell = row.insertCell();
 				modelCell.addClass('ia-table-cell');
-				modelCell.addClass('ia-code');
-				modelCell.setText(r.model);
+				modelCell.setText(modelDisplayLabel(r.model, plugin.settings.llmConfigs));
+				modelCell.setAttribute('title', r.model);
 
 				[r.promptTokens.toLocaleString(), r.completionTokens.toLocaleString(), r.totalTokens.toLocaleString()]
 					.forEach(text => {
@@ -206,7 +209,7 @@ export async function displayUsageTab(
 		clearBtn.addClass('ia-button');
 		clearBtn.addClass('ia-button--danger');
 		clearBtn.addEventListener('click', () => {
-			void showConfirm(_app, t('settings.usage.confirm.clear')).then(confirmed => {
+			void showConfirm(_app, t('settings.usage.confirm.clear'), { title: t('settings.usage.clearBtn'), confirmText: t('settings.usage.clearBtn') }).then(confirmed => {
 				if (confirmed) {
 					void repo.clearAll().then(() => { _refreshDisplay(); });
 				}

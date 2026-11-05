@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-plugin-intelligence-assistant",
-	"version": "0.0.22",
+	"version": "0.0.23",
 	"description": "Full autonomous Agentic workspace",
 	"main": "main.js",
 	"scripts": {
@@ -40,7 +40,10 @@
 		"version:minor": "node scripts/version.js minor",
 		"version:major": "node scripts/version.js major",
 		"hot-reload": "node scripts/hot-reload.js",
-		"audit:obsidian-api": "node scripts/obsidian-api-audit.js"
+		"audit:obsidian-api": "node scripts/obsidian-api-audit.js",
+		"test:real:ux": "node tests/real/run-ux.mjs",
+		"test:real:architecture": "node tests/real/architecture.mjs",
+		"verify:release:real": "node scripts/run-real-release.mjs"
 	},
 	"keywords": [],
 	"author": "",
@@ -106,5 +109,8 @@
 		"i18next": "^26.2.0",
 		"marked": "^17.0.0",
 		"zod": "^4.6.7"
-	}
+	},
+	"sideEffects": [
+		"./src/features/tools/zod-locale.ts"
+	]
 }

@@ -180,7 +180,11 @@ tests/e2e/screenshots/
 tests/e2e/state-dumps/
 tests/e2e/logs/
 tests/e2e/reports/
+tests/e2e/test-vault/.obsidian/plugins/intelligence-assistant/config/
+tests/e2e/test-vault/.obsidian/plugins/intelligence-assistant/data/
 .envrc
+/artifact-provenance.json
+/artifact-sha256.txt
 
 # Mutation testing (Stryker)
 .stryker-tmp/

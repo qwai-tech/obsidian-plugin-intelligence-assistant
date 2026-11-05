@@ -1,4 +1,5 @@
-import { App, Modal, Notice, Setting } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App, Modal, Setting } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
 import type { RegisteredTool } from '@/features/tools';
 import { getConnectedMcpServers, getToolsByProviderKey } from './mcp-inspector-data';
@@ -192,19 +193,19 @@ export class MCPInspectorModal extends Modal {
 					try {
 						if (currentlyConnected) {
 							await this.plugin.services.tools.disconnectMcp(server.name);
-							new Notice(t('modals.mcpInspector.connections.notices.disconnected', { name: server.name }));
+							notify(t('modals.mcpInspector.connections.notices.disconnected', { name: server.name }));
 						} else {
 							if (!server.enabled) {
-								new Notice(t('modals.mcpInspector.connections.notices.enableFirst'));
+								notify(t('modals.mcpInspector.connections.notices.enableFirst'));
 								return;
 							}
 							await this.plugin.services.tools.connectMcp(server);
-							new Notice(t('modals.mcpInspector.connections.notices.connected', { name: server.name }));
+							notify(t('modals.mcpInspector.connections.notices.connected', { name: server.name }));
 						}
 					} catch (_error) {
 						const err = _error instanceof Error ? _error : new Error(String(_error));
 						console.error(`[MCP] Failed to ${currentlyConnected ? 'disconnect' : 'connect'} ${server.name}:`, err);
-						new Notice(currentlyConnected
+						notify(currentlyConnected
 							? t('modals.mcpInspector.connections.notices.failedDisconnect', { name: server.name, message: err.message })
 							: t('modals.mcpInspector.connections.notices.failedConnect', { name: server.name, message: err.message }));
 					} finally {

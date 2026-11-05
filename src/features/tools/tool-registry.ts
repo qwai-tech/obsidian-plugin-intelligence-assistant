@@ -9,6 +9,7 @@ import type {
 	RegisteredTool,
 	SourceTool,
 	ToolResult,
+	ToolExecutionContext,
 	ToolSourceKind,
 } from '@/features/tools/types/tools';
 import type { ToolSource } from './tool-source';
@@ -134,17 +135,26 @@ export class ToolRegistry {
 	}
 
 	/** Execute a tool by its LLM-facing name; returns a failure ToolResult if not found or on error. */
-	async executeTool(llmName: string, args: Record<string, unknown>): Promise<ToolResult> {
+	async executeTool(llmName: string, args: Record<string, unknown>, context?: ToolExecutionContext): Promise<ToolResult> {
 		const tool = this.byLlmName.get(llmName);
 		if (!tool) {
 			return { success: false, error: `Tool not found: ${llmName}` };
 		}
+		return this.executeBoundTool(tool, args, context);
+	}
+
+	/** Reject a changed source instead of rebinding a permitted wire name to a new tool. */
+	async executeBoundTool(tool: RegisteredTool, args: Record<string, unknown>, context: ToolExecutionContext = {}): Promise<ToolResult> {
+		context.signal?.throwIfAborted();
+		if (this.byToolId.get(tool.toolId) !== tool) return { success: false, error: `Tool ${tool.toolId} changed during this task; start a new task to use the updated source.` };
+		const llmName = tool.llmName;
 		const validation = validateToolArguments(tool.definition, args);
 		if (!validation.success) {
 			return { success: false, error: `Invalid arguments for ${llmName}: ${validation.error}` };
 		}
 		try {
-			const result = await tool.execute(validation.data);
+			const result = await tool.execute(validation.data, context);
+			context.signal?.throwIfAborted();
 			if (result.success && tool.definition.sideEffects?.vaultWrite) {
 				const proposalCheck = assertWriteProposalResult(result.result);
 				if (!proposalCheck.success) {
@@ -221,7 +231,7 @@ export class ToolRegistry {
 			type: 'function',
 			function: {
 				name: tool.llmName,
-				description: tool.definition.description,
+				description: tool.definition.description + (tool.definition.argumentSources?.length ? '\nHost-enforced argument source contracts (successful source reads required in this run; copy exact values for the matching target): ' + JSON.stringify(tool.definition.argumentSources) : ''),
 				parameters: parametersToJsonSchema(tool.definition.parameters),
 			},
 		}));
@@ -246,7 +256,7 @@ export class ToolRegistry {
 					llmName,
 					origin: { kind: source.kind, sourceId: source.id },
 					definition: st.definition,
-					execute: (args) => st.execute(args),
+					execute: (args, context) => st.execute(args, context),
 				});
 			}
 		}

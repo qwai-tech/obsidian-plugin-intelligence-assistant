@@ -11,7 +11,7 @@ export interface EmbeddingModel {
 
 export class EmbeddingManager {
   private static readonly DEFAULT_EMBEDDING_MODEL = 'all-MiniLM-L6-v2';
-  private static readonly EMBEDDING_CAPABLE_PROVIDERS = new Set(['openai', 'google', 'ollama', 'openrouter', 'custom']);
+  private static readonly EMBEDDING_CAPABLE_PROVIDERS = new Set(['openai', 'google', 'ollama', 'openrouter', 'custom', 'sap-ai-core']);
 
   private static readonly EMBEDDING_MODELS: EmbeddingModel[] = [
     {
@@ -70,7 +70,7 @@ export class EmbeddingManager {
     return allModels.find(m => m.id === id);
   }
 
-  static async generateEmbedding(text: string, modelId: string | undefined, llmConfigs: LLMConfig[]): Promise<number[]> {
+  static async generateEmbedding(text: string, modelId: string | undefined, llmConfigs: LLMConfig[], signal?: AbortSignal): Promise<number[]> {
     const model = modelId
       ? this.getEmbeddingModelById(modelId, llmConfigs)
       : this.getDefaultEmbeddingModel();
@@ -85,7 +85,7 @@ export class EmbeddingManager {
     }
 
     if (!this.EMBEDDING_CAPABLE_PROVIDERS.has(config.provider)) {
-      throw new Error(`Provider ${config.provider} does not support embeddings. Choose an OpenAI, Google, Ollama, OpenRouter, or custom embedding model in RAG settings.`);
+      throw new Error(`Provider ${config.provider} does not support embeddings. Choose an OpenAI, Google, Ollama, OpenRouter, SAP AI Core, or custom embedding model in RAG settings.`);
     }
 
     const provider = ProviderFactory.createProvider(config);
@@ -93,7 +93,7 @@ export class EmbeddingManager {
       throw new Error(`Provider ${config.provider} does not support embeddings`);
     }
 
-    return provider.generateEmbedding(text, model.id);
+    return provider.generateEmbedding(text, model.id, { signal });
   }
 
   private static findConfigForEmbeddingModel(model: EmbeddingModel, configs: LLMConfig[]): LLMConfig | null {

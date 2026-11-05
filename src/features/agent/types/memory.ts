@@ -30,6 +30,8 @@ export interface AgentMemorySnapshot {
 	researchLog: string;
 	preferences: Record<string, string>;
 	updatedAt: number;
+	researchEntries?: string[];
+	completedRuns?: number;
 }
 
 export interface AgentMemoryFile {

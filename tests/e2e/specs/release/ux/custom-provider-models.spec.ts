@@ -30,7 +30,7 @@ describe('UX review: Custom provider model identity', function () {
 		await llm.saveProviderForm('custom');
 
 		const ids = await llm.cachedModelIds('custom');
-		expect(ids).toContain('custom:qwen3.5:0.8b');
+		expect(ids.some(id => /^custom@[^:]+:qwen3\.5:0\.8b$/.test(id))).toBe(true);
 		expect(ids.filter(id => id.startsWith('openai:'))).toEqual([]);
 		await settings.closeSettings();
 	});

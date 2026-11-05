@@ -13,7 +13,7 @@ interface BraveWebSearchResponse {
 	};
 }
 
-export async function searchBrave(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchBrave(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	if (!config.apiKey && !config.braveApiKey) {
 		throw new Error('Brave API key is required for Brave search');
 	}
@@ -51,7 +51,7 @@ export async function searchBrave(query: string, maxResults: number, { config, h
 	const searchUrl = `https://api.search.brave.com/res/v1/web/search?${params.toString()}`;
 	
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: searchUrl,
 			method: 'GET',
 			headers: headers

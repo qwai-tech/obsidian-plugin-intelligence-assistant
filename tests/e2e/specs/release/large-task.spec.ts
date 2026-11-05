@@ -3,6 +3,7 @@ import { createAgentConfig } from '../../support/data-fixtures';
 import { waitForPluginReady } from '../../support/plugin-helpers';
 import { skipUnlessReleaseLLM } from '../../support/release-env';
 import { VaultFixture } from '../../support/vault-fixture';
+import { captureReleaseProducts } from '../../support/release-evidence';
 
 /**
  * L3/L5 large-task stress test: a REAL LLM drives a multi-step autonomous
@@ -11,7 +12,7 @@ import { VaultFixture } from '../../support/vault-fixture';
  * The PRIMARY oracle is the REAL vault side effect — we scan the whole vault for
  * the required marker strings, wherever the agent chose to write them — not the
  * model's prose and not a UI element. The tool trace is a soft, logged signal.
- * This is the statistical (non-blocking) layer proving prompt + real model +
+ * This is a mandatory release gate proving prompt + real model +
  * real Electron + real tool execution + real vault work end to end.
  */
 interface VaultDump { path: string; content: string; }
@@ -52,6 +53,7 @@ describe('Release large agentic task', () => {
 
 	beforeEach(async () => {
 		await waitForPluginReady();
+		await deleteByPaths(['alpha.md', 'beta.md', 'gamma.md', 'index.md']);
 		await vault.seedSettings({
 			agents: [createAgentConfig({
 				id: 'release-large-task-agent',
@@ -97,12 +99,12 @@ describe('Release large agentic task', () => {
 
 		// PRIMARY oracle: each marker exists in some real vault note (the agent
 		// actually wrote it), and an index note links the three.
-		for (const marker of MARKERS) {
-			const hit = dump.find((d) => d.content.includes(marker));
-			expect(Boolean(hit)).toBe(true);
+		for (const [i, name] of ['alpha.md', 'beta.md', 'gamma.md'].entries()) {
+			expect(dump.find(d => d.path === name)?.content.includes(MARKERS[i])).toBe(true);
 		}
-		const indexNote = dump.find((d) => /\[\[\s*alpha/i.test(d.content) && /\[\[\s*beta/i.test(d.content) && /\[\[\s*gamma/i.test(d.content));
+		const indexNote = dump.find((d) => d.path === 'index.md' && /\[\[\s*alpha(?:\.md)?\s*\]\]/i.test(d.content) && /\[\[\s*beta(?:\.md)?\s*\]\]/i.test(d.content) && /\[\[\s*gamma(?:\.md)?\s*\]\]/i.test(d.content));
 		expect(Boolean(indexNote)).toBe(true);
+		await captureReleaseProducts('large-task', dump.filter(d => ['alpha.md', 'beta.md', 'gamma.md', 'index.md'].includes(d.path)), { elapsedMs });
 
 		// Cleanup any notes the agent created (those carrying our markers + the index).
 		const created = dump

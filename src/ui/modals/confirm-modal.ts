@@ -2,6 +2,12 @@ import { Modal, App } from 'obsidian';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 
+export interface ConfirmationOptions {
+	title: string;
+	confirmText?: string;
+	destructive?: boolean;
+}
+
 /**
  * Confirmation modal to replace window.confirm()
  */
@@ -15,7 +21,8 @@ class ConfirmModal extends Modal {
 		app: App,
 		message: string,
 		onConfirm: () => void,
-		onCancel?: () => void
+		onCancel?: () => void,
+		private readonly options?: ConfirmationOptions,
 	) {
 		super(app);
 		this.message = message;
@@ -27,6 +34,7 @@ class ConfirmModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass('ia-confirm-modal');
+		this.setTitle(this.options?.title ?? t('modals.confirm.confirm'));
 
 		contentEl.createEl('p', { text: this.message });
 
@@ -41,8 +49,8 @@ class ConfirmModal extends Modal {
 		});
 
 		const confirmBtn = buttonContainer.createEl('button', {
-			text: t('modals.confirm.confirm'),
-			cls: 'mod-warning'
+			text: this.options?.confirmText ?? t('modals.confirm.confirm'),
+			cls: this.options?.destructive === false ? 'mod-cta' : 'mod-warning'
 		});
 		confirmBtn.setAttribute('data-testid', TestIds.settings.confirmModalConfirmBtn);
 		confirmBtn.addEventListener('click', () => {
@@ -67,14 +75,16 @@ class ConfirmModal extends Modal {
  */
 export async function showConfirm(
 	app: App,
-	message: string
+	message: string,
+	options?: ConfirmationOptions,
 ): Promise<boolean> {
 	return new Promise((resolve) => {
 		new ConfirmModal(
 			app,
 			message,
 			() => resolve(true),
-			() => resolve(false)
+			() => resolve(false),
+			options,
 		).open();
 	});
 }

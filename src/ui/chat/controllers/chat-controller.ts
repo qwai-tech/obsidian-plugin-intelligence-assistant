@@ -1,4 +1,6 @@
-import { Notice, TFolder } from 'obsidian';
+import type { TaskAuthorization } from '@/features/agent';
+import { notify } from '@/core/notifications';
+import { TFolder } from 'obsidian';
 import { BaseController } from './base-controller';
 import { t } from '@/i18n';
 import type { Message } from '@/features/conversations';
@@ -13,6 +15,7 @@ import type { RagStatusPanel } from '@/ui/chat/rag-status-panel';
 import type { RAGSource } from '@/features/knowledge';
 import { errorMessage } from '@/core/utils/errors';
 import { errorReply, type Reply } from './chat-reply';
+import { connectionLabel } from '@qwai/obsidian-llm';
 
 export interface ChatControllerOptions {
 	chatContainer: HTMLElement;
@@ -34,20 +37,20 @@ export class ChatController extends BaseController {
 	protected get plugin() { return this._plugin; }
 
 	async initialize(): Promise<void> {}
-	cleanup(): void { this.state.isStreaming = false; }
+	cleanup(): void { this.state.stopRun(); this.state.isStreaming = false; }
 
 	configure(options: ChatControllerOptions): void {
 		this.options = options;
 	}
 
-	async sendMessage(text: string, options?: { llmContentOverride?: string }): Promise<void> {
+	async sendMessage(text: string, options?: { llmContentOverride?: string; authorization?: TaskAuthorization }): Promise<void> {
 		if (this.state.isStreaming) {
-			new Notice(t('chat.notices.waitForResponse'));
+			notify(t('chat.notices.waitForResponse'));
 			return;
 		}
 
 		if (this.plugin.settings.llmConfigs.length === 0) {
-			new Notice(t('chat.notices.configureProvider'));
+			notify(t('chat.notices.configureProvider'));
 			return;
 		}
 
@@ -82,9 +85,12 @@ export class ChatController extends BaseController {
 		this.options.addMessageToUI(userMessage);
 
 		try {
-			await this.handleAssistantResponse({ text, selectedModel, config, llmContent, targetMessage: userMessage });
+			// Persist the task before dispatch: a reload or crash during a long run
+			// must not erase the user's request along with the in-memory reply.
+			await this.options.conversationManager.saveCurrentConversation(true);
+			await this.handleAssistantResponse({ text, selectedModel, config, llmContent, targetMessage: userMessage, authorization: options?.authorization ?? { origin: 'chat', approved: true } });
 		} catch (_error) {
-			new Notice(t('chat.notices.chatError', { message: errorMessage(_error) }));
+			notify(t('chat.notices.chatError', { message: errorMessage(_error) }));
 			const failureMessage = errorReply(_error, selectedModel, config);
 			this.state.messages.push(failureMessage);
 			this.options.addMessageToUI(failureMessage);
@@ -95,23 +101,23 @@ export class ChatController extends BaseController {
 	async regenerateMessage(message: Message, messageEl?: HTMLElement): Promise<void> {
 		if (message.role !== 'assistant') return;
 		if (this.state.isStreaming) {
-			new Notice(t('chat.notices.waitForResponse'));
+			notify(t('chat.notices.waitForResponse'));
 			return;
 		}
 
 		const assistantIndex = this.state.messages.indexOf(message);
 		if (assistantIndex === -1) {
-			new Notice(t('chat.notices.noMessageToRegenerate'));
+			notify(t('chat.notices.noMessageToRegenerate'));
 			return;
 		}
 		if (assistantIndex !== this.state.messages.length - 1) {
-			new Notice(t('chat.notices.regenerateOnlyLatest'));
+			notify(t('chat.notices.regenerateOnlyLatest'));
 			return;
 		}
 
 		const previousUser = this.findPreviousUserMessage(assistantIndex);
 		if (!previousUser) {
-			new Notice(t('chat.notices.regenerateNoUserMsg'));
+			notify(t('chat.notices.regenerateNoUserMsg'));
 			return;
 		}
 
@@ -138,10 +144,10 @@ export class ChatController extends BaseController {
 				targetMessage: previousUser.message,
 			});
 		} catch (error) {
-			new Notice(t('chat.notices.regenerateFailed', { message: errorMessage(error) }));
+			notify(t('chat.notices.regenerateFailed', { message: errorMessage(error) }));
 		}
 		if (reply?.ok) {
-			new Notice(t('chat.notices.regenerated'));
+			notify(t('chat.notices.regenerated'));
 			return;
 		}
 		await this.restoreOriginal(message, reply);
@@ -170,6 +176,7 @@ export class ChatController extends BaseController {
 		config: LLMConfig;
 		llmContent: string;
 		targetMessage: Message;
+		authorization?: TaskAuthorization;
 	}): Promise<Reply> {
 		const { selectedModel, config, llmContent, targetMessage } = options;
 
@@ -179,7 +186,7 @@ export class ChatController extends BaseController {
 
 		const contextWindow = this.getActiveAgent()?.contextWindow ?? 20;
 		const llmMessages = this.options.chatService.prepareLlmMessages(
-			this.state.messages, targetMessage, llmContent, contextWindow
+			this.state.messages, targetMessage, llmContent, contextWindow, this.state.mode === 'agent'
 		);
 
 		const placeholderAssistant: Message = {
@@ -187,6 +194,7 @@ export class ChatController extends BaseController {
 			content: '',
 			model: selectedModel,
 			provider: config.provider ?? undefined,
+			providerLabel: connectionLabel(config),
 			timestamp: Date.now(),
 		};
 		const assistantMessageEl = this.options.addMessageToUI(placeholderAssistant);
@@ -199,8 +207,11 @@ export class ChatController extends BaseController {
 		let currentRagSources: RAGSource[] = [];
 		let settled: Promise<Reply> | null = null;
 		const settle = (ok: boolean, message: Message, show: () => HTMLElement, ragSources?: RAGSource[]) => {
+			if (settled) return;
 			let element = assistantMessageEl;
 			message.timestamp ??= placeholderAssistant.timestamp;
+			message.stopped = signal.aborted;
+			message.providerLabel = connectionLabel(config);
 			const stoppedEmpty = signal.aborted && message.content.trim() === '';
 			settled = this.finishReply(message, () => (element = show()), ragSources).then(() => ({ ok: ok && !stoppedEmpty, message, element }));
 		};
@@ -210,7 +221,7 @@ export class ChatController extends BaseController {
 				await this.runAgentLoop(
 					llmMessages, selectedModel, config, contextWindow, activeSystemPrompts,
 					placeholderAssistant, assistantMessageEl, contentEl,
-					targetMessage.references ?? [], signal, settle
+					targetMessage.references ?? [], signal, settle, options.authorization, targetMessage.content
 				);
 			} else {
 				await this.options.chatService.streamResponse(
@@ -218,6 +229,7 @@ export class ChatController extends BaseController {
 				{
 					...this.sampling(selectedModel),
 					mode: this.state.mode,
+					userText: targetMessage.content,
 					enableRAG: this.state.enableRAG && this.plugin.settings.ragConfig.enabled,
 					enableWebSearch: this.state.enableWebSearch && this.plugin.settings.webSearchConfig.enabled,
 					activeSystemPrompts,
@@ -233,7 +245,7 @@ export class ChatController extends BaseController {
 					onRAGSources: (sources: RAGSource[]) => { currentRagSources = sources; },
 					onComplete: (finalMessage: Message) => settle(true, finalMessage, () => this.showReply(placeholderAssistant, assistantMessageEl, finalMessage), currentRagSources),
 					onError: (error: Error) => {
-						new Notice(t('chat.notices.chatError', { message: error.message }));
+						notify(t('chat.notices.chatError', { message: error.message }));
 						const failedMessage = errorReply(error, selectedModel, config);
 						settle(false, failedMessage, () => this.showReply(placeholderAssistant, assistantMessageEl, failedMessage));
 					},
@@ -247,6 +259,13 @@ export class ChatController extends BaseController {
 			throw error;
 		}
 		if (settled) return settled;
+		if (signal.aborted) {
+			placeholderAssistant.stopped = true;
+			placeholderAssistant.content = contentEl?.textContent || '';
+			settle(false, placeholderAssistant, () => this.showReply(placeholderAssistant, assistantMessageEl, placeholderAssistant));
+			if (settled) return settled;
+		}
+		assistantMessageEl.remove();
 		this.finalizeStreamingUI();
 		return { ok: false, message: placeholderAssistant, element: assistantMessageEl };
 	}
@@ -275,6 +294,8 @@ export class ChatController extends BaseController {
 		references: FileReference[],
 		signal: AbortSignal,
 		settle: (ok: boolean, message: Message, show: () => HTMLElement, ragSources?: RAGSource[]) => void,
+		authorization?: TaskAuthorization,
+		userText?: string,
 	): Promise<void> {
 		const isGenericAgent = !this.plugin.settings.activeAgentId;
 		const activeAgent = this.getActiveAgent();
@@ -287,6 +308,8 @@ export class ChatController extends BaseController {
 			{
 				...this.sampling(selectedModel),
 				mode: 'agent',
+				authorization: authorization ?? { origin: 'chat', approved: true },
+				userText,
 				enableRAG: Boolean(activeAgent?.ragEnabled && this.plugin.settings.ragConfig.enabled),
 				enableWebSearch: Boolean(activeAgent?.webSearchEnabled && this.plugin.settings.webSearchConfig.enabled),
 				activeSystemPrompts,
@@ -309,7 +332,7 @@ export class ChatController extends BaseController {
 				onThought: (thought, phase) => trace.thought(thought, phase),
 				onComplete: (finalMessage) => settle(true, finalMessage, () => this.showAgentReply(placeholderAssistant, assistantMessageEl, finalMessage), finalMessage.ragSources),
 				onError: (error) => {
-					new Notice(t('chat.notices.chatError', { message: error.message }));
+					notify(t('chat.notices.chatError', { message: error.message }));
 					const failedMessage = errorReply(error, selectedModel, config);
 					settle(false, failedMessage, () => this.showAgentReply(placeholderAssistant, assistantMessageEl, failedMessage));
 				},
@@ -351,12 +374,12 @@ export class ChatController extends BaseController {
 	private resolveModel(): { selectedModel: string; config: LLMConfig } | null {
 		const selectedModel = this.modelForRun();
 		if (!selectedModel) {
-			new Notice(t('chat.notices.selectModel'));
+			notify(t('chat.notices.selectModel'));
 			return null;
 		}
 		const config = this.options.chatService.findLLMConfig(selectedModel);
 		if (!config) {
-			new Notice(t('chat.notices.noValidProvider'));
+			notify(t('chat.notices.noValidProvider'));
 			return null;
 		}
 		return { selectedModel, config };

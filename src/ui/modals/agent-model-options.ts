@@ -1,5 +1,6 @@
 import type { AgentModelStrategy } from '@/features/agent';
 import type { LLMConfig } from '@/features/llm';
+import { connectionLabel } from '@qwai/obsidian-llm';
 
 export interface ModelOption {
 	id: string;
@@ -17,20 +18,22 @@ export function modelCatalog(configs: LLMConfig[]): ModelCatalog {
 	const seen = new Set<string>();
 	for (const config of configs) {
 		for (const model of config.cachedModels ?? []) {
+			if (!model.enabled || (model.capabilities?.length && !model.capabilities.includes('chat'))) continue;
 			if (!seen.has(model.id)) {
 				seen.add(model.id);
-				options.push({ id: model.id, label: `${model.name} • ${providerLabel(model.provider || config.provider)}` });
+				options.push({ id: model.id, label: `${model.name} • ${connectionLabel(config)}` });
 			}
 			const alias = withoutProvider(model.id);
 			if (alias !== model.id) {
-				aliases.set(alias, model.id);
+				// Ambiguous aliases must not silently choose another connection.
+				if (!aliases.has(alias)) aliases.set(alias, model.id);
+				else if (aliases.get(alias) !== model.id) aliases.set(alias, '');
 			}
 		}
 	}
 	options.sort((a, b) => a.label.localeCompare(b.label));
 	return { options, aliases };
 }
-
 export function initialModelSelection(catalog: ModelCatalog, strategy: AgentModelStrategy): string {
 	const { options, aliases } = catalog;
 	if (options.length === 0) {
@@ -41,6 +44,7 @@ export function initialModelSelection(catalog: ModelCatalog, strategy: AgentMode
 		if (has(strategy.modelId)) return strategy.modelId;
 		const alias = aliases.get(strategy.modelId);
 		if (alias && has(alias)) return alias;
+		return strategy.modelId;
 	}
 	return options[0].id;
 }
@@ -58,10 +62,4 @@ export function uniquePromptId(name: string, existingIds: string[]): string {
 
 function withoutProvider(modelId: string): string {
 	return modelId.includes(':') ? modelId.split(':').slice(1).join(':') : modelId;
-}
-
-function providerLabel(value: string): string {
-	return value.split(/[-_]/g)
-		.map(word => word.length <= 2 ? word.toUpperCase() : word.charAt(0).toUpperCase() + word.slice(1))
-		.join(' ');
 }

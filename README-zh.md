@@ -20,7 +20,7 @@
 - **认知记忆系统** — 基于本地向量库的长期关联记忆。Agent 能跨对话记住你的偏好和关键研究发现。
 - **现代逻辑 UI** — 全新设计的 **执行时间轴**，将推理过程与动作融合。紧凑的工具胶囊既节省空间又支持深度审计。
 - **Vault 原生工具** — 专用于 **Properties (YAML)** 管理、批量文件操作（移动、创建、删除）和目录树感知。
-- **多 LLM 提供商** — 支持 OpenAI, Anthropic (Claude 3.5), Google Gemini, DeepSeek, Ollama (本地), OpenRouter 等。
+- **多 LLM 提供商** — 支持 OpenAI, Anthropic (Claude 3.5), Google Gemini, DeepSeek, Ollama (本地), OpenRouter、SAP AI Core 等。
 - **MCP & OpenAPI 集成** — 无缝连接 Model Context Protocol 服务器或任何 OpenAPI 服务，扩展 Agent 的工具箱。
 - **隐私第一** — 笔记保留在本地。索引 (RAG) 使用本地向量库，嵌入提供商可灵活配置。
 
@@ -38,6 +38,8 @@
 |---|---|
 | Obsidian | v1.13.0 或更高版本（仅桌面端） |
 | LLM API Key | OpenAI, Anthropic, Google, DeepSeek 等。密钥保存在 Obsidian 钥匙串中，插件只保存密钥名称；旧版本保存的密钥会在首次启动时自动迁移。 |
+
+SAP AI Core：新增提供商，选择存有完整 Service Key JSON 的钥匙串密钥，设置资源组（默认为 `default`），再测试连接以发现运行中的部署。AI API 地址默认读取 `serviceurls.AI_API_URL`，也可覆盖。已有 SAP 配置会保留，明文 Service Key 会迁移至钥匙串；此前已删除的配置需要重新填写。
 
 ## 🤖 智能代理
 

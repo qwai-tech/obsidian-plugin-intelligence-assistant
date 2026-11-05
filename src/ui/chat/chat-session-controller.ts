@@ -1,4 +1,5 @@
-import { Notice, TFile, type TFolder } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { TFile, type TFolder } from 'obsidian';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { t } from '@/i18n';
 import type IntelligenceAssistantPlugin from '@plugin';
@@ -53,16 +54,16 @@ export class ChatSessionController {
 		return Boolean(enabled && this.settings.webSearchConfig.enabled);
 	}
 
-	capabilitySummary(registry: ToolRegistry, references: Array<TFile | TFolder>): AgentCapabilitySummary {
-		const agent = this.activeAgent();
+	capabilitySummary(registry: ToolRegistry, references: Array<TFile | TFolder>, mode = this.state.mode): AgentCapabilitySummary {
+		const agent = mode === 'agent' ? this.settings.agents.find(candidate => candidate.id === pickAgentId(this.settings)) ?? null : this.activeAgent();
 		return buildAgentCapabilitySummary({
-			mode: this.state.mode,
+			mode,
 			agent,
 			tools: resolveAgentToolsForAgent(registry, agent),
 			ragConfigured: this.settings.ragConfig.enabled,
-			ragActive: this.ragActive(),
+			ragActive: mode === 'agent' ? Boolean(agent?.ragEnabled && this.settings.ragConfig.enabled) : this.ragActive(),
 			webSearchConfigured: this.settings.webSearchConfig.enabled,
-			webSearchActive: this.webSearchActive(),
+			webSearchActive: mode === 'agent' ? Boolean(agent?.webSearchEnabled && this.settings.webSearchConfig.enabled) : this.webSearchActive(),
 			references: references.map(reference => ({
 				type: reference instanceof TFile ? 'file' : 'folder',
 				path: reference.path,
@@ -82,7 +83,7 @@ export class ChatSessionController {
 				await this.select(selectionForConversation(this.settings, 'agent', { agentId }));
 				await this.applyAgent(agentId);
 			} else {
-				new Notice(t('chat.notices.noAgents'));
+				notify(t('chat.notices.noAgents'));
 				await this.select({ activeAgentId: null, activeSystemPromptId: this.settings.activeSystemPromptId ?? null });
 				this.controls.input.refreshAgentSelect();
 			}
@@ -160,7 +161,7 @@ export class ChatSessionController {
 	async toggleRag(): Promise<void> {
 		if (this.state.mode === 'agent') return;
 		if (!this.settings.ragConfig.enabled) {
-			new Notice(t('chat.notices.ragDisabled'));
+			notify(t('chat.notices.ragDisabled'));
 			return;
 		}
 		this.state.enableRAG = !this.state.enableRAG;
@@ -171,7 +172,7 @@ export class ChatSessionController {
 	async toggleWebSearch(): Promise<void> {
 		if (this.state.mode === 'agent') return;
 		if (!this.settings.webSearchConfig.enabled) {
-			new Notice(t('chat.notices.webSearchDisabled'));
+			notify(t('chat.notices.webSearchDisabled'));
 			return;
 		}
 		this.state.enableWebSearch = !this.state.enableWebSearch;

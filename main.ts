@@ -1,4 +1,6 @@
-import { Notice, Plugin, type WorkspaceLeaf } from 'obsidian';
+import { notify, installNotificationSink } from '@/core/notifications';
+import { obsidianNotificationSink } from '@/adapters/obsidian-notices';
+import { Plugin, type WorkspaceLeaf } from 'obsidian';
 import { t, initI18n } from './src/i18n';
 import type { PluginSettings } from './src/features/settings';
 import { pluginPaths } from './src/core/plugin-paths';
@@ -62,10 +64,11 @@ export default class IntelligenceAssistantPlugin extends Plugin {
 	}
 
 	async onload() {
+		this.register(installNotificationSink(obsidianNotificationSink));
 		const pluginDir = this.manifest.dir ?? `${this.app.vault.configDir}/plugins/${this.manifest.id}`;
 		initI18n(undefined, unpackLocale);
 		setDefaultHttpPort(withResilience(createObsidianHttpPort()));
-		setDiagnosticsSink(({ message }) => { new Notice(message); });
+		setDiagnosticsSink(({ message }) => { notify(message); });
 		this.llmHub = new LLMHubService({
 			getLLMConfigs: () => this.store?.peek()?.llmConfigs ?? [],
 			getDefaultModelId: () => this.store?.peek()?.defaultModel ?? null,

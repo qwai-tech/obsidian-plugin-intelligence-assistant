@@ -1,9 +1,10 @@
+import { notify } from '@/core/notifications';
 /**
  * Provider Settings Tab
  * Displays LLM provider management and configuration
  */
 
-import { Setting, App, Notice } from 'obsidian';
+import { Setting, App } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type { PluginHost } from '@/ui/plugin-host';
 import { defaultAfterRefresh, type LLMConfig } from '@/features/llm';
@@ -12,6 +13,7 @@ import { ProviderConfigModal } from '@/ui/modals/provider-config-modal';
 import { OllamaModelManagerModal } from '@/ui/modals/ollama-model-manager-modal';
 import { getProviderMeta } from '@/ui/provider-meta';
 import { TestIds } from '@/ui/utils/test-ids';
+import { connectionLabel } from '@qwai/obsidian-llm';
 
 export function displayProviderTab(
 	containerEl: HTMLElement,
@@ -75,7 +77,7 @@ export function displayProviderTab(
 		// Create span with ia-provider-name class for test compatibility
 		const providerNameSpan = providerHeader.createSpan();
 		providerNameSpan.addClass('ia-provider-name');
-		providerNameSpan.setText(providerMeta.label);
+		providerNameSpan.setText(config.name || (config.provider === 'custom' ? connectionLabel(config) : providerMeta.label));
 
 		// For Ollama, add a version placeholder that will be updated
 		let versionEl: HTMLElement | null = null;
@@ -100,6 +102,10 @@ export function displayProviderTab(
 		let guidance = '';
 
 		switch (config.provider) {
+			case 'sap-ai-core':
+				hasCredentials = Boolean(config.serviceKey);
+				guidance = t('settings.provider.guidance.provideServiceKey');
+				break;
 			case 'ollama':
 				hasCredentials = Boolean(ollamaBaseUrl);
 				guidance = t('settings.provider.guidance.configureBaseUrl');
@@ -287,11 +293,11 @@ export function displayProviderTab(
 						config.cacheTimestamp = Date.now();
 						settings.defaultModel = defaultAfterRefresh(settings.defaultModel, before, models);
 					});
-					new Notice(t('settings.provider.notices.refreshed', { provider: getProviderMeta(config.provider).label }));
+					notify(t('settings.provider.notices.refreshed', { provider: connectionLabel(config) }));
 					refreshDisplay();
 				} catch (_error) {
 					console.error('Failed to refresh models', _error);
-					new Notice(t('settings.provider.notices.refreshFailed'));
+					notify(t('settings.provider.notices.refreshFailed'));
 				} finally {
 					refreshBtn.disabled = false;
 					refreshBtn.textContent = t('settings.provider.actions.refreshModels');
@@ -307,7 +313,7 @@ export function displayProviderTab(
 		deleteBtn.addClass('ia-button--danger');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (await showConfirm(app, t('settings.provider.confirm.delete', { provider: getProviderMeta(config.provider).label }))) {
+				if (await showConfirm(app, t('settings.provider.confirm.delete', { provider: connectionLabel(config) }), { title: t('ux.deleteProvider'), confirmText: t('settings.provider.actions.delete') })) {
 					await plugin.updateSettings((settings) => {
 						settings.llmConfigs.splice(index, 1);
 					});

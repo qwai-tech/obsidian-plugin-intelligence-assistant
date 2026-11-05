@@ -118,9 +118,8 @@ class Builder {
             });
             logger.success('TypeScript check passed');
         } catch (error) {
-            logger.warning('TypeScript errors found (continuing build):');
-            console.log(error.stdout.toString());
-            // Don't fail the build, just warn about TypeScript errors
+            if (error.stdout) console.log(error.stdout.toString());
+            throw new Error('TypeScript check failed; no release bundle was built.');
         }
     }
 
@@ -216,7 +215,7 @@ if you want to view the source, please visit the github repository of this plugi
                 outfile: this.config.outputFile,
                 plugins: [aliasPlugin, localePackPlugin],
                 minify: this.isProduction,
-                metafile: this.analyze,
+                metafile: true,
                 define: this.isProduction ? {
                     'process.env.NODE_ENV': '"production"'
                 } : undefined
@@ -229,6 +228,7 @@ if you want to view the source, please visit the github repository of this plugi
                 const result = await context.rebuild();
                 this.metafile = result.metafile;
                 await context.dispose(); // Clean up esbuild context
+                this.writeProvenance();
                 logger.success('esbuild completed');
 
             }
@@ -236,6 +236,21 @@ if you want to view the source, please visit the github repository of this plugi
         } catch (error) {
             throw new Error(`esbuild failed: ${error.message}`);
         }
+    }
+
+    writeProvenance() {
+        const fs = require('fs');
+        const { createHash } = require('node:crypto');
+        const { execFileSync } = require('node:child_process');
+        const hash = (file) => createHash('sha256').update(readFileSync(file)).digest('hex');
+        const files = new Set(Object.keys(this.metafile.inputs).filter(file => existsSync(file) && fs.statSync(file).isFile()));
+        for (const name of fs.readdirSync(join(this.sourceDir, 'src/i18n/locales'))) if (name.endsWith('.json')) files.add(`src/i18n/locales/${name}`);
+        for (const name of ['package.json', 'package-lock.json', 'scripts/build.js', 'scripts/locale-pack.js', 'manifest.json', 'styles.css']) files.add(name);
+        const inputs = Object.fromEntries([...files].sort().map(file => [file, hash(file)]));
+        const artifacts = Object.fromEntries(['main.js', 'styles.css', 'manifest.json'].map(file => [file, hash(file)]));
+        let gitCommit = null;
+        try { gitCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: this.sourceDir, encoding: 'utf8' }).trim(); } catch { /* An extracted source archive has no Git receipt. */ }
+        writeFileSync(join(this.sourceDir, 'artifact-provenance.json'), JSON.stringify({ mode: this.isProduction ? 'production' : 'development', gitCommit, node: process.version, esbuild: require('esbuild').version, inputs, artifacts }, null, 2) + '\n');
     }
 
     async analyzeBuild() {

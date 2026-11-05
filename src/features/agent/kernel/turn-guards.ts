@@ -1,14 +1,10 @@
 import type { GuardVerdict, ModelTurn, RunView, TurnGuard } from './turn-kernel';
 
-const WRITE_PROPOSAL_MARKERS = ['write proposal', 'proposal/review queue', 'call create_note or write_file', 'call create_note', 'call write_file'];
 const WRITE_TOOL_PRIORITY = ['create_note', 'write_file', 'append_to_note'];
 
-export function requiresWriteProposal(explicit: boolean | undefined, prompts: string[]): boolean {
-	if (explicit !== undefined) {
-		return explicit;
-	}
-	const haystack = prompts.join('\n').toLowerCase();
-	return WRITE_PROPOSAL_MARKERS.some((marker) => haystack.includes(marker));
+/** Only an explicit host task contract may force a write tool; quoted prose cannot. */
+export function requiresWriteProposal(explicit: boolean | undefined, _prompts: string[]): boolean {
+	return explicit === true;
 }
 
 export function selectWriteTool(toolNames: string[]): string | null {
@@ -61,7 +57,7 @@ export class MissingProposalGuard implements TurnGuard {
 
 	constructor(private readonly options: { required: boolean; writeTool: string | null }) {}
 
-	check(_turn: ModelTurn, run: RunView): GuardVerdict {
+	check(_turn: ModelTurn, run: Pick<RunView, 'proposalsCreated'>): GuardVerdict {
 		const { required, writeTool } = this.options;
 		if (!required || !writeTool || run.proposalsCreated > 0 || this.retries >= MAX_PROPOSAL_RETRIES) {
 			return { kind: 'pass' };

@@ -1,4 +1,5 @@
-import { Notice } from 'obsidian';
+import { notify } from '@/core/notifications';
+
 import { t } from '@/i18n';
 import type { Message } from '@/features/conversations';
 
@@ -15,10 +16,10 @@ export function renderCopyButton(actions: HTMLElement, contentEl: HTMLElement | 
 			if (!contentEl) return;
 			try {
 				await copyMessageContent(contentEl);
-				new Notice(t('chat.message.copied'));
+				notify(t('chat.message.copied'));
 			} catch (error) {
 				console.error('Copy failed:', error);
-				new Notice(t('chat.message.copyFailed'));
+				notify(t('chat.message.copyFailed'));
 			}
 		})();
 	});

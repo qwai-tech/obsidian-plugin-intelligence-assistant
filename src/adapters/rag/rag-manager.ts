@@ -1,11 +1,11 @@
-import { App, TFile, Notice, getAllTags } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App, TFile, getAllTags } from 'obsidian';
 import { isIndexable } from '@/core/rag-index-filter';
-import type { RAGConfig, RAGSource } from '@/features/knowledge';
+import type { RAGConfig, RAGSource, RetrievalScope, MemoryWriteOptions } from '@/features/knowledge';
 import { fitContextBudget } from './context-budget';
 import type { LLMConfig } from '@/features/llm';
 import { VectorStore } from './vector-store';
 import type { SearchResult } from './rag-types';
-import { EmbeddingManager } from './embedding-manager';
 import { DocumentGrader } from './document-grader';
 import { errorMessage } from '@/core/utils/errors';
 import { t } from '@/i18n';
@@ -16,11 +16,13 @@ export class RAGManager {
   private config: RAGConfig;
   private llmConfigs: LLMConfig[];
   private documentGrader: DocumentGrader;
+  private closed = false;
+  private indexingTask?: Promise<void>;
   constructor(app: App, config: RAGConfig, llmConfigs: LLMConfig[], vectorStorePath: string) {
     this.app = app;
     this.config = config;
     this.llmConfigs = llmConfigs;
-    this.vectorStore = new VectorStore(app, vectorStorePath, llmConfigs);
+    this.vectorStore = new VectorStore(app, vectorStorePath, llmConfigs, config.vectorStore);
     this.documentGrader = new DocumentGrader(config, llmConfigs);
   }
 
@@ -28,15 +30,21 @@ export class RAGManager {
     await this.vectorStore.load();
   }
 
-  async indexVault(): Promise<void> {
+  indexVault(): Promise<void> {
+    if (this.closed) return Promise.reject(new Error('Index service stopped'));
+    this.indexingTask ??= this.performIndexVault().finally(() => { this.indexingTask = undefined; });
+    return this.indexingTask;
+  }
+
+  private async performIndexVault(): Promise<void> {
     const files = this.app.vault.getMarkdownFiles().filter(file => this.isIndexable(file));
     
     if (files.length === 0) {
-      new Notice(t('rag.notices.noFiles'));
+      notify(t('rag.notices.noFiles'), 5000, 'rag-index');
       return;
     }
     
-    new Notice(t('rag.notices.starting', { count: files.length }));
+    notify(t('rag.notices.starting', { count: files.length }), 0, 'rag-index');
     
     // Process files in batches to avoid blocking the UI
     return new Promise((resolve, reject) => {
@@ -46,6 +54,7 @@ export class RAGManager {
       let failureCount = 0;
       
       const processBatch = async () => {
+        if (this.closed) throw new Error('Index service stopped');
         const batchEnd = Math.min(currentIndex + batchSize, files.length);
         
         for (let i = currentIndex; i < batchEnd; i++) {
@@ -54,6 +63,7 @@ export class RAGManager {
             await this.indexFile(file);
             successCount++;
           } catch (error) {
+            if (this.closed) throw error;
             console.error(`Failed to index file ${file.path}:`, error);
             failureCount++;
           }
@@ -63,7 +73,7 @@ export class RAGManager {
         
         // Update progress every 10 files or at the end
         if (currentIndex % 10 === 0 || currentIndex === files.length) {
-          new Notice(t('rag.notices.progress', { done: currentIndex, total: files.length }));
+          notify(t('rag.notices.progress', { done: currentIndex, total: files.length }), 0, 'rag-index');
         }
         
         if (currentIndex < files.length) {
@@ -73,7 +83,7 @@ export class RAGManager {
           }, 10); // 10ms delay allows UI to remain responsive
         } else {
           // All files processed
-          new Notice(t('rag.notices.completed', { indexed: successCount, failed: failureCount }));
+          notify(t('rag.notices.completed', { indexed: successCount, failed: failureCount }), 5000, 'rag-index');
           resolve();
         }
       };
@@ -84,6 +94,7 @@ export class RAGManager {
   }
 
   async indexFile(file: TFile): Promise<void> {
+    if (this.closed) throw new Error('Index service stopped');
     if (!this.config.enabled) {
       return;
     }
@@ -126,21 +137,21 @@ export class RAGManager {
     return await this.vectorStore.renameFile(oldPath, newPath);
   }
 
-  async indexMemory(agentId: string, content: string): Promise<void> {
+  async indexMemory(agentId: string, content: string, options: MemoryWriteOptions = {}): Promise<void> {
     if (!this.config.enabled) {
       return;
     }
     
     await this.vectorStore.addContent(content, {
-      type: 'agent-memory',
+      source: 'agent-memory',
       agentId,
       path: `memory://${agentId}`,
       title: `Memory: ${agentId}`
-    }, this.config);
+    }, this.config, options);
   }
 
-  async search(query: string, chatModel?: string, defaultModel?: string): Promise<RAGSource[]> {
-    const results = await this.query(query, chatModel, defaultModel);
+  async search(query: string, chatModel?: string, defaultModel?: string, scope: RetrievalScope = {}): Promise<RAGSource[]> {
+    const results = await this.query(query, chatModel, defaultModel, scope);
     return fitContextBudget(results.map(result => ({
       path: result.chunk.metadata.path,
       content: result.chunk.content,
@@ -149,22 +160,22 @@ export class RAGManager {
     })), this.config.contextWindowLimit);
   }
 
-  private async query(query: string, chatModel?: string, defaultModel?: string): Promise<SearchResult[]> {
+  private async query(query: string, chatModel?: string, defaultModel?: string, scope: RetrievalScope = {}): Promise<SearchResult[]> {
     if (!this.config.enabled) {
       return [];
     }
 
     // Get embedding model from config or use default
-    const embeddingModel = this.config.embeddingModel || EmbeddingManager.getDefaultEmbeddingModel().id;
+    const embeddingModel = this.config.embeddingModel || undefined;
 
-    let results = (await this.vectorStore.search(query, this.config, embeddingModel))
+    let results = (await this.vectorStore.search(query, this.config, embeddingModel, scope))
       .filter(result => this.isStillIndexable(result.chunk.metadata.path));
     
     // Check if we have any indexed documents, if not suggest embedding
       if (results.length === 0) {
         const stats = this.vectorStore.getDetailedStats();
         if (stats.chunkCount === 0) {
-          new Notice(t('rag.notices.noIndex'));
+          notify(t('rag.notices.noIndex'));
         }
       }
     
@@ -183,7 +194,7 @@ export class RAGManager {
         }));
         
         // Grade all documents
-        const grades = await this.documentGrader.gradeDocuments(gradeRequests, chatModel, defaultModel);
+        const grades = await this.documentGrader.gradeDocuments(gradeRequests, chatModel, defaultModel, scope.signal);
         
         // Filter results based on grades
         const filteredResults = results.filter(result => {
@@ -193,8 +204,9 @@ export class RAGManager {
         
         results = filteredResults;
       } catch (error) {
+        scope.signal?.throwIfAborted();
         console.error('[RAG Manager] Error during document grading:', error);
-        new Notice(t('rag.notices.gradingError', { message: errorMessage(error) }));
+        notify(t('rag.notices.gradingError', { message: errorMessage(error) }));
       }
     }
     
@@ -202,20 +214,19 @@ export class RAGManager {
   }
 
   async refreshIndex(): Promise<void> {
-    new Notice(t('rag.notices.clearing'));
-    this.vectorStore.clear();
-    if (this.config.enabled) {
-      await this.indexVault();
-    } else {
-      new Notice(t('rag.notices.cleared'));
+    if (!this.config.enabled) {
+      notify(t('ux.ragEnableFirst'), 5000, 'rag-index');
+      return;
     }
+    this.vectorStore.clear();
+    await this.indexVault();
   }
 
-  async clearIndex(): Promise<void> {
-    new Notice(t('rag.notices.clearing'));
+  async clearIndex(announce = true): Promise<void> {
+    if (announce) notify(t('rag.notices.clearing'), 0, 'rag-index');
     this.vectorStore.clear();
     await this.vectorStore.save();
-    new Notice(t('rag.notices.cleared'));
+    if (announce) notify(t('rag.notices.cleared'), 5000, 'rag-index');
   }
 
   getStats(): { chunkCount: number } {
@@ -236,6 +247,7 @@ export class RAGManager {
 
   updateConfig(config: RAGConfig, llmConfigs?: LLMConfig[]): void {
     this.config = config;
+    this.vectorStore.setStorageMode(config.vectorStore);
     if (llmConfigs) {
       this.llmConfigs = llmConfigs;
       this.vectorStore.setLlmConfigs(llmConfigs);
@@ -244,6 +256,8 @@ export class RAGManager {
   }
 
   async destroy(): Promise<void> {
-    await this.vectorStore.flush();
+    this.closed = true;
+    await this.vectorStore.destroy();
+    await this.indexingTask?.catch(() => undefined);
   }
 }

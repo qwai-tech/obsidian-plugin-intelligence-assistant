@@ -32,12 +32,25 @@ export type { ChunkParser, ParsedStreamChunk } from './base-streaming-provider';
 export { toOpenAiWireMessage, toOpenAiWireMessages } from './openai-message';
 export type { OpenAiWireMessage } from './openai-message';
 export { ModelManager } from './model-manager';
+export { ensureConnectionId, connectionLabel, scopeModel } from './model-identity';
 export { ProviderFactory } from './provider-factory';
 export { OpenAIProvider } from './providers/openai-provider';
 export { AnthropicProvider } from './providers/anthropic-provider';
 export { GoogleProvider } from './providers/google-provider';
 export { DeepSeekProvider } from './providers/deepseek-provider';
 export { OpenRouterProvider } from './providers/openrouter-provider';
+export { SAPAICoreProvider } from './providers/sap-ai-core-provider';
+export { parseSAPServiceKey } from './providers/sap-service-key';
 export { OllamaProvider } from './providers/ollama-provider';
-export { HttpAbortedError, HttpTimeoutError, withResilience } from './resilient-http';
+export { mayRetryRequest, HttpAbortedError, HttpTimeoutError, withResilience } from './resilient-http';
 export type { ResilienceOptions } from './resilient-http';
+
+export { boundChatRequest, estimateInputTokens, estimateRequestTokens } from './request-budget';
+export { setLLMRequestObserver } from './provider-facade';
+export type { LLMRequestEvent } from './provider-facade';
+
+export { PROVIDER_DEFINITIONS } from './provider-definitions';
+
+export { runtimeClock } from './runtime-clock';
+
+export { CompletionError } from './completion-status';

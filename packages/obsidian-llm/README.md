@@ -3,7 +3,7 @@
 Multi-provider LLM client for Obsidian plugins — plus a hub contract so plugins
 can share one provider configuration instead of each shipping their own.
 
-Providers: OpenAI (and any OpenAI-compatible gateway), Anthropic, Google,
+Providers: OpenAI (and any OpenAI-compatible gateway), Anthropic, Google, SAP AI Core,
 DeepSeek, OpenRouter, Ollama.
 
 ## Two problems, two mechanisms
@@ -61,9 +61,11 @@ Obsidian needs **two** transports and neither does both jobs:
 
 `createObsidianHttpPort()` wires both up and translates a blocked request into
 `StreamTransportUnavailableError`, which makes the providers fall back to a
-buffered non-streaming request and synthesise the chunks. Because that lives
-behind an interface, the providers themselves contain no environment-specific
-code — pass `createFetchHttpPort()` in Node or a fake in tests.
+buffered request for the same SSE endpoint. It validates the real event stream,
+including finish reasons and trailing usage, and coalesces delivery to the caller.
+It does not convert a streaming request into a non-stream JSON completion.
+The providers contain no environment-specific transport code; pass
+`createFetchHttpPort()` in Node.
 
 ## 2. Using a hub (shared configuration)
 
@@ -96,8 +98,11 @@ you degrade to your own configuration instead of crashing.
 Obsidian has no permission model — anything a plugin exposes is reachable by
 every other enabled plugin, including ones the user doesn't trust. So `LLMHub`
 has no method that returns an `LLMConfig` or an `apiKey`.
-Callers get an `ILLMProvider`: they can spend the user's quota (unavoidable, and
-consented to by installing the plugin) but cannot walk off with the key.
+ProviderFactory returns a frozen closure-backed `ILLMProvider` facade: callers
+can use its operations, but the returned object exposes neither credentials nor
+the raw transport/configuration. This is API encapsulation. It does not isolate
+a plugin from other plugins in Obsidian's shared host, where revealed settings
+and arbitrary host objects may already be reachable.
 
 If you implement `LLMHub`, keep that invariant — and note that TypeScript's
 `private` will not enforce it, since it is erased at compile time. Use a `#`
@@ -116,6 +121,25 @@ interface ChatRequest extends Omit<WireChatRequest, 'messages'> {
   messages: MyRichMessage[];
 }
 ```
+
+## Incomplete output and real verification
+
+A provider-reported output limit or content filter rejects with `CompletionError`.
+Its `usage`, `partialContent` and `partialReasoning` preserve genuine service
+results; failed streams never emit a successful final chunk. Output budgets may
+include reasoning, so a small `maxTokens` does not guarantee visible prose.
+The client does not silently increase that budget, retry, or disable thinking.
+An explicitly supplied `thinking: { type: "disabled" }` is forwarded by the
+OpenAI-compatible adapter when the selected service supports it.
+
+`tests/real/long-output-investigation.mjs` compares actual HTTP SSE with the
+production provider and buffered-SSE stage. Set `IA_REAL_API_KEY` outside the
+repository, `IA_REAL_BASE_URL`, `IA_REAL_MODEL`, `IA_LONG_MAX_TOKENS`, and
+`IA_REAL_RESULTS`. Optional `IA_LONG_MODES=direct,plugin,buffered` selects paths;
+`IA_EXPECT_LONG_COMPLETE=1` requires a final marker and at least 900 words.
+`IA_LONG_THINKING=disabled` changes only that explicit experiment. The regression
+long-prose test uses a 16,384-token test budget by default, separately configurable
+with `IA_REAL_LONG_MAX_TOKENS`; application defaults are unchanged.
 
 ## License
 

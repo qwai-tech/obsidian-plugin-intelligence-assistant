@@ -1,0 +1,22 @@
+/** Format the actual native budget halt from actual saved successful actions. No emulated run. */
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import * as fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+const out=path.resolve('test-results/execution-counts-2026-11-05');
+const original=JSON.parse(await fs.readFile(path.join(out,'native-b-budget.json'),'utf8'));
+const reply=original.messages.at(-1),receipt=reply.agentTask.lastRun;
+const successful=reply.agentExecutionSteps.filter(s=>s.type==='action'&&s.status==='success'&&s.toolName==='read_file');
+assert.equal(successful.length,50);assert.equal(receipt.successfulReadFileCalls,50);assert.equal(receipt.outcome,'budget');
+const file=path.join(await fs.mkdtemp(path.join(tmpdir(),'ia-budget-report-')),'production.cjs');
+await build({stdin:{contents:"export { budgetExecutionReport } from './src/features/agent/execution-report';",resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'node',format:'cjs',outfile:file,logLevel:'silent'});
+const {budgetExecutionReport}=createRequire(import.meta.url)(file);
+const journalPath=path.join('/tmp/ia-codex-ux-20261103/vault/.obsidian/plugins/intelligence-assistant/data/agent-runs',receipt.id+'.jsonl');
+const events=(await fs.readFile(journalPath,'utf8')).trim().split('\n').map(l=>JSON.parse(l).event);
+const terminal=events.find(e=>e.type==='run_finished');assert.equal(terminal.reason.kind,'budget');assert.equal(terminal.reason.steps,50);
+const rendered=budgetExecutionReport(terminal.reason.steps,successful.length);
+assert.match(rendered,/successful read_file calls in this run: 50/);assert.match(rendered,/not been confirmed complete/);assert.ok(!rendered.includes('9 of 20'));
+await fs.writeFile(path.join(out,'budget-report-replay.json'),JSON.stringify({method:'Production host formatter applied to the actual native 50-step budget halt and independently counted successful action records',status:'passed',actualSuccessfulReads:successful.length,originalUnverifiedProgress:reply.content,rendered},null,2));
+console.log({status:'passed',actualReads:50,rendered});

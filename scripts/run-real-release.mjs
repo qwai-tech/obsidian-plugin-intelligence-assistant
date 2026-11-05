@@ -1,0 +1,36 @@
+/** Run every real release gate against a frozen, committed production bundle. Never publish. */
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+import {createHash,randomUUID} from 'node:crypto';
+import {execFileSync,spawn} from 'node:child_process';
+const root=process.cwd();
+const required=['E2E_TEST_PROVIDER','E2E_TEST_API_KEY','E2E_TEST_MODEL'];
+for(const key of required)if(!process.env[key])throw Error(`Missing real service variable: ${key}`);
+if(/43117|mock/i.test(process.env.E2E_TEST_BASE_URL||''))throw Error('A mock endpoint cannot satisfy release verification');
+const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+if(git('diff','--name-only')||git('diff','--cached','--name-only'))throw Error('Commit tracked changes before the release gate');
+const untracked=git('ls-files','--others','--exclude-standard').split('\n').filter(Boolean);
+if(untracked.some(name=>/^(src|packages|scripts|tests)\//.test(name)))throw Error('Untracked source/test files must be committed before the release gate');
+const pkg=JSON.parse(await fs.readFile('package.json','utf8')),plugin=JSON.parse(await fs.readFile('manifest.json','utf8')),lock=JSON.parse(await fs.readFile('package-lock.json','utf8'));
+if(pkg.version!==plugin.version||lock.version!==plugin.version||lock.packages[''].version!==plugin.version)throw Error('Version files differ');
+const provenance=JSON.parse(await fs.readFile('artifact-provenance.json','utf8'));
+if(provenance.mode!=='production'||provenance.gitCommit!==git('rev-parse','HEAD'))throw Error('Build the production candidate from this exact committed source first');
+for(const [file,expected] of Object.entries(provenance.inputs))if(createHash('sha256').update(await fs.readFile(file)).digest('hex')!==expected)throw Error(`Build input changed: ${file}`);
+const runId=`${plugin.version}-${Date.now()}-${randomUUID().slice(0,8)}`;
+const dir=path.resolve(process.env.IA_RELEASE_REPORT_ROOT||path.join('tests/e2e/reports/real-release',runId));
+await fs.mkdir(path.dirname(dir),{recursive:true});await fs.mkdir(dir,{recursive:false});await fs.mkdir(path.join(dir,'bundle'));
+const artifacts={};for(const name of ['main.js','styles.css','manifest.json']){const bytes=await fs.readFile(name);artifacts[name]=createHash('sha256').update(bytes).digest('hex');await fs.writeFile(path.join(dir,'bundle',name),bytes);}
+for(const [name,hash] of Object.entries(artifacts))if(provenance.artifacts[name]!==hash)throw Error(`Artifact is not from the recorded build: ${name}`);
+await fs.copyFile('artifact-provenance.json',path.join(dir,'artifact-provenance.json'));
+const info={runId,startedAt:Date.now(),gitCommit:git('rev-parse','HEAD'),version:plugin.version,artifacts,provider:process.env.E2E_TEST_PROVIDER,model:process.env.E2E_TEST_MODEL,baseUrl:process.env.E2E_TEST_BASE_URL,defaultReasoning:true,mocks:false,excludedLiveProviders:['ollama','sap-ai-core'],excludedUntrackedArtifacts:untracked,workload:{minutes:Number(process.env.LONG_TASK_TARGET_MIN||20),notes:Number(process.env.LONG_TASK_NOTES||60),words:Number(process.env.LONG_TASK_WORDS||1200)},serviceAudit:process.env.IA_RELEASE_SERVICE_AUDIT||null};
+await fs.writeFile(path.join(dir,'run.json'),JSON.stringify(info,null,2));
+await fs.mkdir('tests/e2e/reports/real-release',{recursive:true});await fs.writeFile('tests/e2e/reports/real-release/latest.json',JSON.stringify({dir}));
+console.log(JSON.stringify({releaseGate:'starting',runId,dir,gitCommit:info.gitCommit,artifacts,workload:info.workload}));
+const child=spawn(process.execPath,['node_modules/@wdio/cli/bin/wdio.js','run','tests/e2e/config/wdio.release.conf.ts'],{cwd:root,stdio:'inherit',env:{...process.env,IA_RELEASE_GATE:'1',RUN_LONG_TASK:'1',E2E_TEST_DISABLE_DOTENV:'1',IA_RELEASE_REPORT_ROOT:dir,IA_RELEASE_BUNDLE_DIR:path.join(dir,'bundle')}});
+const code=await new Promise(resolve=>child.on('exit',resolve));
+await fs.writeFile(path.join(dir,'runner-result.json'),JSON.stringify({exitCode:code,finishedAt:Date.now()}));
+for(const [name,expected] of Object.entries(artifacts))if(createHash('sha256').update(await fs.readFile(name)).digest('hex')!==expected)throw Error(`Release asset changed during testing: ${name}`);
+if(code!==0)throw Error(`Real release tests failed; evidence preserved at ${dir}`);
+const verifier=spawn(process.execPath,['scripts/verify-real-release.mjs',dir],{cwd:root,stdio:'inherit'});
+const verified=await new Promise(resolve=>verifier.on('exit',resolve));if(verified!==0)throw Error('Real release evidence did not pass validation');
+console.log(`Prepared and verified locally, not published: ${dir}`);

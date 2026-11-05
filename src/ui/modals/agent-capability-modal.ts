@@ -6,6 +6,7 @@ export class AgentCapabilityModal extends Modal {
 	constructor(
 		app: App,
 		private readonly summary: AgentCapabilitySummary,
+		private readonly onConfigure?: () => void,
 	) {
 		super(app);
 	}
@@ -21,6 +22,12 @@ export class AgentCapabilityModal extends Modal {
 			text: t('capability.subtitle', { agent: this.summary.agentName, count: this.summary.toolCount }),
 		});
 
+		if (this.onConfigure) {
+			contentEl.createDiv('ia-modal-footer').createEl('button', { text: t('ux.configureTools') }).addEventListener('click', () => {
+				this.close();
+				this.onConfigure?.();
+			});
+		}
 		this.renderPermissions(contentEl);
 		this.renderReferences(contentEl);
 		this.renderTools(contentEl);

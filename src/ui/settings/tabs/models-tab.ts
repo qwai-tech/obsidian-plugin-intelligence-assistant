@@ -1,14 +1,19 @@
+import { notify } from '@/core/notifications';
 /**
  * Models Settings Tab
  * Displays model configuration and management
  */
 
-import { Notice } from 'obsidian';
+
 import type { PluginHost } from '@/ui/plugin-host';
 import { defaultAfterRefresh, type ModelInfo, type ModelCapability } from '@/features/llm';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { getProviderMeta } from '@/ui/provider-meta';
+import { connectionLabel } from '@qwai/obsidian-llm';
+import { describeConnectionError } from '@/ui/modals/connection-error';
+
+const refreshFeedback = new WeakMap<PluginHost, { message: string; details: string[] }>();
 
 export interface ModelFilters {
 	providerFilter: string;
@@ -34,6 +39,13 @@ export function displayModelsTab(
 	controls.addClass('ia-section-actions--wrap');
 	const summary = controls.createDiv('ia-section-summary');
 	summary.createSpan({ text: t('settings.models.providerCount', { count: plugin.settings.llmConfigs.length }) });
+	const previousFeedback = refreshFeedback.get(plugin);
+	if (previousFeedback) {
+		const feedback = containerEl.createDiv('ia-operation-feedback');
+		feedback.setAttribute('role', 'status');
+		feedback.createEl('p', { text: previousFeedback.message });
+		for (const detail of previousFeedback.details) feedback.createEl('p', { text: detail, cls: 'ia-operation-error' });
+	}
 
 	// Add refresh all button
 	const refreshAllBtn = controls.createEl('button', { text: t('settings.models.refreshAll') });
@@ -48,14 +60,16 @@ export function displayModelsTab(
 			const { ModelManager } = await import('@qwai/obsidian-llm');
 
 			const refreshed = new Map<number, Awaited<ReturnType<typeof ModelManager.getModelsForConfig>>>();
+			const failures: string[] = [];
 			const before = new Map(plugin.settings.llmConfigs.map((config, index) => [index, [...(config.cachedModels ?? [])]]));
 			for (const [index, config] of plugin.settings.llmConfigs.entries()) {
 				try {
-					new Notice(t('settings.models.notices.fetching', { provider: getProviderMeta(config.provider).label }));
+					notify(t('settings.models.notices.fetching', { provider: connectionLabel(config) }), 0, 'models-refresh');
 					refreshed.set(index, await ModelManager.getModelsForConfig(config, true));
 				} catch (error) {
 					console.error(`Failed to refresh models for ${config.provider}:`, error);
-					new Notice(t('settings.models.notices.fetchFailed', { provider: getProviderMeta(config.provider).label }));
+					const { key, status } = describeConnectionError(error);
+					failures.push(`${connectionLabel(config)}: ${t(`modals.provider.connectionErrors.${key}`, { status })}`);
 				}
 			}
 
@@ -66,13 +80,19 @@ export function displayModelsTab(
 					settings.llmConfigs[index].cacheTimestamp = Date.now();
 				}
 			});
-			new Notice(t('settings.models.notices.refreshed'));
+			const message = failures.length === 0 ? t('settings.models.notices.refreshed')
+				: refreshed.size === 0 ? t('settings.models.notices.refreshFailed')
+					: t('ux.modelsRefreshPartial', { success: refreshed.size, failed: failures.length });
+			refreshFeedback.set(plugin, { message, details: failures });
+			notify(message, 5000, 'models-refresh');
 
 			// Redisplay the tab
 			refreshDisplay();
 		} catch (error) {
 			console.error('Failed to refresh models:', error);
-			new Notice(t('settings.models.notices.refreshFailed'));
+			refreshFeedback.set(plugin, { message: t('settings.models.notices.refreshFailed'), details: [] });
+			notify(t('settings.models.notices.refreshFailed'), 5000, 'models-refresh');
+			refreshDisplay();
 		} finally {
 			refreshAllBtn.disabled = false;
 			refreshAllBtn.textContent = t('settings.models.refreshAll');
@@ -155,11 +175,10 @@ export function displayModelsTab(
 		const metaRow = modelStack.createDiv('ia-model-meta');
 		const providerLabel = metaRow.createSpan();
 		providerLabel.addClass('ia-table-subtext');
-		providerLabel.setText(providerMeta.label);
-		const separator = metaRow.createSpan();
-		separator.addClass('ia-model-meta-separator');
-		separator.setText('•');
-		const idSpan = metaRow.createSpan();
+		providerLabel.setText(model.providerLabel || providerMeta.label);
+		const details = modelStack.createEl('details');
+		details.createEl('summary', { text: t('ux.modelId') });
+		const idSpan = details.createSpan();
 		idSpan.addClass('ia-code');
 		idSpan.setText(model.id);
 
@@ -238,7 +257,7 @@ export function displayModelsTab(
 						await plugin.updateSettings((settings) => {
 							settings.defaultModel = model.id;
 						});
-						new Notice(t('settings.models.notices.defaultChatSet', { name: model.name }));
+						notify(t('settings.models.notices.defaultChatSet', { name: `${model.name} · ${model.providerLabel || providerMeta.label}` }));
 						refreshDisplay();
 					})();
 				});
@@ -257,7 +276,7 @@ export function displayModelsTab(
 						await plugin.updateSettings((settings) => {
 							settings.ragConfig.embeddingModel = model.id;
 						});
-						new Notice(t('settings.models.notices.defaultEmbeddingSet', { name: model.name }));
+						notify(t('settings.models.notices.defaultEmbeddingSet', { name: model.name }));
 						refreshDisplay();
 					})();
 				});
@@ -275,8 +294,13 @@ function renderModelFilters(
 	refreshDisplay: () => void
 ): void {
 	const filterBar = parent.createDiv('ia-filter-bar');
+	const field = (label: string) => {
+		const wrapper = filterBar.createEl('label', { cls: 'ia-filter-field' });
+		wrapper.createSpan({ text: label, cls: 'ia-filter-label' });
+		return wrapper;
+	};
 
-	const providerSelect = filterBar.createEl('select');
+	const providerSelect = field(t('settings.usage.tableHeaders.provider')).createEl('select');
 	providerSelect.addClass('ia-filter-control');
 	providerSelect.addClass('ia-filter-control--compact');
 	providerSelect.createEl('option', { value: 'all', text: t('settings.models.filters.allProviders') });
@@ -298,7 +322,7 @@ function renderModelFilters(
 		refreshDisplay();
 	});
 
-	const capabilitySelect = filterBar.createEl('select');
+	const capabilitySelect = field(t('settings.models.tableHeaders.capabilities')).createEl('select');
 	capabilitySelect.addClass('ia-filter-control');
 	capabilitySelect.addClass('ia-filter-control--compact');
 	capabilitySelect.createEl('option', { value: 'all', text: t('settings.models.filters.allCapabilities') });
@@ -318,7 +342,7 @@ function renderModelFilters(
 		refreshDisplay();
 	});
 
-	const statusSelect = filterBar.createEl('select');
+	const statusSelect = field(t('settings.models.tableHeaders.status')).createEl('select');
 	statusSelect.addClass('ia-filter-control');
 	statusSelect.addClass('ia-filter-control--compact');
 	statusSelect.createEl('option', { value: 'all', text: t('settings.models.filters.allStates') });
@@ -330,7 +354,9 @@ function renderModelFilters(
 		refreshDisplay();
 	});
 
-	const searchInput = filterBar.createEl('input', { type: 'search', placeholder: t('settings.models.filters.searchPlaceholder') });
+	const searchField = field(t('settings.models.filters.searchPlaceholder'));
+	searchField.addClass('ia-filter-field--search');
+	const searchInput = searchField.createEl('input', { type: 'search', placeholder: t('settings.models.filters.searchPlaceholder') });
 	searchInput.addClass('ia-filter-control');
 	searchInput.addClass('ia-filter-search');
 	searchInput.value = filters.searchTerm;

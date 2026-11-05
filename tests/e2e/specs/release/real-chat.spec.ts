@@ -43,6 +43,7 @@ describe('Release real chat', () => {
 		const conversation = await vault.readRuntimeDataFile<PersistedConversation>(conversationPath);
 		const assistantMessages = conversation.messages.filter(message => message.role === 'assistant');
 		const assistant = assistantMessages[assistantMessages.length - 1];
-		void assistant;
+		expect(assistant.content).toContain('ROUTE_C_RELEASE_CHAT_SENTINEL');
+		expect((assistant.tokenUsage?.totalTokens ?? 0) > 0).toBe(true);
 	});
 });

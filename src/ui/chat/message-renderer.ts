@@ -11,6 +11,7 @@ import { renderExecutionTrace } from '@/ui/chat/agent-trace-view';
 import { renderWriteProposalCards, type ApplyProposal } from '@/ui/chat/write-proposal-cards';
 import { renderCopyButton, renderTokenUsageFooter } from '@/ui/chat/message-footer';
 import { TestIds } from '@/ui/utils/test-ids';
+import { ModelManager, connectionLabel } from '@qwai/obsidian-llm';
 
 export interface MessageRendererContext {
 	app: App;
@@ -92,6 +93,15 @@ export function renderMessage(
 	const status = header.createSpan('ia-chat-message__status');
 	status.setAttr('data-message-status', 'idle');
 	status.addClass('ia-hidden');
+	if (message.stopped) {
+		status.removeClass('ia-hidden');
+		status.setText(t('ux.stopped'));
+		status.setAttr('data-message-status', 'stopped');
+	} else if (message.role === 'assistant' && !message.content && !message.agentExecutionSteps?.length) {
+		status.removeClass('ia-hidden');
+		status.setText(t('ux.generating'));
+		status.setAttr('data-message-status', 'generating');
+	}
 
 	if (assistantMeta) {
 		renderAssistantBadges(header, assistantMeta);
@@ -192,6 +202,7 @@ function applyAvatarAndLabel(
 		'ollama': '#000000',
 		'deepseek': '#0066cc',
 		'openrouter': '#6366f1',
+		'sap-ai-core': '#0070f2',
 		'groq': '#f97316',
 		'mistral': '#0d9488',
 		'togetherai': '#ec4899'
@@ -223,7 +234,8 @@ function applyAvatarAndLabel(
 		|| (providerId ? providerColorFallbacks[providerId] : undefined)
 		|| '#3f3f46';
 
-	const providerLabel = providerMeta?.label || humanizeProvider(providerId) || 'Unknown Provider';
+	const connection = message.model ? ModelManager.findConfigForModelByProvider(message.model, context.plugin.settings.llmConfigs) : null;
+	const providerLabel = message.providerLabel || (connection?.provider === 'custom' ? connectionLabel(connection) : null) || providerMeta?.label || humanizeProvider(providerId) || 'Unknown Provider';
 	const modelLabel = getModelDisplayName(message.model) || message.model || 'Unknown Model';
 
 	avatar.addClass('ia-provider-avatar');

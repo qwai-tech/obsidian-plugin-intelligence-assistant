@@ -5,6 +5,7 @@ import type { WebSearchResult } from '../web-search-service';
 export interface BackendContext {
 	config: WebSearchConfig;
 	http: HttpPort;
+	signal?: AbortSignal;
 }
 
 export type SearchBackend = (query: string, maxResults: number, context: BackendContext) => Promise<WebSearchResult[]>;

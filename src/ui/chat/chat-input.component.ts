@@ -265,8 +265,9 @@ export class ChatInputComponent {
 		}
 
 		const grouped = models.reduce((acc, m) => {
-			if (!acc[m.provider]) acc[m.provider] = [];
-			acc[m.provider].push(m);
+			const label = m.providerLabel || m.provider;
+			if (!acc[label]) acc[label] = [];
+			acc[label].push(m);
 			return acc;
 		}, {} as Record<string, ModelInfo[]>);
 
@@ -280,14 +281,14 @@ export class ChatInputComponent {
 
 		for (const [provider, providerModels] of sortedProviders) {
 			const group = this.modelSelect.createEl('optgroup');
-			group.label = `${provider.toUpperCase()} (${providerModels.length})`;
+			group.label = `${provider} (${providerModels.length})`;
 			const sorted = [...providerModels].sort((a, b) => {
 				if (a.id === defaultModel) return -1;
 				if (b.id === defaultModel) return 1;
 				return a.name.localeCompare(b.name);
 			});
 			for (const m of sorted) {
-				const opt = group.createEl('option', { value: m.id, text: m.name });
+				const opt = group.createEl('option', { value: m.id, text: `${m.name} · ${m.providerLabel || m.provider}` });
 				if (m.id === defaultModel) opt.selected = true;
 			}
 		}

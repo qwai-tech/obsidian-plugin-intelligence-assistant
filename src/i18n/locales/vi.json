@@ -102,7 +102,8 @@
       },
       "guidance": {
         "configureBaseUrl": "Cấu hình URL cơ sở",
-        "addApiKey": "Thêm khóa API"
+        "addApiKey": "Thêm khóa API",
+        "provideServiceKey": "Cung cấp khóa dịch vụ"
       },
       "models": {
         "none": "Không có mô hình",
@@ -1132,7 +1133,8 @@
       "writesProposal": "Ghi: chỉ đề xuất; cần nhấn Áp dụng",
       "writesNone": "Ghi: không khả dụng",
       "rag": "RAG: {{state}}",
-      "web": "Web: {{state}}"
+      "web": "Web: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "Đề xuất ghi",
@@ -1275,7 +1277,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (cục bộ)",
         "openrouter": "OpenRouter",
-        "custom": "Tùy chỉnh (tương thích OpenAI)"
+        "custom": "Tùy chỉnh (tương thích OpenAI)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "Bộ lọc mô hình",
@@ -1301,7 +1304,8 @@
       "validation": {
         "selectProvider": "Vui lòng chọn loại nhà cung cấp",
         "invalidUrl": "Định dạng URL cơ sở không hợp lệ. Vui lòng nhập URL hợp lệ (ví dụ: https://api.example.com)",
-        "baseUrlRequired": "Nhập URL cơ sở của điểm cuối tương thích OpenAI."
+        "baseUrlRequired": "Nhập URL cơ sở của điểm cuối tương thích OpenAI.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "Mô hình đã lưu cache: {{count}}",
       "connectionErrors": {
@@ -1314,7 +1318,17 @@
       "noCachedModels": "Không có mô hình nào được lưu cache",
       "testConnection": "Kiểm tra kết nối",
       "testing": "Đang kiểm tra...",
-      "connectionSuccess_other": "Kết nối thành công. Đã lưu cache {{count}} mô hình."
+      "connectionSuccess_other": "Kết nối thành công. Đã lưu cache {{count}} mô hình.",
+      "resourceGroup": {
+        "name": "Nhóm tài nguyên",
+        "desc": "Nhóm tài nguyên SAP AI Core tùy chọn",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "Khóa dịch vụ",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1612,7 +1626,8 @@
       "destructive": "Thao tác phá hủy trên vault",
       "notProvided": "Công cụ tích hợp không cung cấp",
       "customEnabled_other": "Đã bật {{count}} công cụ MCP, OpenAPI hoặc CLI",
-      "referencesPlusContext_other": "{{count}} tham chiếu tường minh cùng ngữ cảnh đang hoạt động"
+      "referencesPlusContext_other": "{{count}} tham chiếu tường minh cùng ngữ cảnh đang hoạt động",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_other": "{{agent}} có thể dùng {{count}} công cụ."
   },
@@ -1630,5 +1645,47 @@
       "cleared": "Đã xóa chỉ mục.",
       "starting_other": "Đang lập chỉ mục {{count}} ghi chú…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

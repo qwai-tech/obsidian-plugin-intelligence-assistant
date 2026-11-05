@@ -3,6 +3,7 @@ import { createAgentConfig } from '../../support/data-fixtures';
 import { waitForPluginReady } from '../../support/plugin-helpers';
 import { skipUnlessReleaseLLM } from '../../support/release-env';
 import { VaultFixture } from '../../support/vault-fixture';
+import { captureReleaseProducts, finishedReleaseRun, wordCount } from '../../support/release-evidence';
 
 /**
  * SINGLE long-running large task: a REAL LLM drives ONE continuous autonomous
@@ -46,7 +47,7 @@ const TARGET_MIN = Number(process.env.LONG_TASK_TARGET_MIN || 20);
 const NOTES = Number(process.env.LONG_TASK_NOTES || 60);
 const WORDS = Number(process.env.LONG_TASK_WORDS || 1200);
 const MIN_CHARS = Number(process.env.LONG_TASK_MIN_CHARS || 2500);
-const MAX_STEPS = Number(process.env.LONG_TASK_MAXSTEPS || NOTES + 40);
+const MAX_STEPS = Number(process.env.LONG_TASK_MAXSTEPS || NOTES * 2 + 40);
 const MAX_TOKENS = Number(process.env.LONG_TASK_MAXTOKENS || 8000);
 const NOTE_RE = /^note_\d+\.md$/;
 
@@ -89,8 +90,10 @@ describe('Release single long-running large task', () => {
 			`Your VERY FIRST output MUST be a create_note tool call for note_001.md — output NO preface, NO explanation, NO "I will start" text. Just call the tool immediately.`,
 			`Create exactly ${NOTES} notes named note_001.md, note_002.md, ... note_${String(NOTES).padStart(3, '0')}.md, strictly in numeric order, ONE create_note tool call per note.`,
 			`Each note must be an original, detailed article of AT LEAST ${WORDS} words on a DISTINCT subtopic of large language models, AI agents, retrieval systems and knowledge management — use multiple "##" sections, examples, and depth.`,
+			`Aim for ${WORDS + 300} English words per article to leave a margin above the minimum; use a distinct descriptive first heading for each subtopic.`,
 			`After every note you create, immediately call the tool again for the next one. After all ${NOTES} notes exist, create index.md linking every note with [[note_001]] ... style links.`,
 			`NEVER reply with only text while the job is unfinished — every assistant turn until the job is done must contain a tool call. Do NOT stop, summarize, shortcut, or ask questions until all ${NOTES} notes AND index.md exist.`,
+			'Only after all requested notes and index links exist, finish with RELEASE_LONG_TASK_DONE. Never emit that marker for an incomplete or blocked task.',
 		].join(' '));
 
 		const startedAt = Date.now();
@@ -113,21 +116,35 @@ describe('Release single long-running large task', () => {
 			if (!stopVisible && msgCount >= 2) { completed = true; break; }
 		}
 
-		const elapsedMin = (Date.now() - startedAt) / 60000;
+		const wallElapsedMin = (Date.now() - startedAt) / 60000;
+		const execution = process.env.IA_RELEASE_GATE === '1' ? await finishedReleaseRun(await chat.getConversationId()) : undefined;
+		const elapsedMin = execution ? execution.durationMs / 60000 : wallElapsedMin;
 		const dump = await dumpVaultMarkdown();
 		const notes = dump.filter((d) => NOTE_RE.test(d.path));
 		const substantial = notes.filter((d) => d.content.length >= MIN_CHARS);
+		const longEnough = notes.filter(d => wordCount(d.content) >= WORDS);
 		const index = dump.find((d) => d.path === 'index.md');
 		const reply = await chat.getLastAssistantText().catch(() => '');
 
 		logLine(`[long-task] SUMMARY completed=${String(completed)} elapsedMin=${elapsedMin.toFixed(1)} notes=${notes.length}/${NOTES} substantial(>=${MIN_CHARS}c)=${substantial.length} index=${String(Boolean(index))} reply="${reply.slice(0, 160)}"`);
 
-		// cleanup
-		await deleteByPaths([...notes.map((d) => d.path), 'index.md']);
-
-		// Oracle: the single task ran for the target duration AND really produced
-		// a large body of long-form notes in the vault.
+		await captureReleaseProducts('long-task', [...notes, ...(index ? [index] : [])], { elapsedMin, wallElapsedMin, clock: execution ? 'agent-journal' : 'poll', execution, completed, expectedNotes: NOTES, minimumWords: WORDS, minimumMinutes: TARGET_MIN, substantial: substantial.length, longEnough: longEnough.length });
+		// Every requested artifact and link must exist; elapsed time alone cannot
+		// turn an incomplete or prematurely-ended task into a passing release gate.
+		expect(completed).toBe(true);
+		expect(reply).toContain('RELEASE_LONG_TASK_DONE');
+		if (execution) { expect(execution.outcome).toBe('answered'); expect(execution.successfulCreates).toBeGreaterThanOrEqual(NOTES); }
 		expect(elapsedMin).toBeGreaterThanOrEqual(TARGET_MIN);
-		expect(substantial.length).toBeGreaterThanOrEqual(Math.floor(NOTES * 0.6));
+		expect(notes.length).toBe(NOTES);
+		expect(substantial.length).toBe(NOTES);
+		expect(longEnough.length).toBe(NOTES);
+		expect(Boolean(index)).toBe(true);
+		for (let i = 1; i <= NOTES; i++) {
+			const stem = `note_${String(i).padStart(3, '0')}`;
+			expect(notes.some(note => note.path === `${stem}.md`)).toBe(true);
+			expect(index?.content).toMatch(new RegExp(`\\[\\[${stem}(?:\\.md)?(?:\\|[^\\]]*)?\\]\\]`));
+		}
+		expect(new Set(notes.map(note => note.content.trim())).size).toBe(NOTES);
+		await deleteByPaths([...notes.map((d) => d.path), 'index.md']);
 	});
 });

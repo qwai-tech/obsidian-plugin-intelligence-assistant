@@ -14,7 +14,6 @@ import {
 import { BUILTIN_AGENT_PRESETS } from '@/features/agent/presets/builtin-agents';
 import { BUILTIN_PROMPT_PRESETS } from '@/features/agent/presets/builtin-prompts';
 
-const LEGACY_DEFAULT_AGENT_MAX_TOKENS = 2000;
 
 /** Build a toolAccess that grants the given builtin tool names. */
 function builtinAccess(toolNames: string[]): AgentToolAccess {
@@ -35,7 +34,6 @@ function builtinAccess(toolNames: string[]): AgentToolAccess {
 export function ensureDefaultAgent(settings: PluginSettings): void {
 	const assistantPromptId = 'builtin-intelligence-assistant';
 
-	settings.defaultChatMode = 'agent';
 
 	// Phase F: Ensure all builtin prompts are present and up-to-date (readonly)
 	for (const preset of BUILTIN_PROMPT_PRESETS) {
@@ -80,9 +78,6 @@ export function ensureDefaultAgent(settings: PluginSettings): void {
 		// Force update existing default agent to use the new optimized prompt and settings
 		if (defaultAgent.systemPromptId !== assistantPromptId) {
 			defaultAgent.systemPromptId = assistantPromptId;
-		}
-		if (defaultAgent.temperature !== 0.5) {
-			defaultAgent.temperature = 0.5;
 		}
 		const newDesc = 'Advanced Obsidian agent specializing in multi-step vault operations, spatial thinking, and long-term knowledge management.';
 		if (defaultAgent.description !== newDesc) {
@@ -129,11 +124,6 @@ export function ensureDefaultAgent(settings: PluginSettings): void {
 	}
 
 	const ensuredAgent = defaultAgent ?? settings.agents.find(a => a.id === DEFAULT_AGENT_ID)!;
-
-	if (ensuredAgent.maxTokens === LEGACY_DEFAULT_AGENT_MAX_TOKENS) {
-		ensuredAgent.maxTokens = DEFAULT_MODEL_CONFIG.MAX_TOKENS;
-		ensuredAgent.updatedAt = Date.now();
-	}
 
 	// Sync the default agent's builtin tool access to whatever is globally
 	// enabled in settings.builtInTools. Compare against the current toolAccess

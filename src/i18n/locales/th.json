@@ -102,7 +102,8 @@
       },
       "guidance": {
         "configureBaseUrl": "กำหนดค่า Base URL",
-        "addApiKey": "เพิ่มคีย์ API"
+        "addApiKey": "เพิ่มคีย์ API",
+        "provideServiceKey": "ระบุคีย์บริการ"
       },
       "models": {
         "none": "ไม่มีโมเดล",
@@ -1132,7 +1133,8 @@
       "writesProposal": "การเขียน: เป็นข้อเสนอเท่านั้น ต้องกด \"นำไปใช้\"",
       "writesNone": "การเขียน: ไม่พร้อมใช้งาน",
       "rag": "RAG: {{state}}",
-      "web": "เว็บ: {{state}}"
+      "web": "เว็บ: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "ข้อเสนอการเขียน",
@@ -1275,7 +1277,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (ในเครื่อง)",
         "openrouter": "OpenRouter",
-        "custom": "กำหนดเอง (เข้ากันได้กับ OpenAI)"
+        "custom": "กำหนดเอง (เข้ากันได้กับ OpenAI)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "ตัวกรองโมเดล",
@@ -1301,7 +1304,8 @@
       "validation": {
         "selectProvider": "โปรดเลือกประเภทผู้ให้บริการ",
         "invalidUrl": "รูปแบบ Base URL ไม่ถูกต้อง โปรดป้อน URL ที่ถูกต้อง (เช่น https://api.example.com)",
-        "baseUrlRequired": "ป้อน URL ฐานของปลายทางที่เข้ากันได้กับ OpenAI"
+        "baseUrlRequired": "ป้อน URL ฐานของปลายทางที่เข้ากันได้กับ OpenAI",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "โมเดลที่แคชไว้: {{count}}",
       "connectionErrors": {
@@ -1314,7 +1318,17 @@
       "noCachedModels": "ไม่มีโมเดลที่แคชไว้",
       "testConnection": "ทดสอบการเชื่อมต่อ",
       "testing": "กำลังทดสอบ...",
-      "connectionSuccess_other": "เชื่อมต่อสำเร็จ แคชโมเดลไว้ {{count}} รายการ"
+      "connectionSuccess_other": "เชื่อมต่อสำเร็จ แคชโมเดลไว้ {{count}} รายการ",
+      "resourceGroup": {
+        "name": "กลุ่มทรัพยากร",
+        "desc": "กลุ่มทรัพยากร SAP AI Core (ไม่บังคับ)",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "คีย์บริการ",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1612,7 +1626,8 @@
       "destructive": "การกระทำที่ทำลายข้อมูลใน Vault",
       "notProvided": "เครื่องมือในตัวไม่มีให้",
       "customEnabled_other": "เปิดใช้งานเครื่องมือ MCP, OpenAPI หรือ CLI {{count}} รายการ",
-      "referencesPlusContext_other": "การอ้างอิงที่ระบุ {{count}} รายการ พร้อมบริบทที่ใช้งานอยู่"
+      "referencesPlusContext_other": "การอ้างอิงที่ระบุ {{count}} รายการ พร้อมบริบทที่ใช้งานอยู่",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_other": "{{agent}} ใช้เครื่องมือได้ {{count}} รายการ"
   },
@@ -1630,5 +1645,47 @@
       "cleared": "ล้างดัชนีแล้ว",
       "starting_other": "กำลังทำดัชนีบันทึก {{count}} รายการ…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

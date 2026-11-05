@@ -1,4 +1,5 @@
-import { MarkdownRenderChild, Notice, TFile, type ObsidianProtocolData, type Plugin } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { MarkdownRenderChild, TFile, type ObsidianProtocolData, type Plugin } from 'obsidian';
 import type { RAGConfig } from '@/features/knowledge';
 import type { RAGManager } from '@/adapters/rag/rag-manager';
 import { createIncrementalIndexHandlers } from '@/adapters/rag/incremental-indexer';
@@ -65,10 +66,13 @@ export function registerInlineAiBlocks(plugin: Plugin, launcher: AgentTaskLaunch
 				references: [],
 				newConversation: false,
 				sendImmediately: true,
+				authorization: { origin: 'ai-block', approved: true },
 			})
+				.then(result => handle.setResult(result?.content || t('ux.emptyReply')))
 				.catch((error) => {
 					console.error('[Plugin] Inline ai block run failed:', error);
-					new Notice(t('notices.inlineBlockFailed'));
+					notify(t('notices.inlineBlockFailed'));
+					handle.setResult(t('notices.inlineBlockFailed'));
 				})
 				.finally(() => handle.setRunning(false));
 		});
@@ -79,7 +83,7 @@ export function registerDeepLinks(plugin: Plugin, launcher: AgentTaskLauncher): 
 	plugin.registerObsidianProtocolHandler('intelligence-assistant', (params) => {
 		runDeepLink(plugin, launcher, params).catch((error) => {
 			console.error('[Plugin] Protocol deep link failed:', error);
-			new Notice(t('notices.deepLinkFailed'));
+			notify(t('notices.deepLinkFailed'));
 		});
 	});
 }
@@ -92,11 +96,10 @@ async function runDeepLink(plugin: Plugin, launcher: AgentTaskLauncher, params: 
 		await launcher.openChat();
 		return;
 	}
-	await launcher.run({
-		prompt: task,
-		displayText: task,
-		references: file instanceof TFile ? [file] : [],
-		newConversation: params.new === 'true',
-		sendImmediately: params.send !== 'false',
-	});
+	if (params.send === 'false') {
+		await launcher.run({ prompt: task, displayText: task, references: file instanceof TFile ? [file] : [], newConversation: params.new === 'true', sendImmediately: false,
+			authorization: { origin: 'deep-link', approved: false } });
+		return;
+	}
+	await launcher.launch(task, file instanceof TFile ? [file] : [], task, { origin: 'deep-link', newConversation: params.new === 'true' });
 }

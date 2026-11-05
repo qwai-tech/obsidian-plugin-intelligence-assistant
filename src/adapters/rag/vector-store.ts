@@ -1,5 +1,6 @@
-import {App, TFile} from 'obsidian';
-import type { RAGConfig } from '@/features/knowledge';
+import { runtimeClock } from '@qwai/obsidian-llm';
+import type {App, TFile} from 'obsidian';
+import type { RAGConfig, RetrievalScope, MemoryWriteOptions } from '@/features/knowledge';
 import type { LLMConfig } from '@/features/llm';
 import { JsonFile } from '@/adapters/persistence/json-file';
 import { EmbeddingManager } from './embedding-manager';
@@ -16,6 +17,9 @@ export interface VectorStoreData {
 
 export class VectorStore {
 	private _chunks: DocumentChunk[] = [];
+	private memories: DocumentChunk[] = [];
+	private sessionMemories: DocumentChunk[] = [];
+	private readonly memoryFile: JsonFile<DocumentChunk[]>;
 	private app: App;
 	private llmConfigs: LLMConfig[];
 	/**
@@ -29,11 +33,13 @@ export class VectorStore {
 
   private readonly file: JsonFile<VectorStoreData | null>;
   private readonly indexing = new Map<string, Promise<void>>();
+  private readonly lifecycle = new AbortController();
 
-  constructor(app: App, filePath: string, llmConfigs: LLMConfig[] = []) {
+  constructor(app: App, filePath: string, llmConfigs: LLMConfig[] = [], private storageMode = 'disk') {
     this.app = app;
     this.file = new JsonFile<VectorStoreData | null>(app.vault.adapter, filePath, () => null, 0);
     this.llmConfigs = llmConfigs;
+    this.memoryFile = new JsonFile(app.vault.adapter, `${filePath}.agent-memory.json`, () => [], 0);
   }
 
 	private loading: Promise<void> | null = null;
@@ -43,11 +49,23 @@ export class VectorStore {
 		return this.loading;
 	}
 
+	setStorageMode(mode: string): void {
+		if (mode === this.storageMode) return;
+		this.storageMode = mode;
+		if (mode === 'disk') void this.save(true).catch(error => console.error('Vector index persistence failed:', error));
+	}
+
 	setLlmConfigs(llmConfigs: LLMConfig[]): void {
 		this.llmConfigs = llmConfigs;
 	}
 
+	async destroy(): Promise<void> {
+    this.lifecycle.abort(new Error('Index service stopped'));
+    await this.flush();
+  }
+
 	async flush(): Promise<void> {
+    await Promise.all([...this.indexing.values()]);
 		if (this.saveTimeout) {
 			await this.save(true);
 		}
@@ -55,41 +73,35 @@ export class VectorStore {
 
 	private async readFromDisk(): Promise<void> {
 		this.chunkNorms.clear();
-		const stored = await this.file.read();
-		this._chunks = Array.isArray(stored?._chunks) ? stored._chunks : [];
+		const stored = this.storageMode === 'disk' ? await this.file.read() : null;
+		const legacy = Array.isArray(stored?._chunks) ? stored._chunks : [];
+		this._chunks = legacy.filter(chunk => !chunk.metadata.path.startsWith('memory://') && !chunk.metadata.agentId && chunk.metadata.source !== 'agent-memory');
+		const savedMemory = await this.memoryFile.read();
+		this.memories = savedMemory.filter(chunk => chunk.metadata.agentId && chunk.metadata.entryId && chunk.metadata.embeddingModel !== undefined);
 	}
 
-	private saveTimeout: ReturnType<typeof activeWindow.setTimeout> | null = null;
+	private saveTimeout: ReturnType<typeof runtimeClock.schedule> | null = null;
 
 	async save(immediate = false): Promise<void> {
 		if (this.saveTimeout) {
-			window.clearTimeout(this.saveTimeout);
+			runtimeClock.cancel(this.saveTimeout);
 			this.saveTimeout = null;
 		}
 
-		// Always immediate in test environment to avoid race conditions in E2E
-		const isTest = typeof process !== 'undefined' && (process.env.NODE_ENV === 'test' || Boolean(process.env.WDIO_WORKER_ID));
-
-		if (immediate || isTest) {
+		if (this.storageMode !== 'disk') return;
+		if (immediate) {
 			await this.performSave();
 		} else {
-			this.saveTimeout = window.setTimeout(() => {
-				void this.performSave();
+			this.saveTimeout = runtimeClock.schedule(() => {
+				void this.performSave().catch(error => console.error('Vector index persistence failed:', error));
 				this.saveTimeout = null;
 			}, 1000);
 		}
 	}
 
 	private async performSave(): Promise<void> {
-		try {
-			await this.file.write({
-				_chunks: this._chunks,
-				createdAt: this._chunks.reduce((earliest, chunk) => Math.min(earliest, chunk.metadata.timestamp), Date.now()),
-				updatedAt: Date.now(),
-			});
-		} catch (error) {
-			console.error('Error saving vector store:', error);
-		}
+		if (this.storageMode !== 'disk') return;
+		await this.file.write({ _chunks: this._chunks, createdAt: this._chunks.reduce((earliest, chunk) => Math.min(earliest, chunk.metadata.timestamp), Date.now()), updatedAt: Date.now() });
 	}
 
   addFile(file: TFile, config: RAGConfig): Promise<void> {
@@ -121,56 +133,24 @@ export class VectorStore {
     const _chunks = chunkText(content, config);
     const fresh: DocumentChunk[] = [];
 
-    const batchSize = 10; // Process 10 _chunks at a time
+    const batchSize = Math.max(1, Math.min(100, Math.floor(config.embeddingBatchSize || 10)));
     for (let currentIndex = 0; currentIndex < _chunks.length; currentIndex += batchSize) {
       const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
 
-      for (let i = currentIndex; i < batchEnd; i++) {
-          const chunkId = `${path}-${String(i)}`;
-
-          // Generate embedding for the chunk content
-          const embeddingModel = config.embeddingModel;
-          let embedding: number[] | undefined;
-          if (embeddingModel) {
-            try {
-              embedding = await this.generateEmbedding(_chunks[i], embeddingModel);
-            } catch (error) {
-              console.error(`Failed to generate embedding for chunk ${chunkId}:`, error);
-            }
-          }
-
-          // Create combined text for embedding that includes path info if we don't have an embedding yet
-          if (!embedding && config.embeddingModel) {
-            try {
-              const combinedText = `${path} ${file.basename ?? ''} ${_chunks[i] ?? ''}`;
-              embedding = await this.generateEmbedding(combinedText, config.embeddingModel);
-            } catch (error) {
-              console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
-            }
-          }
-
-          const chunk: DocumentChunk = {
-            id: chunkId,
-            content: _chunks[i],
-            embedding: embedding,
-            metadata: {
-              source: 'file',
-              path,
-              title: file.basename,
-              timestamp: file.stat.mtime,
-              contentHash,
-              embeddingModel: config.embeddingModel,
-            }
-          };
-
-          fresh.push(chunk);
-      }
+      this.lifecycle.signal.throwIfAborted();
+      const batch = await Promise.all(_chunks.slice(currentIndex, batchEnd).map(async (content, offset): Promise<DocumentChunk> => ({
+        id: `${path}-${currentIndex + offset}`, content,
+        embedding: await this.generateEmbedding(content, config.embeddingModel || undefined, this.lifecycle.signal, true),
+        metadata: { source: 'file', path, title: file.basename, timestamp: file.stat.mtime, contentHash, embeddingModel: config.embeddingModel },
+      })));
+      fresh.push(...batch);
 
       if (batchEnd < _chunks.length) {
         await this.yieldToUi(1);
       }
     }
 
+    this.lifecycle.signal.throwIfAborted();
     this._chunks = [...this._chunks.filter(chunk => chunk.metadata.path !== path), ...fresh];
     this.chunkNorms.clear();
     await this.save();
@@ -223,83 +203,53 @@ export class VectorStore {
     return renamed;
   }
 
-  async addContent(content: string, metadata: unknown, config: RAGConfig): Promise<void> {
-    await this.load();
-    // Embeddings (and therefore norms) are about to change; drop the norm cache.
-    this.chunkNorms.clear();
-    // Split content into _chunks
-    const _chunks = chunkText(content, config);
-
-    // Remove existing _chunks for this content if ID is provided
-    if ((metadata as { id?: string }).id) {
-      this._chunks = this._chunks.filter(chunk => !chunk.id.startsWith(`${(metadata as { id?: string }).id ?? ''}-`));
-    }
-
-    const batchSize = 10; // Process 10 _chunks at a time
-    for (let currentIndex = 0; currentIndex < _chunks.length; currentIndex += batchSize) {
-      const batchEnd = Math.min(currentIndex + batchSize, _chunks.length);
-
-      for (let i = currentIndex; i < batchEnd; i++) {
-          const chunkId = `${(metadata as { id?: string }).id ?? 'content'}-${String(i)}`;
-
-          // Generate embedding for the chunk content
-          const embeddingModel = config.embeddingModel;
-          let embedding: number[] | undefined;
-          if (embeddingModel) {
-            try {
-              embedding = await this.generateEmbedding(_chunks[i], embeddingModel);
-            } catch (error) {
-              console.error(`Failed to generate embedding for chunk ${chunkId}:`, error);
-            }
-          }
-
-          // Create combined text for embedding that includes path/filename info if we don't have an embedding yet
-          if (!embedding && config.embeddingModel && (metadata as { path?: string }).path) {
-            try {
-              const combinedText = `${(metadata as { path?: string }).path ?? ''} ${(metadata as { title?: string }).title ?? ''} ${_chunks[i] ?? ''}`;
-              embedding = await this.generateEmbedding(combinedText, config.embeddingModel);
-            } catch (error) {
-              console.error(`Failed to generate combined embedding for chunk ${chunkId}:`, error);
-            }
-          }
-
-          const chunk: DocumentChunk = {
-            id: chunkId,
-            content: _chunks[i],
-            embedding: embedding,
-            metadata: {
-              ...(metadata as Record<string, unknown>),
-              timestamp: Date.now()
-            } as DocumentChunk['metadata']
-          };
-
-          this._chunks.push(chunk);
+  async addContent(content: string, rawMetadata: unknown, config: RAGConfig, options: MemoryWriteOptions = {}): Promise<void> {
+    const metadata = rawMetadata as { agentId?: string; path?: string; title?: string };
+    if (!metadata.agentId) throw new Error('Memory indexing requires an agent owner');
+    const owner = metadata.agentId;
+    return this.enqueue(`memory:${owner}`, async () => {
+      await this.load();
+      const signal = options.signal ? AbortSignal.any([options.signal, this.lifecycle.signal]) : this.lifecycle.signal;
+      signal.throwIfAborted();
+      const mode = options.mode ?? 'long-term';
+      const entryId = `${owner}:${await contentDigest(content)}`;
+      const pieces = chunkText(content, config);
+      const fresh: DocumentChunk[] = [];
+      for (let i = 0; i < pieces.length; i++) {
+        fresh.push({ id: `memory:${entryId}:${i}`, content: pieces[i], embedding: await this.generateEmbedding(pieces[i], config.embeddingModel || undefined, signal, true), metadata: {
+          source: 'agent-memory', agentId: owner, entryId, memoryMode: mode, path: metadata.path || `memory://${owner}`, title: metadata.title,
+          timestamp: Date.now(), embeddingModel: config.embeddingModel || '', contentHash: stableHash(content),
+        } });
       }
-
-      if (batchEnd < _chunks.length) {
-        await this.yieldToUi(1);
-      }
-    }
-
-    await this.save();
+      const current = mode === 'short-term' ? this.sessionMemories : this.memories;
+      const updated = [...current.filter(chunk => chunk.metadata.entryId !== entryId), ...fresh];
+      const entries = [...new Set(updated.filter(chunk => chunk.metadata.agentId === owner).map(chunk => chunk.metadata.entryId))];
+      const keep = new Set(entries.slice(-Math.max(1, Math.min(1000, options.maxEntries ?? 50))));
+      const retained = updated.filter(chunk => chunk.metadata.agentId !== owner || keep.has(chunk.metadata.entryId));
+      signal.throwIfAborted();
+      if (mode === 'short-term') this.sessionMemories = retained;
+      else { await this.memoryFile.write(retained); this.memories = retained; }
+      this.chunkNorms.clear();
+    });
   }
 
   private async yieldToUi(delayMs: number): Promise<void> {
-    const timerHost = typeof activeWindow !== 'undefined' ? activeWindow : window;
-    await new Promise<void>(resolve => timerHost.setTimeout(resolve, delayMs));
+    await new Promise<void>(resolve => runtimeClock.schedule(resolve, delayMs));
   }
 
-  async search(query: string, config: RAGConfig, embeddingModel?: string): Promise<SearchResult[]> {
+  async search(query: string, config: RAGConfig, embeddingModel?: string, scope: RetrievalScope = {}): Promise<SearchResult[]> {
     await this.load();
-    const queryEmbedding = await this.generateEmbedding(query, embeddingModel);
+    scope.signal?.throwIfAborted();
+    const memory = scope.memoryMode === 'short-term' ? this.sessionMemories : scope.memoryMode === 'long-term' ? this.memories : [];
+    const candidates = [...this._chunks, ...memory.filter(chunk => Boolean(scope.agentId) && chunk.metadata.agentId === scope.agentId)];
+    const queryEmbedding = await this.generateEmbedding(query, embeddingModel, scope.signal);
+    scope.signal?.throwIfAborted();
     if (!queryEmbedding) {
-      return rankResults(this._chunks.map(chunk => ({ chunk, similarity: keywordSimilarity(query, chunk) })), config);
+      return rankResults(candidates.map(chunk => ({ chunk, similarity: keywordSimilarity(query, chunk) })), config);
     }
 
     const queryNorm = vectorNorm(queryEmbedding);
-    const comparable = this._chunks.filter(chunk => chunk.metadata.embeddingModel
-      ? chunk.metadata.embeddingModel === embeddingModel
-      : !chunk.embedding || chunk.embedding.length === queryEmbedding.length);
+    const comparable = candidates.filter(chunk => !chunk.embedding || chunk.metadata.embeddingModel === embeddingModel);
     const unembedded = comparable.filter(chunk => !chunk.embedding).length;
     if (unembedded > 0) {
       console.warn(
@@ -325,13 +275,15 @@ export class VectorStore {
     return norm;
   }
 
-  private async generateEmbedding(text: string, embeddingModel?: string): Promise<number[] | undefined> {
+  private async generateEmbedding(text: string, embeddingModel?: string, signal?: AbortSignal, strict = false): Promise<number[] | undefined> {
     try {
       if (!embeddingModel) {
         return undefined;
       }
-      return await EmbeddingManager.generateEmbedding(text, embeddingModel, this.llmConfigs);
+      return await EmbeddingManager.generateEmbedding(text, embeddingModel, this.llmConfigs, signal);
     } catch (error) {
+      signal?.throwIfAborted();
+      if (strict) throw error;
       console.error('Error generating embedding:', error);
       return undefined;
     }
@@ -372,4 +324,9 @@ export class VectorStore {
       unembeddedChunkCount,
     };
   }
+}
+
+async function contentDigest(content: string): Promise<string> {
+  const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(content));
+  return Array.from(new Uint8Array(bytes), byte => byte.toString(16).padStart(2, '0')).join('');
 }

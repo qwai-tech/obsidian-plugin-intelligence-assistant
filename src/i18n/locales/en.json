@@ -105,7 +105,8 @@
       },
       "guidance": {
         "configureBaseUrl": "Configure base URL",
-        "addApiKey": "Add API key"
+        "addApiKey": "Add API key",
+        "provideServiceKey": "Provide service key"
       },
       "models": {
         "none": "No models",
@@ -561,13 +562,13 @@
             "preset-whoami": "Current user",
             "preset-uname": "System info (uname)",
             "preset-open": "Open File/URL (open)",
-            "preset-open-app": "Launch App (open -a)",
+            "preset-open-app": "Launch app (open -a)",
             "preset-safari": "Open in Safari",
             "preset-chrome": "Open in Chrome",
             "preset-firefox": "Open in Firefox",
             "preset-pbcopy": "Copy to clipboard",
             "preset-pbpaste": "Paste from clipboard",
-            "preset-say": "Text-to-Speech (say)",
+            "preset-say": "Text to speech (say)",
             "preset-osascript": "AppleScript runner",
             "preset-notify": "Desktop notification",
             "preset-screencapture": "Screenshot",
@@ -600,8 +601,8 @@
         "vectorStore": {
           "name": "Vector store",
           "desc": "Vector database for storing embeddings",
-          "memory": "In-Memory",
-          "disk": "Disk-Based"
+          "memory": "In memory",
+          "disk": "On disk"
         },
         "embeddingModel": {
           "name": "Embedding model",
@@ -656,7 +657,7 @@
         "strategy": {
           "name": "Chunking strategy",
           "desc": "Strategy for splitting documents into chunks",
-          "recursive": "Recursive (Smart)",
+          "recursive": "Recursive (smart)",
           "fixed": "Fixed size",
           "sentence": "By sentence",
           "paragraph": "By paragraph"
@@ -1153,7 +1154,8 @@
       "writesProposal": "Writes: proposal only; Apply required",
       "writesNone": "Writes: unavailable",
       "rag": "RAG: {{state}}",
-      "web": "Web: {{state}}"
+      "web": "Web: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "Write proposals",
@@ -1298,7 +1300,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (local)",
         "openrouter": "OpenRouter",
-        "custom": "Custom (OpenAI compatible)"
+        "custom": "Custom (OpenAI compatible)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "Model filter",
@@ -1335,10 +1338,21 @@
       "validation": {
         "selectProvider": "Please select a provider type",
         "invalidUrl": "Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)",
-        "baseUrlRequired": "Enter the base URL of the OpenAI-compatible endpoint."
+        "baseUrlRequired": "Enter the base URL of the OpenAI-compatible endpoint.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "connectionSuccess_one": "Connection successful. {{count}} model cached.",
-      "connectionSuccess_other": "Connection successful. {{count}} models cached."
+      "connectionSuccess_other": "Connection successful. {{count}} models cached.",
+      "resourceGroup": {
+        "name": "Resource group",
+        "desc": "Optional SAP AI Core resource group",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "Service key",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1640,7 +1654,8 @@
       "customEnabled_one": "{{count}} MCP, OpenAPI or CLI tool enabled",
       "customEnabled_other": "{{count}} MCP, OpenAPI or CLI tools enabled",
       "referencesPlusContext_one": "{{count}} explicit reference plus active context",
-      "referencesPlusContext_other": "{{count}} explicit references plus active context"
+      "referencesPlusContext_other": "{{count}} explicit references plus active context",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_one": "{{agent}} can use {{count}} tool.",
     "subtitle_other": "{{agent}} can use {{count}} tools."
@@ -1660,5 +1675,47 @@
       "starting_one": "Indexing {{count}} note…",
       "starting_other": "Indexing {{count}} notes…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

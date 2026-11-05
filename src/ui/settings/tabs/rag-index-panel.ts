@@ -1,9 +1,12 @@
-import { Setting, Notice } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { Setting } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
 import { setDestructiveButton } from '@/ui/utils/ui-helpers';
+
+const indexFeedback = new WeakMap<PluginHost, string>();
 
 export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHost): void {
 	const section = containerEl.createDiv('ia-settings-section');
@@ -77,6 +80,9 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 
 	// Initial stats load
 	void updateStats();
+	const status = section.createEl('p', { text: indexFeedback.get(plugin) ?? '', cls: 'ia-operation-feedback' });
+	status.setAttribute('role', 'status');
+	const showStatus = (message: string) => { indexFeedback.set(plugin, message); status.setText(message); };
 
 	// Rebuild Index button
 	new Setting(section)
@@ -86,19 +92,21 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 			button.buttonEl.setAttribute('data-testid', TestIds.settings.ragRebuildBtn);
 			setDestructiveButton(button.setButtonText(t('settings.rag.indexMgmt.rebuild.btn')))
 			.onClick(async () => {
+				if (!plugin.settings.ragConfig.enabled) { showStatus(t('ux.ragEnableFirst')); return; }
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.rebuild.rebuilding'));
 
 				try {
 					const ragManager = plugin.services.rag;
 					ragManager.updateConfig(plugin.settings.ragConfig, plugin.settings.llmConfigs);
-					await ragManager.clearIndex();
+					await ragManager.clearIndex(false);
 					await ragManager.indexVault();
 					await updateStats();
-					new Notice(t('settings.rag.indexMgmt.notices.rebuilt'));
+					showStatus(t('settings.rag.indexMgmt.notices.rebuilt'));
 				} catch (error) {
 					console.error('Failed to rebuild index:', error);
-					new Notice(t('settings.rag.indexMgmt.notices.rebuildFailed'));
+					showStatus(t('settings.rag.indexMgmt.notices.rebuildFailed'));
+					notify(t('settings.rag.indexMgmt.notices.rebuildFailed'), 5000, 'rag-index');
 				} finally {
 					button.setDisabled(false);
 					button.setButtonText(t('settings.rag.indexMgmt.rebuild.btn'));
@@ -113,6 +121,7 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 		.addButton(button => button
 			.setButtonText(t('settings.rag.indexMgmt.refresh.btn'))
 			.onClick(async () => {
+				if (!plugin.settings.ragConfig.enabled) { showStatus(t('ux.ragEnableFirst')); return; }
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.refresh.refreshing'));
 
@@ -120,10 +129,11 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 					const ragManager = plugin.services.rag;
 					await ragManager.refreshIndex();
 					await updateStats();
-					new Notice(t('settings.rag.indexMgmt.notices.refreshed'));
+					showStatus(t('settings.rag.indexMgmt.notices.refreshed'));
 				} catch (error) {
 					console.error('Failed to refresh index:', error);
-					new Notice(t('settings.rag.indexMgmt.notices.refreshFailed'));
+					showStatus(t('settings.rag.indexMgmt.notices.refreshFailed'));
+					notify(t('settings.rag.indexMgmt.notices.refreshFailed'), 5000, 'rag-index');
 				} finally {
 					button.setDisabled(false);
 					button.setButtonText(t('settings.rag.indexMgmt.refresh.btn'));
@@ -137,7 +147,7 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 		.addButton(button => setDestructiveButton(button
 			.setButtonText(t('settings.rag.indexMgmt.clear.btn')))
 			.onClick(async () => {
-				if (!await showConfirm(plugin.app, t('settings.rag.confirm.clear'))) return;
+				if (!await showConfirm(plugin.app, t('settings.rag.confirm.clear'), { title: t('settings.rag.indexMgmt.clear.name'), confirmText: t('settings.rag.indexMgmt.clear.name') })) return;
 				button.setDisabled(true);
 				button.setButtonText(t('settings.rag.indexMgmt.clear.clearing'));
 
@@ -145,10 +155,11 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 					const ragManager = plugin.services.rag;
 					await ragManager.clearIndex();
 					await updateStats();
-					new Notice(t('settings.rag.indexMgmt.notices.cleared'));
+					showStatus(t('settings.rag.indexMgmt.notices.cleared'));
 				} catch (error) {
 					console.error('Failed to clear index:', error);
-					new Notice(t('settings.rag.indexMgmt.notices.clearFailed'));
+					showStatus(t('settings.rag.indexMgmt.notices.clearFailed'));
+					notify(t('settings.rag.indexMgmt.notices.clearFailed'), 5000, 'rag-index');
 				} finally {
 					button.setDisabled(false);
 					button.setButtonText(t('settings.rag.indexMgmt.clear.btn'));

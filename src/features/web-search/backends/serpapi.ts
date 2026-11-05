@@ -13,7 +13,7 @@ interface SerpApiResponse {
 	organic_results?: SerpApiOrganicResult[];
 }
 
-export async function searchSerpAPI(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchSerpAPI(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	if (!config.apiKey) {
 		throw new Error('SerpAPI key is required for SerpAPI search');
 	}
@@ -38,7 +38,7 @@ export async function searchSerpAPI(query: string, maxResults: number, { config,
 	const searchUrl = `${endpoint}?${params.toString()}`;
 	
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: searchUrl,
 			method: 'GET',
 		});

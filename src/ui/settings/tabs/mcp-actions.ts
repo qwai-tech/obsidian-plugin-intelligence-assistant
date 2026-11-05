@@ -1,18 +1,20 @@
-import { App, Notice } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
 import type { CachedMCPTool, MCPServerConfig } from '@/features/tools';
 import { t } from '@/i18n';
 import { MCPServerModal } from '@/ui/modals/mcp-server-modal';
+import { setMcpFailure } from './mcp-feedback';
 
 export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 	const mcpServers = plugin.settings.mcpServers;
 
 	if (mcpServers.length === 0) {
-		new Notice(t('settings.mcp.notices.noServersConfigured'));
+		notify(t('settings.mcp.notices.noServersConfigured'));
 		return;
 	}
 
-	new Notice(t('settings.mcp.notices.testingAll', { count: mcpServers.length }));
+	notify(t('settings.mcp.notices.testingAll', { count: mcpServers.length }));
 
 	const results: {name: string, success: boolean, error?: string}[] = [];
 	const probed = new Map<string, CachedMCPTool[]>();
@@ -25,6 +27,7 @@ export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 
 		try {
 			probed.set(server.name, await plugin.services.tools.probeMcp(server));
+			setMcpFailure(plugin, server.name);
 
 			results.push({
 				name: server.name,
@@ -32,6 +35,7 @@ export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 				error: undefined
 			});
 		} catch (error: unknown) {
+			setMcpFailure(plugin, server.name, error instanceof Error ? error.message : String(error));
 			console.error(`[MCP] ${server.name} connection test failed:`, error);
 			results.push({
 				name: server.name,
@@ -58,9 +62,9 @@ export async function testAllMcpConnections(plugin: PluginHost): Promise<void> {
 	const failed = results.filter(r => !r.success).length;
 
 	if (failed === 0) {
-		new Notice(t('settings.mcp.notices.testAllSuccess', { count: successful }));
+		notify(t('settings.mcp.notices.testAllSuccess', { count: successful }));
 	} else {
-		new Notice(t('settings.mcp.notices.testAllPartial', { successful, failed }));
+		notify(t('settings.mcp.notices.testAllPartial', { successful, failed }));
 	}
 }
 

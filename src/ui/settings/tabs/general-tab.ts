@@ -1,9 +1,18 @@
-import type { SettingDefinitionItem } from 'obsidian';
+import type { SettingDefinition } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
 import { t } from '@/i18n';
+import { modelCatalog } from '@/ui/modals/agent-model-options';
+import { NotificationHistoryModal } from '@/ui/modals/notification-history-modal';
 
-export function generalDefinitions(plugin: PluginHost): SettingDefinitionItem[] {
+export function generalDefinitions(plugin: PluginHost, onModelDropdown?: (refresh: () => void) => void): SettingDefinition[] {
 	return [
+		{
+			name: t('ux.notificationsTitle'),
+			desc: t('ux.notificationsDesc'),
+			render: setting => {
+				setting.addButton(button => button.setButtonText(t('ux.viewNotifications')).onClick(() => new NotificationHistoryModal(plugin.app).open()));
+			},
+		},
 		{
 			name: t('settings.general.pluginVersion.name'),
 			desc: plugin.manifest.version,
@@ -11,7 +20,22 @@ export function generalDefinitions(plugin: PluginHost): SettingDefinitionItem[] 
 		{
 			name: t('settings.general.defaultModel.name'),
 			desc: t('settings.general.defaultModel.desc'),
-			control: { type: 'text', key: 'defaultModel', placeholder: t('settings.general.defaultModel.placeholder') },
+			render: (setting) => {
+				setting.addDropdown(dropdown => {
+					const refresh = () => {
+						const models = modelCatalog(plugin.settings.llmConfigs).options;
+						const options = Object.fromEntries(models.map(model => [model.id, model.label]));
+						if (!options[plugin.settings.defaultModel]) options[plugin.settings.defaultModel || ''] = plugin.settings.defaultModel || t('chat.header.noModels');
+						dropdown.selectEl.empty();
+						dropdown.addOptions(options).setValue(plugin.settings.defaultModel);
+					};
+					refresh();
+					onModelDropdown?.(refresh);
+					dropdown.onChange(async value => {
+						await plugin.updateSettings(settings => { settings.defaultModel = value; });
+					});
+				});
+			},
 		},
 		{
 			name: t('settings.general.conversationTitleMode.name'),

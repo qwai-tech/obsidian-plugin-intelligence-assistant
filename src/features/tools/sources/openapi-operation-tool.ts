@@ -1,6 +1,6 @@
 import type { HttpPort } from '@qwai/obsidian-llm';
 import type { OpenApiAuthType } from '@/features/tools/types/openapi-tools';
-import type { Tool, ToolDefinition, ToolResult } from '@/features/tools/types/tools';
+import type { Tool, ToolDefinition, ToolResult, ToolExecutionContext } from '@/features/tools/types/tools';
 
 export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'head' | 'options' | 'trace';
 export type ParameterLocation = 'path' | 'query' | 'header' | 'body';
@@ -42,7 +42,7 @@ export class OpenApiOperationTool implements Tool {
 		this.provider = providerId;
 	}
 
-	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>, context: ToolExecutionContext = {}): Promise<ToolResult> {
 		try {
 			const normalizedArgs: Record<string, ToolArgumentValue> = {};
 			const sourceArgs = args ?? {};
@@ -55,7 +55,7 @@ export class OpenApiOperationTool implements Tool {
 				url: prepared.url,
 				method: this.method.toUpperCase(),
 				headers: prepared.headers,
-				body: prepared.body
+				body: prepared.body, signal: context.signal, retry: 'never',
 			});
 
 			const isJson = typeof response.headers?.['content-type'] === 'string' &&

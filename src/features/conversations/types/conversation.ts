@@ -7,13 +7,17 @@ import type { Attachment, FileReference } from '@/features/chat';
 import type { RAGSource } from '@/features/knowledge';
 import type { WebSearchResult } from '@/features/web-search';
 import type { ReasoningStep, AgentExecutionStep } from '@/features/llm';
+import type { AgentTaskCheckpoint } from '@/features/agent';
 
 export interface Message {
 	role: 'user' | 'assistant' | 'system';
 	content: string;
+	context?: boolean;
 	timestamp?: number;
 	model?: string;
 	provider?: string;
+	providerLabel?: string;
+	stopped?: boolean;
 	attachments?: Attachment[];
 	references?: FileReference[];
 	ragSources?: RAGSource[];
@@ -22,6 +26,7 @@ export interface Message {
 	reasoningSteps?: ReasoningStep[];
 	reasoningContent?: string;
 	agentExecutionSteps?: AgentExecutionStep[];
+	agentTask?: AgentTaskCheckpoint;
 	tokenUsage?: {
 		promptTokens?: number;
 		completionTokens?: number;

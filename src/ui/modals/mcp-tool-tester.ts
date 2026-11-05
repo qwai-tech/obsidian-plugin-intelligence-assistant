@@ -1,4 +1,5 @@
-import { Notice, Setting } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { Setting } from 'obsidian';
 import { t } from '@/i18n';
 import type { ToolRegistry, ToolParameter } from '@/features/tools';
 import { errorMessage } from '@/core/utils/errors';
@@ -62,7 +63,7 @@ export function renderMcpToolTester(container: HTMLElement, registry: ToolRegist
 		if (!toolSelect.value) return;
 		const parsed = parseToolArguments(inputs.map(({ param, input }) => toField(param, input)));
 		if (!parsed.ok) {
-			new Notice(t(`modals.mcpInspector.logs.notices.${parsed.problem}`, { name: parsed.name }));
+			notify(t(`modals.mcpInspector.logs.notices.${parsed.problem}`, { name: parsed.name }));
 			return;
 		}
 		runButton.disabled = true;
@@ -71,10 +72,10 @@ export function renderMcpToolTester(container: HTMLElement, registry: ToolRegist
 		void registry.executeTool(toolSelect.value, parsed.args)
 			.then(result => {
 				showResult(resultContainer, result);
-				new Notice(result.success ? t('modals.mcpInspector.logs.notices.success') : t('modals.mcpInspector.logs.notices.failed'));
+				notify(result.success ? t('modals.mcpInspector.logs.notices.success') : t('modals.mcpInspector.logs.notices.failed'));
 			}, (error: unknown) => {
 				showError(resultContainer, errorMessage(error));
-				new Notice(t('modals.mcpInspector.logs.notices.error', { message: errorMessage(error) }));
+				notify(t('modals.mcpInspector.logs.notices.error', { message: errorMessage(error) }));
 			})
 			.finally(() => {
 				runButton.disabled = false;

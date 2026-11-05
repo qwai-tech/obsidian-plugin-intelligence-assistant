@@ -13,7 +13,7 @@ interface SearchApiResponse {
 	results?: SearchApiResult[];
 }
 
-export async function searchSearXNG(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchSearXNG(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	if (!config.searxngEndpoint) {
 		throw new Error('SearXNG endpoint is required for SearXNG search');
 	}
@@ -32,7 +32,7 @@ export async function searchSearXNG(query: string, maxResults: number, { config,
 	const searchUrl = `${config.searxngEndpoint}?${params.toString()}`;
 	
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: searchUrl,
 			method: 'GET',
 			headers: {

@@ -27,7 +27,7 @@ export type KernelEvent =
 	| { type: 'text_delta'; text: string }
 	| { type: 'reasoning_delta'; text: string }
 	| { type: 'tool_started'; call: ToolCallRequest; reasoning?: string }
-	| { type: 'tool_finished'; call: ToolCallRequest; ok: boolean; output: string; value: JsonValue }
+	| { type: 'tool_finished'; call: ToolCallRequest; ok: boolean; output: string; value: JsonValue; dispatched?: boolean }
 	| { type: 'guard_triggered'; guard: string; message: string }
 	| { type: 'proposal_created'; call: ToolCallRequest }
 	| { type: 'budget_updated'; stepLimit: number }
@@ -35,5 +35,6 @@ export type KernelEvent =
 	| { type: 'run_finished'; reason: FinishReason; answer: string };
 
 export interface RunJournal {
+	flush?(): Promise<void>;
 	append(runId: string, event: KernelEvent): Promise<void>;
 }

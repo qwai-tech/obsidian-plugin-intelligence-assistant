@@ -1,3 +1,5 @@
+import { completionError } from '../completion-status';
+import { assertRequestOptions } from '../request-options';
 import { BaseStreamingProvider, type ChunkParser, type ParsedStreamChunk } from '../base-streaming-provider';
 import type { ChatRequest, ChatResponse, LLMMessage } from '../types';
 
@@ -16,7 +18,7 @@ interface WireToolCall {
 type WireMessage = Omit<LLMMessage, 'role' | 'tool_calls'> & { role: LLMMessage['role'] | 'tool'; tool_calls?: WireToolCall[] };
 
 interface GeminiResponse {
-	candidates?: Array<{ content?: { parts?: Array<{ text?: string; functionCall?: { name: string; args?: unknown } }> } }>;
+	candidates?: Array<{ finishReason?: string; content?: { parts?: Array<{ text?: string; functionCall?: { name: string; args?: unknown } }> } }>;
 	usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number; totalTokenCount?: number };
 }
 
@@ -32,35 +34,33 @@ export class GoogleProvider extends BaseStreamingProvider {
 	}
 
 	protected getHeaders(): Record<string, string> {
-		return { 'Content-Type': 'application/json' };
+		return { 'Content-Type': 'application/json', ...(this.config.apiKey ? { 'x-goog-api-key': this.config.apiKey } : {}) };
 	}
 
 	private modelUrl(model: string, method: string): string {
 		const base = this.getBaseUrl('https://generativelanguage.googleapis.com/v1beta');
-		return `${base}/models/${this.extractModelName(model)}:${method}?key=${this.config.apiKey ?? ''}`;
+		return `${base}/models/${this.extractModelName(model)}:${method}`;
 	}
 
-	async chat(request: ChatRequest): Promise<ChatResponse> {
-		const response = await this.makeRequest(this.modelUrl(request.model, 'generateContent'), this.buildBody(request), request.signal) as { json: GeminiResponse };
-		const data = response.json;
-		return {
-			content: textOf(data),
-			usage: {
-				promptTokens: data.usageMetadata?.promptTokenCount ?? 0,
-				completionTokens: data.usageMetadata?.candidatesTokenCount ?? 0,
-				totalTokens: data.usageMetadata?.totalTokenCount ?? 0,
-			},
-		};
+	protected prepareBufferedRequest(request: ChatRequest): { url: string; body: unknown } {
+		return { url: this.modelUrl(request.model, 'generateContent'), body: this.buildBody(request) };
+	}
+	protected decodeBufferedResponse(raw: unknown): ChatResponse {
+		const data = raw as GeminiResponse;
+		if (!Array.isArray(data?.candidates)) throw new Error('The service returned no Gemini candidates');
+		const parsed = this.createChunkParser()(data);
+		if (parsed?.failure) throw parsed.failure;
+		return { content: textOf(data), toolCalls: parsed?.toolCalls, usage: parsed?.usage };
 	}
 
-	async generateEmbedding(text: string, model: string): Promise<number[]> {
+	async generateEmbedding(text: string, model: string, options?: { signal?: AbortSignal }): Promise<number[]> {
 		const body = { model: `models/${this.extractModelName(model)}`, content: { parts: [{ text }] } };
-		const response = await this.makeRequest(this.modelUrl(model, 'embedContent'), body) as { json: { embedding: { values: number[] } } };
+		const response = await this.makeRequest(this.modelUrl(model, 'embedContent'), body, options?.signal) as { json: { embedding: { values: number[] } } };
 		return response.json.embedding.values;
 	}
 
 	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
-		return { url: `${this.modelUrl(request.model, 'streamGenerateContent')}&alt=sse`, body: this.buildBody(request) };
+		return { url: `${this.modelUrl(request.model, 'streamGenerateContent')}?alt=sse`, body: this.buildBody(request) };
 	}
 
 	protected createChunkParser(): ChunkParser {
@@ -82,18 +82,20 @@ export class GoogleProvider extends BaseStreamingProvider {
 					function: { name: part.functionCall?.name ?? '', arguments: JSON.stringify(part.functionCall?.args ?? {}) },
 				}));
 			const content = textOf(response) || null;
-			if (!content && !usage && toolCalls.length === 0) {
+			if (!content && !usage && toolCalls.length === 0 && !response.candidates?.[0]?.finishReason) {
 				return null;
 			}
-			return { content, done: false, usage, toolCalls: toolCalls.length > 0 ? toolCalls : undefined };
+			const failure = completionError(response.candidates?.[0]?.finishReason, usage, content ?? undefined);
+			return { failure, content, done: false, complete: Boolean(response.candidates?.[0]?.finishReason), usage, toolCalls: !failure && toolCalls.length > 0 ? toolCalls : undefined };
 		};
 	}
 
 	private buildBody(request: ChatRequest): Record<string, unknown> {
-		const messages = request.messages as WireMessage[];
+		assertRequestOptions(this.name, request, ['topK']);
+		const messages = request.messages;
 		const system = messages.filter((m) => m.role === 'system').map((m) => m.content).join('\n\n');
 		const body: Record<string, unknown> = {
-			contents: toContents(messages),
+			contents: toGeminiContents(messages),
 			generationConfig: generationConfigOf(request),
 		};
 		if (system) {
@@ -116,7 +118,8 @@ export class GoogleProvider extends BaseStreamingProvider {
 	}
 }
 
-function toContents(messages: WireMessage[]): Content[] {
+export function toGeminiContents(input: LLMMessage[]): Content[] {
+	const messages = input as WireMessage[];
 	const callNames = new Map<string, string>();
 	const contents: Content[] = [];
 	for (const message of messages) {
@@ -195,6 +198,9 @@ function generationConfigOf(request: ChatRequest): Record<string, unknown> {
 		temperature: request.temperature ?? 0.7,
 		maxOutputTokens: request.maxTokens ?? 2000,
 	};
+	if (request.topP !== undefined) config.topP = request.topP;
+	if (request.topK !== undefined) config.topK = request.topK;
+	if (request.stopSequences ?? request.stop) config.stopSequences = request.stopSequences ?? (typeof request.stop === 'string' ? [request.stop] : request.stop);
 	if (request.responseFormat?.type === 'json_object' || request.responseFormat?.type === 'json_schema') {
 		config.responseMimeType = 'application/json';
 	}

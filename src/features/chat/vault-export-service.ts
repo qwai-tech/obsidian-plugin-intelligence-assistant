@@ -1,4 +1,5 @@
-import { App, Notice, TFile } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App, TFile } from 'obsidian';
 import { t } from '@/i18n';
 import type { Message } from '@/features/conversations';
 import { errorMessage } from '@/core/utils/errors';
@@ -42,7 +43,7 @@ export class VaultExportService {
 			}
 			content += message.content + '\n';
 			await this.app.vault.create(fileName, content);
-			new Notice(t('chat.notices.noteCreated', { name: fileName }));
+			notify(t('chat.notices.noteCreated', { name: fileName }));
 			const file = this.app.vault.getAbstractFileByPath(fileName);
 			if (file instanceof TFile) {
 				await this.app.workspace.getLeaf(false).openFile(file);
@@ -50,7 +51,7 @@ export class VaultExportService {
 		} catch (_error) {
 			const errMsg = errorMessage(_error);
 			console.error('Error creating note:', errMsg);
-			new Notice(t('chat.notices.noteCreateFailed', { message: errMsg }));
+			notify(t('chat.notices.noteCreateFailed', { message: errMsg }));
 		}
 	}
 
@@ -65,12 +66,12 @@ export class VaultExportService {
 			}
 			addition += message.content + '\n';
 			await rewriteNote(this.app, selectedFile, (current) => current + addition);
-			new Notice(t('chat.notices.messageInserted', { path: selectedFile.path }));
+			notify(t('chat.notices.messageInserted', { path: selectedFile.path }));
 			await this.app.workspace.getLeaf(false).openFile(selectedFile);
 		} catch (_error) {
 			const errMsg = errorMessage(_error);
 			console.error('Error inserting to note:', errMsg);
-			new Notice(t('chat.notices.messageInsertFailed', { message: errMsg }));
+			notify(t('chat.notices.messageInsertFailed', { message: errMsg }));
 		}
 	}
 }

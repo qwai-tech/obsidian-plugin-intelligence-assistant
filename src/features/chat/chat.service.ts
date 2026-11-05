@@ -8,11 +8,13 @@ import type { LLMConfig, StreamChunk } from '@/features/llm';
 import type { RAGSource, KnowledgeBase } from '@/features/knowledge';
 import type { WebSearchResult, WebSearchService } from '@/features/web-search';
 import type { FileReference } from '@/features/chat/types/attachments';
-import type { Agent, AgentEngineLoop, AgentLoopCallbacks } from '@/features/agent';
+import type { Agent, AgentEngineLoop, AgentLoopCallbacks, TaskAuthorization } from '@/features/agent';
+import { RunCoordinator, resolveAgentTask, taskCheckpointContext } from '@/features/agent';
 import { IFileSystem } from '@/core/interfaces/file-system.interface';
 import { ProviderFactory } from '@qwai/obsidian-llm';
 import { ModelManager } from '@qwai/obsidian-llm';
 import type { UsageRecord } from '@/features/usage';
+import { savedExecutionBoundary, savedExecutionContext } from './saved-execution-context';
 
 /**
  * Reference-content budget. Referenced notes are inlined into the prompt and
@@ -27,6 +29,9 @@ export const MAX_REFERENCE_TOTAL_CHARS = 24000;
 export interface ChatOptions {
 	model: string;
 	mode: 'chat' | 'agent';
+	/** Original user input; never enriched vault/attachment content. */
+	userText?: string;
+	authorization?: TaskAuthorization;
 	temperature?: number;
 	maxTokens?: number;
 	topP?: number;
@@ -50,7 +55,16 @@ export interface UsageRecorder {
 	recordUsage(record: UsageRecord): Promise<void>;
 }
 
+export interface ChatCallbacks {
+	onChunk: (chunk: StreamChunk) => void;
+	onComplete: (finalMessage: Message) => void;
+	onError: (error: Error) => void;
+	onRAGSources?: (sources: RAGSource[]) => void;
+	onWebSearch?: (results: WebSearchResult[]) => void;
+	signal?: AbortSignal;
+}
 export interface ChatServiceDependencies {
+	runs?: RunCoordinator;
 	fileSystem: IFileSystem;
 	knowledge: KnowledgeBase;
 	webSearchService: WebSearchService;
@@ -60,19 +74,19 @@ export interface ChatServiceDependencies {
 }
 
 export class ChatService {
+	private readonly runs: RunCoordinator;
 	private readonly fileSystem: IFileSystem;
 	private readonly knowledge: KnowledgeBase;
 	private readonly webSearchService: WebSearchService;
 	private readonly settings: () => ModelSettings;
-	private readonly usageRepo?: UsageRecorder;
 	private readonly agentEngineLoop?: AgentEngineLoop;
 
 	constructor(dependencies: ChatServiceDependencies) {
+		this.runs = dependencies.runs ?? new RunCoordinator();
 		this.fileSystem = dependencies.fileSystem;
 		this.knowledge = dependencies.knowledge;
 		this.webSearchService = dependencies.webSearchService;
 		this.settings = dependencies.settings;
-		this.usageRepo = dependencies.usageRepo;
 		this.agentEngineLoop = dependencies.agentEngineLoop;
 	}
 
@@ -87,16 +101,20 @@ export class ChatService {
 		allMessages: Message[], 
 		targetMessage: Message, 
 		llmContent: string, 
-		contextWindow = 20
+		contextWindow = 20,
+		agentMode = false
 	): Message[] {
 		const targetIndex = allMessages.indexOf(targetMessage);
+		const task = agentMode ? resolveAgentTask(allMessages, targetMessage) : undefined;
+		if (task) targetMessage.agentTask = task;
 		
 		const formattedMessages = allMessages.map((msg, index) => {
 			const isTarget = index === targetIndex;
 			const baseContent = isTarget ? llmContent : msg.content;
+			const reasoning = msg.role === 'assistant' && msg.reasoningContent !== undefined ? { reasoningContent: msg.reasoningContent } : {};
 
 			if (!msg.attachments || msg.attachments.length === 0) {
-				return { role: msg.role, content: baseContent };
+				return { role: msg.role, content: baseContent, ...(isTarget && task ? { agentTask: task } : {}), ...reasoning };
 			}
 
 			let finalContent = baseContent;
@@ -112,25 +130,20 @@ export class ChatService {
 
 			const imageAttachments = msg.attachments.filter(att => att.type === 'image');
 			if (imageAttachments.length === 0) {
-				return { role: msg.role, content: finalContent };
+				return { role: msg.role, content: finalContent, ...(isTarget && task ? { agentTask: task } : {}), ...reasoning };
 			}
 			finalContent += '\n\n---\n**Attached Images:**\n\n';
 			imageAttachments.forEach(att => {
 				finalContent += `- Image: ${att.name} (Path: ${att.path})\n`;
 			});
-			return { role: msg.role, content: finalContent, attachments: imageAttachments };
+			return { role: msg.role, content: finalContent, attachments: imageAttachments, ...(isTarget && task ? { agentTask: task } : {}), ...reasoning };
 		});
 
-		// Deduplicate and Truncate
-		const seen = new Set<string>();
-		const deduped = formattedMessages.filter(msg => {
-			const key = `${msg.role}:${msg.content}`;
-			if (seen.has(key)) return false;
-			seen.add(key);
-			return true;
-		});
-
-		return deduped.slice(-contextWindow);
+		// Repeated prompts are legitimate new turns (including retries). Keep
+		// their chronological position rather than globally deduplicating text.
+		const saved = savedExecutionContext(allMessages.slice(-contextWindow));
+		const boundary = savedExecutionBoundary(allMessages.slice(-contextWindow));
+		return [...(task ? [taskCheckpointContext(task)] : []), ...(boundary ? [task ? { ...boundary, context: true } : boundary] : []), ...(saved ? [saved] : []), ...formattedMessages.slice(-contextWindow)];
 	}
 
 	/**
@@ -188,18 +201,16 @@ export class ChatService {
 	/**
 	 * Main chat execution loop (Streaming)
 	 */
-	async streamResponse(
-		messages: Message[],
-		options: ChatOptions,
-		callbacks: {
-			onChunk: (chunk: StreamChunk) => void;
-			onComplete: (finalMessage: Message) => void;
-			onError: (error: Error) => void;
-			onRAGSources?: (sources: RAGSource[]) => void;
-			onWebSearch?: (results: WebSearchResult[]) => void;
-			signal?: AbortSignal;
-		}
-	): Promise<void> {
+	streamResponse(messages: Message[], options: ChatOptions, callbacks: ChatCallbacks): Promise<void> {
+		return this.runs.run(callbacks.signal, async lease => {
+			await this.streamOwned(JSON.parse(JSON.stringify(messages)) as Message[], JSON.parse(JSON.stringify(options)) as ChatOptions, { ...callbacks, signal: lease.signal,
+				onComplete: message => { lease.finish(lease.signal.aborted ? 'aborted' : 'completed'); callbacks.onComplete(message); },
+				onError: error => { lease.finish(lease.signal.aborted ? 'aborted' : 'failed'); callbacks.onError(error); },
+			});
+		});
+	}
+
+	private async streamOwned(messages: Message[], options: ChatOptions, callbacks: ChatCallbacks): Promise<void> {
 		try {
 			const { model: selectedModel } = options;
 			const config = ModelManager.findConfigForModelByProvider(selectedModel, this.settings().llmConfigs);
@@ -218,7 +229,7 @@ export class ChatService {
 			// Handle RAG
 			let ragSources: RAGSource[] = [];
 			if (options.enableRAG) {
-				ragSources = await this.knowledge.search(userQuery, selectedModel, this.settings().defaultModel);
+				ragSources = await this.knowledge.search(userQuery, selectedModel, this.settings().defaultModel, { memoryMode: 'none', signal: callbacks.signal });
 				if (ragSources.length > 0) {
 					
 					const ragContext = ragSources
@@ -226,7 +237,7 @@ export class ChatService {
 						.join('\n\n');
 						
 					systemMessages.push({
-						role: 'system',
+						role: 'system', context: true,
 						content: `RAG Context (retrieved from your vault):\n\n${ragContext}`
 					});
 					
@@ -237,10 +248,10 @@ export class ChatService {
 			// 3. Handle Web Search
 			let webResults: WebSearchResult[] = [];
 			if (options.enableWebSearch) {
-				webResults = await this.webSearchService.search(userQuery);
+				webResults = await this.webSearchService.search(options.userText ?? '', { signal: callbacks.signal });
 				if (webResults && webResults.length > 0) {
 					const webContext = this.webSearchService.formatResultsAsContext(webResults);
-					systemMessages.push({ role: 'system', content: webContext });
+					systemMessages.push({ role: 'system', context: true, content: webContext });
 					if (callbacks.onWebSearch) callbacks.onWebSearch(webResults);
 				}
 			}
@@ -259,7 +270,7 @@ export class ChatService {
 				await provider.streamChat(
 					{
 						messages: finalMessages,
-						model: selectedModel,
+						model: selectedModel, conversationId: options.conversationId, purpose: 'chat',
 						temperature: options.temperature,
 						maxTokens: options.maxTokens,
 						topP: options.topP,
@@ -299,18 +310,6 @@ export class ChatService {
 				reasoningContent: fullReasoning || undefined,
 				tokenUsage: streamUsage ? { promptTokens: streamUsage.promptTokens, completionTokens: streamUsage.completionTokens, totalTokens: streamUsage.totalTokens } : undefined,
 			};
-
-			if (this.usageRepo && streamUsage) {
-				void this.usageRepo.recordUsage({
-					model: selectedModel,
-					provider: config.provider,
-					promptTokens: streamUsage.promptTokens,
-					completionTokens: streamUsage.completionTokens,
-					totalTokens: streamUsage.totalTokens,
-					timestamp: Date.now(),
-					conversationId: options.conversationId
-				});
-			}
 
 			callbacks.onComplete(assistantMessage);
 

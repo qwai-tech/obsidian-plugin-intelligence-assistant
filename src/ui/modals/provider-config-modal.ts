@@ -1,22 +1,17 @@
-import {App, Modal, Notice, SecretComponent, Setting} from 'obsidian';
+import { notify } from '@/core/notifications';
+import {App, Modal, SecretComponent, Setting } from 'obsidian';
 import { describeConnectionError } from '@/ui/modals/connection-error';
 import type { LLMConfig, OllamaAdmin } from '@/features/llm';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { OllamaModelManagerModal } from './ollama-model-manager-modal';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
+import { parseSAPServiceKey, ensureConnectionId, PROVIDER_DEFINITIONS } from '@qwai/obsidian-llm';
+import { readableTextField } from '@/ui/utils/readable-text-field';
 
 const MODEL_FILTER_PLACEHOLDER = 'gpt-4|claude-';
 
-const LLM_PROVIDER_OPTIONS: Array<{ value: string; labelKey: string }> = [
-	{ value: 'openai', labelKey: 'modals.provider.providers.openai' },
-	{ value: 'anthropic', labelKey: 'modals.provider.providers.anthropic' },
-	{ value: 'google', labelKey: 'modals.provider.providers.google' },
-	{ value: 'deepseek', labelKey: 'modals.provider.providers.deepseek' },
-	{ value: 'ollama', labelKey: 'modals.provider.providers.ollama' },
-	{ value: 'openrouter', labelKey: 'modals.provider.providers.openrouter' },
-	{ value: 'custom', labelKey: 'modals.provider.providers.custom' },
-];
+const LLM_PROVIDER_OPTIONS = PROVIDER_DEFINITIONS.map(provider => ({ value: provider.id, labelKey: provider.labelKey }));
 
 export class ProviderConfigModal extends Modal {
 	private draft: LLMConfig;
@@ -26,6 +21,7 @@ export class ProviderConfigModal extends Modal {
 		super(app);
 		const clonedDraft = JSON.parse(JSON.stringify(initial)) as unknown as LLMConfig;
 		this.draft = clonedDraft;
+		ensureConnectionId(this.draft);
 		this.onSaveCallback = onSave;
 	}
 
@@ -33,6 +29,8 @@ export class ProviderConfigModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		this.setTitle(t('modals.provider.title'));
+		new Setting(contentEl).setName(t('ux.connectionName'))
+			.addText(text => text.setValue(this.draft.name ?? '').onChange(value => { this.draft.name = value.trim() || undefined; }));
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'llmConfigs[].provider',
@@ -47,6 +45,10 @@ export class ProviderConfigModal extends Modal {
 			dropdown
 				.setValue(this.draft.provider)
 				.onChange(value => {
+					if (value !== this.draft.provider) {
+						this.draft.cachedModels = [];
+						this.draft.cacheTimestamp = undefined;
+					}
 					this.draft.provider = value;
 					void this.renderProviderSpecific();
 				});
@@ -91,7 +93,7 @@ export class ProviderConfigModal extends Modal {
 				const validationError = this.validateConfig();
 				if (validationError) {
 					// Show validation error using Obsidian Notice
-					new Notice(validationError, 5000);
+					notify(validationError, 5000);
 					return;
 				}
 
@@ -132,6 +134,34 @@ export class ProviderConfigModal extends Modal {
 					.onClick(() => {
 						new OllamaModelManagerModal(this.app, this.ollama, this.draft, () => undefined).open();
 					}));
+		} else if (this.draft.provider === 'sap-ai-core') {
+			new Setting(this.providerContainer)
+				.setName(t('modals.provider.serviceKey.name'))
+				.setDesc(t('modals.provider.serviceKey.desc'))
+				.addComponent(el => new SecretComponent(this.app, el)
+					.setValue(this.draft.serviceKeySecret ?? '')
+					.onChange(name => {
+						this.draft.cachedModels = [];
+						this.draft.cacheTimestamp = undefined;
+						this.draft.serviceKeySecret = name || undefined;
+						this.draft.serviceKey = name ? this.app.secretStorage.getSecret(name) ?? undefined : undefined;
+					}));
+			new Setting(this.providerContainer)
+				.setName(t('modals.provider.resourceGroup.name'))
+				.setDesc(t('modals.provider.resourceGroup.desc'))
+				.addText(text => text.setPlaceholder(t('modals.provider.resourceGroup.placeholder')).setValue(this.draft.resourceGroup ?? '')
+					.onChange(value => {
+						this.draft.cachedModels = [];
+						this.draft.cacheTimestamp = undefined;
+						this.draft.resourceGroup = value.trim() || undefined;
+					}));
+			readableTextField(new Setting(this.providerContainer)
+				.setName(t('modals.provider.baseUrl.name')).setDesc(t('modals.provider.sapBaseUrlDesc')),
+			this.draft.baseUrl ?? '', value => {
+				this.draft.cachedModels = [];
+				this.draft.cacheTimestamp = undefined;
+				this.draft.baseUrl = value.trim() || undefined;
+			});
 		} else {
 			applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].apiKey',
@@ -151,19 +181,13 @@ export class ProviderConfigModal extends Modal {
 				? t('modals.provider.baseUrl.customDesc')
 				: t('modals.provider.baseUrl.optionalDesc');
 
-			applyConfigFieldMetadata(new Setting(this.providerContainer), {
+			readableTextField(applyConfigFieldMetadata(new Setting(this.providerContainer), {
 				path: 'llmConfigs[].baseUrl',
 				label: t('modals.provider.baseUrl.name'),
 				description: baseUrlDesc
-			}).addText(text => {
-					text.inputEl.setAttribute('data-testid', TestIds.settings.providerModalBaseUrlInput);
-					text
-						.setPlaceholder(this.getDefaultBaseUrl(this.draft.provider))
-						.setValue(this.draft.baseUrl || '')
-						.onChange(value => {
-							this.draft.baseUrl = value.trim() || undefined;
-						});
-				});
+			}), this.draft.baseUrl || '', value => { this.draft.baseUrl = value.trim() || undefined; }, {
+				placeholder: this.getDefaultBaseUrl(this.draft.provider), testId: TestIds.settings.providerModalBaseUrlInput,
+			});
 		}
 
 		this.renderCachedModelsPreview(this.providerContainer);
@@ -196,7 +220,7 @@ export class ProviderConfigModal extends Modal {
 	private async testConnection(button: HTMLButtonElement): Promise<void> {
 		const validationError = this.validateConfig();
 		if (validationError) {
-			new Notice(validationError, 5000);
+			notify(validationError, 5000);
 			return;
 		}
 
@@ -209,11 +233,11 @@ export class ProviderConfigModal extends Modal {
 			this.draft.cachedModels = models;
 			this.draft.cacheTimestamp = Date.now();
 			this.renderProviderSpecific();
-			new Notice(models.length > 0 ? t('modals.provider.connectionSuccess', { count: models.length }) : t('modals.provider.connectionEmpty'));
+			notify(models.length > 0 ? t('modals.provider.connectionSuccess', { count: models.length }) : t('modals.provider.connectionEmpty'));
 		} catch (error) {
 			console.error('Provider connection test failed:', error);
 			const { key, status } = describeConnectionError(error);
-			new Notice(t(`modals.provider.connectionErrors.${key}`, { status }), 8000);
+			notify(t(`modals.provider.connectionErrors.${key}`, { status }), 8000);
 		} finally {
 			button.disabled = false;
 			button.textContent = originalText;
@@ -241,6 +265,14 @@ export class ProviderConfigModal extends Modal {
 		// Validate provider is selected
 		if (!this.draft.provider || this.draft.provider.trim() === '') {
 			return t('modals.provider.validation.selectProvider');
+		}
+
+		if (this.draft.provider === 'sap-ai-core') {
+			try {
+				parseSAPServiceKey(this.draft.serviceKey, this.draft.baseUrl);
+			} catch {
+				return t('modals.provider.validation.invalidServiceKey');
+			}
 		}
 
 		if (this.draft.provider === 'custom' && !this.draft.baseUrl?.trim()) {

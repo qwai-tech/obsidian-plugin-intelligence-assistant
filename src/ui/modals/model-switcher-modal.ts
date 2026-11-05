@@ -1,4 +1,5 @@
-import { FuzzySuggestModal, Notice } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { FuzzySuggestModal } from 'obsidian';
 import type { App } from 'obsidian';
 import type { ModelInfo } from '@/features/llm';
 import { getModelDisplayName } from '@/ui/chat/utils/provider-utils';
@@ -46,18 +47,18 @@ export class ModelSwitcherModal extends FuzzySuggestModal<ModelInfo> {
 	getItemText(item: ModelInfo): string {
 		const name = item.name || getModelDisplayName(item.id) || item.id;
 		const active = item.id === this.deps.getCurrentModelId() ? ' ✓' : '';
-		return `${name} — ${item.provider}${active}`;
+		return `${name} — ${item.providerLabel || item.provider}${active}`;
 	}
 
 	onChooseItem(item: ModelInfo): void {
 		void this.deps
 			.applyModel(item.id)
 			.then(() => {
-				new Notice(t('modals.modelSwitcher.switched', { name: item.name || item.id }));
+				notify(t('modals.modelSwitcher.switched', { name: `${item.name || item.id} · ${item.providerLabel || item.provider}` }));
 			})
 			.catch((error) => {
 				console.error('[ModelSwitcher] Failed to apply model', error);
-				new Notice(t('modals.modelSwitcher.failed'));
+				notify(t('modals.modelSwitcher.failed'));
 			});
 	}
 }

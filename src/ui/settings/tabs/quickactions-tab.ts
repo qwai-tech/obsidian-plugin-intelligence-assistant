@@ -11,6 +11,7 @@ import { showConfirm } from '@/ui/modals/confirm-modal';
 import { ModelManager } from '@qwai/obsidian-llm';
 import { TestIds } from '@/ui/utils/test-ids';
 import { renderListRow, tagButton } from '@/ui/settings/list-row';
+import { modelDisplayLabel } from '@/ui/utils/model-label';
 
 export function displayQuickActionsTab(
 	containerEl: HTMLElement,
@@ -54,7 +55,7 @@ export function displayQuickActionsTab(
 	addBtn.addEventListener('click', () => {
 		const newAction: QuickActionConfig = {
 			id: `action-${Date.now()}`,
-			name: 'New Quick Action',
+			name: t('ux.newQuickAction'),
 			enabled: true,
 			prompt: 'Process the following text:\n\n',
 			actionType: 'replace'
@@ -75,7 +76,7 @@ export function displayQuickActionsTab(
 			name: t(`settings.quickActions.builtIn.${action.id}.name`, { defaultValue: action.name }),
 			badges: [t(`settings.quickActions.edit.actionType.${action.actionType}`, { defaultValue: action.actionType })],
 			lines: [
-				action.model || t('settings.quickActions.defaultModel'),
+				action.model ? modelDisplayLabel(action.model, plugin.settings.llmConfigs) : t('settings.quickActions.defaultModel'),
 				displayPrompt.length > 120 ? `${displayPrompt.substring(0, 120)}…` : displayPrompt,
 			],
 			testId: TestIds.settings.quickActionRow,
@@ -102,7 +103,7 @@ export function displayQuickActionsTab(
 			button.setButtonText(t('settings.quickActions.deleteBtn')).setDestructive();
 			tagButton(button.buttonEl, TestIds.settings.quickActionDeleteBtn, { 'data-action-id': action.id });
 			button.onClick(async () => {
-				if (await showConfirm(app, t('settings.quickActions.confirm.delete', { name: action.name }))) {
+				if (await showConfirm(app, t('settings.quickActions.confirm.delete', { name: action.name }), { title: t('ux.deleteQuickAction'), confirmText: t('settings.quickActions.deleteBtn') })) {
 					await plugin.updateSettings((settings) => {
 						settings.quickActions = settings.quickActions.filter(candidate => candidate.id !== action.id);
 					});
@@ -240,7 +241,7 @@ function openQuickActionEditModal(
 		private async addModelOptions(dropdown: DropdownComponent): Promise<void> {
 			const models = await ModelManager.getAllChatModels(this.plugin.settings.llmConfigs);
 			for (const model of models) {
-				dropdown.addOption(model.id, model.name);
+				dropdown.addOption(model.id, modelDisplayLabel(model.id, plugin.settings.llmConfigs));
 			}
 			dropdown.setValue(this.action.model || '');
 		}

@@ -1,8 +1,10 @@
-import { App, Modal, Notice, Setting } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App, Modal, Setting } from 'obsidian';
 import type { MCPServerConfig } from '@/features/tools';
 import { applyConfigFieldMetadata } from '@/ui/utils/config-field-metadata';
 import { t } from '@/i18n';
 import { TestIds } from '@/ui/utils/test-ids';
+import { readableTextField } from '@/ui/utils/readable-text-field';
 
 const ENV_PLACEHOLDER = 'API_KEY=xyz\nNODE_ENV=production';
 
@@ -65,33 +67,22 @@ export class MCPServerModal extends Modal {
 					this.draft.connectionMode = value as 'auto' | 'manual';
 				}));
 
-		applyConfigFieldMetadata(new Setting(contentEl), {
+		readableTextField(applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].command',
 			label: t('modals.mcpServer.command.name'),
 			description: t('modals.mcpServer.command.desc')
-		}).addText(text => {
-				text.inputEl.setAttribute('data-testid', TestIds.settings.mcpModalCommandInput);
-				const commandPlaceholder = 'npx @acme/mcp-server';
-				text.setPlaceholder(commandPlaceholder);
-				text.setValue(this.draft.command ?? '');
-				text.onChange(value => {
-					this.draft.command = value;
-				});
-			});
+		}), this.draft.command ?? '', value => { this.draft.command = value; }, {
+			placeholder: 'npx @acme/mcp-server', testId: TestIds.settings.mcpModalCommandInput,
+		});
 
-		applyConfigFieldMetadata(new Setting(contentEl), {
+		readableTextField(applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].args',
 			label: t('modals.mcpServer.arguments.name'),
 			description: t('modals.mcpServer.arguments.desc')
-		}).addText(text => {
-				text.inputEl.setAttribute('data-testid', TestIds.settings.mcpModalArgsInput);
-				text.setPlaceholder('--port=3000, --config=server.json');
-				text.setValue(this.argsText);
-				text.onChange(value => {
-					this.argsText = value;
-					this.draft.args = this.normalizeArgs(value);
-				});
-			});
+		}), this.argsText, value => {
+			this.argsText = value;
+			this.draft.args = this.normalizeArgs(value);
+		}, { placeholder: '--port=3000, --config=server.json', rows: 3, testId: TestIds.settings.mcpModalArgsInput });
 
 		applyConfigFieldMetadata(new Setting(contentEl), {
 			path: 'mcpServers[].env',
@@ -134,13 +125,13 @@ export class MCPServerModal extends Modal {
 			void (async () => {
 				const name = (this.draft.name ?? '').trim();
 				if (!name) {
-					new Notice(t('modals.mcpServer.validation.nameRequired'));
+					notify(t('modals.mcpServer.validation.nameRequired'));
 					return;
 				}
 
 				const command = (this.draft.command ?? '').trim();
 				if (!command) {
-					new Notice(t('modals.mcpServer.validation.commandRequired'));
+					notify(t('modals.mcpServer.validation.commandRequired'));
 					return;
 				}
 
@@ -157,7 +148,7 @@ export class MCPServerModal extends Modal {
 						this.envInputEl.addClass('ia-input-error');
 					}
 					const message = error instanceof Error ? error.message : 'Invalid environment variable entry';
-					new Notice(message);
+					notify(message);
 					return;
 				}
 

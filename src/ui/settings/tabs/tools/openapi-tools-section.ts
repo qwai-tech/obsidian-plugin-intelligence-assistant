@@ -1,16 +1,27 @@
+import { notify } from '@/core/notifications';
 /**
  * OpenAPI Tools Section
  * Renders the OpenAPI tools table and configuration modal for the tools settings tab
  */
 
-import { Notice, SecretComponent, Setting, Modal } from 'obsidian';
+import { SecretComponent, Setting, Modal } from 'obsidian';
 import { t } from '@/i18n';
 import { createTable } from '@/ui/utils/ui-helpers';
 import { TestIds } from '@/ui/utils/test-ids';
 import type { PluginHost } from '@/ui/plugin-host';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { setDestructiveButton } from '@/ui/utils/ui-helpers';
+import { readableTextField } from '@/ui/utils/readable-text-field';
 import type { OpenApiToolConfig, OpenApiAuthType, OpenApiSourceType } from '@/features/tools';
+import { errorMessage } from '@/core/utils/errors';
+
+interface SourceFeedback { message: string; failed: boolean; loading?: boolean }
+const sourceFeedback = new WeakMap<PluginHost, Map<string, SourceFeedback>>();
+function feedbackFor(plugin: PluginHost): Map<string, SourceFeedback> {
+	let state = sourceFeedback.get(plugin);
+	if (!state) { state = new Map(); sourceFeedback.set(plugin, state); }
+	return state;
+}
 
 export function renderOpenapiToolsSection(
 	content: HTMLElement,
@@ -58,6 +69,7 @@ export function renderOpenapiToolsSection(
 		row.insertCell().setText(config.name || t('settings.tools.openapi.unnamed'));
 		const sourceCell = row.insertCell();
 		sourceCell.addClass('ia-table-subtext');
+		sourceCell.addClass('ia-readable-source');
 		sourceCell.setText(formatSource(config));
 		const authCell = row.insertCell();
 		authCell.addClass('ia-table-subtext');
@@ -65,6 +77,8 @@ export function renderOpenapiToolsSection(
 		const statusCell = row.insertCell();
 		statusCell.addClass('ia-table-subtext');
 		statusCell.setText(config.enabled ? t('settings.tools.openapi.statusEnabled') : t('settings.tools.openapi.statusDisabled'));
+		const feedback = feedbackFor(plugin).get(config.id);
+		if (feedback) statusCell.createEl('p', { text: feedback.message, cls: feedback.failed ? 'ia-operation-error' : 'ia-operation-feedback' });
 
 		const actionsCell = row.insertCell();
 		actionsCell.addClass('ia-table-cell');
@@ -85,7 +99,7 @@ export function renderOpenapiToolsSection(
 		deleteBtn.addClass('mod-warning');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (!await showConfirm(plugin.app, t('settings.tools.openapi.confirm.delete', { name: config.name || config.id }))) return;
+				if (!await showConfirm(plugin.app, t('settings.tools.openapi.confirm.delete', { name: config.name || config.id }), { title: t('ux.deleteHttpSource'), confirmText: t('settings.tools.openapi.actions.delete') })) return;
 				const list = plugin.settings.openApiTools;
 				const index = list.findIndex(entry => entry.id === config.id);
 				if (index !== -1) {
@@ -94,7 +108,7 @@ export function renderOpenapiToolsSection(
 					});
 					await plugin.services.tools.removeOpenApi(config.id);
 					refreshDisplay();
-					new Notice(t('settings.tools.openapi.notices.removed'));
+					notify(t('settings.tools.openapi.notices.removed'));
 				}
 			})();
 		});
@@ -124,13 +138,36 @@ async function reloadConfig(
 	forceRefetch: boolean,
 	refreshDisplay: () => void
 ): Promise<void> {
+	const states = feedbackFor(plugin);
+	if (states.get(configId)?.loading) return;
+	const config = plugin.settings.openApiTools.find(tool => tool.id === configId);
+	if (!config?.enabled) {
+		const message = t('ux.sourceDisabled');
+		states.set(configId, { message, failed: false });
+		refreshDisplay();
+		notify(message, 5000, `openapi:${configId}`);
+		return;
+	}
+	states.set(configId, { message: t('ux.loadingSource'), failed: false, loading: true });
 	try {
 		const loaded = await plugin.services.tools.reloadOpenApi(configId, { refetch: forceRefetch });
-		refreshDisplay();
-		new Notice(t('settings.tools.openapi.notices.reloaded', { count: loaded }));
+		const fetchedAt = plugin.settings.openApiTools.find(tool => tool.id === configId)?.lastFetchedAt;
+		if (fetchedAt) {
+			await plugin.updateSettings(settings => {
+				const config = settings.openApiTools.find(tool => tool.id === configId);
+				if (config) config.lastFetchedAt = fetchedAt;
+			});
+		}
+		const message = t('settings.tools.openapi.notices.reloaded', { count: loaded });
+		states.set(configId, { message, failed: false });
+		notify(message, 5000, `openapi:${configId}`);
 	} catch (error) {
 		console.error('[OpenAPI] Failed to reload tools', error);
-		new Notice(t('settings.tools.openapi.notices.reloadFailed'));
+		const message = t('ux.sourceLoadFailed', { name: config.name, reason: errorMessage(error) });
+		states.set(configId, { message, failed: true });
+		notify(message, 8000, `openapi:${configId}`);
+	} finally {
+		refreshDisplay();
 	}
 }
 
@@ -140,7 +177,7 @@ function createDefaultOpenApiConfig(): OpenApiToolConfig {
 		: `openapi-${Math.random().toString(36).slice(2, 10)}`;
 	return {
 		id,
-		name: 'New HTTP Source',
+		name: t('ux.newHttpSource'),
 		enabled: false,
 		sourceType: 'file',
 		specPath: '',
@@ -168,11 +205,21 @@ class OpenApiConfigModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		this.setTitle(this.config.name || t('settings.tools.openapi.modal.defaultTitle'));
+		let cacheInfo: HTMLParagraphElement | undefined;
+		const operationFeedback = contentEl.createEl('p', { cls: 'ia-operation-feedback' });
+		operationFeedback.setAttribute('role', 'status');
+		const updateFeedback = () => {
+			const feedback = feedbackFor(this.plugin).get(this.config.id);
+			operationFeedback.setText(feedback?.message ?? '');
+			operationFeedback.toggleClass('ia-operation-error', feedback?.failed ?? false);
+		};
+		updateFeedback();
 
 		const persist = async () => {
 			const saved = JSON.parse(JSON.stringify(this.config)) as OpenApiToolConfig;
 			await this.plugin.updateSettings((settings) => {
 				const index = settings.openApiTools.findIndex(tool => tool.id === saved.id);
+				saved.lastFetchedAt = settings.openApiTools[index]?.lastFetchedAt ?? saved.lastFetchedAt;
 				settings.openApiTools.splice(index === -1 ? settings.openApiTools.length : index, 1, saved);
 			});
 			this.onChange();
@@ -180,6 +227,9 @@ class OpenApiConfigModal extends Modal {
 
 		const reload = async (forceRefetch = false) => {
 			await reloadConfig(this.plugin, this.config.id, forceRefetch, this.onChange);
+			this.config.lastFetchedAt = this.plugin.settings.openApiTools.find(tool => tool.id === this.config.id)?.lastFetchedAt;
+			if (cacheInfo) cacheInfo.setText(this.cacheDescription());
+			updateFeedback();
 		};
 
 		new Setting(contentEl)
@@ -225,45 +275,26 @@ class OpenApiConfigModal extends Modal {
 			});
 
 		if (this.config.sourceType === 'url') {
-			new Setting(contentEl)
+			const input = readableTextField(new Setting(contentEl)
 				.setName(t('settings.tools.openapi.modal.specUrl.name'))
-				.setDesc(t('settings.tools.openapi.modal.specUrl.desc'))
-				.addText(text => {
-					text.setPlaceholder('https://example.com/openapi.json')
-						.setValue(this.config.specUrl ?? '')
-						.onChange(value => {
-							this.config.specUrl = value.trim();
-						});
-					text.inputEl.onblur = () => { void persist(); };
-				});
-			const cachePath = `${this.plugin.app.vault.configDir}/plugins/${this.plugin.manifest.id}/data/openapi/${this.config.id}.json`;
-			const lastFetched = this.config.lastFetchedAt ? new Date(this.config.lastFetchedAt).toLocaleString() : t('settings.tools.openapi.modal.neverFetched');
-			contentEl.createEl('p', { text: t('settings.tools.openapi.modal.cachedFile', { path: cachePath, date: lastFetched }) }).addClass('ia-table-subtext');
+				.setDesc(t('settings.tools.openapi.modal.specUrl.desc')),
+			this.config.specUrl ?? '', value => { this.config.specUrl = value.trim(); }, { placeholder: 'https://example.com/openapi.json', rows: 3 });
+			input.onblur = () => { void persist(); };
+			cacheInfo = contentEl.createEl('p', { text: this.cacheDescription() });
+			cacheInfo.addClass('ia-table-subtext');
 		} else {
-			new Setting(contentEl)
+			const input = readableTextField(new Setting(contentEl)
 				.setName(t('settings.tools.openapi.modal.specPath.name'))
-				.setDesc(t('settings.tools.openapi.modal.specPath.desc'))
-				.addText(text => {
-					text.setPlaceholder('integrations/openapi.json')
-						.setValue(this.config.specPath ?? '')
-						.onChange(value => {
-							this.config.specPath = value.trim();
-						});
-					text.inputEl.onblur = () => { void persist(); };
-				});
+				.setDesc(t('settings.tools.openapi.modal.specPath.desc')),
+			this.config.specPath ?? '', value => { this.config.specPath = value.trim(); }, { placeholder: 'integrations/openapi.json', rows: 3 });
+			input.onblur = () => { void persist(); };
 		}
 
-		new Setting(contentEl)
+		const baseInput = readableTextField(new Setting(contentEl)
 			.setName(t('settings.tools.openapi.modal.baseUrl.name'))
-			.setDesc(t('settings.tools.openapi.modal.baseUrl.desc'))
-			.addText(text => {
-				text.setPlaceholder('https://api.example.com')
-					.setValue(this.config.baseUrl ?? '')
-					.onChange(value => {
-						this.config.baseUrl = value.trim();
-					});
-				text.inputEl.onblur = () => { void persist(); };
-			});
+			.setDesc(t('settings.tools.openapi.modal.baseUrl.desc')),
+		this.config.baseUrl ?? '', value => { this.config.baseUrl = value.trim(); }, { placeholder: 'https://api.example.com' });
+		baseInput.onblur = () => { void persist(); };
 
 		new Setting(contentEl)
 			.setName(t('settings.tools.openapi.modal.auth.name'))
@@ -319,7 +350,7 @@ class OpenApiConfigModal extends Modal {
 			setDestructiveButton(button.setButtonText(t('settings.tools.openapi.actions.delete')))
 				.onClick(() => {
 					void (async () => {
-						if (!await showConfirm(this.plugin.app, t('settings.tools.openapi.confirm.delete', { name: this.config.name || this.config.id }))) return;
+						if (!await showConfirm(this.plugin.app, t('settings.tools.openapi.confirm.delete', { name: this.config.name || this.config.id }), { title: t('ux.deleteHttpSource'), confirmText: t('settings.tools.openapi.actions.delete') })) return;
 						const list = this.plugin.settings.openApiTools;
 						const index = list.findIndex(entry => entry.id === this.config.id);
 						if (index !== -1) {
@@ -333,6 +364,12 @@ class OpenApiConfigModal extends Modal {
 					})();
 				});
 		});
+	}
+
+	private cacheDescription(): string {
+		const path = `${this.plugin.app.vault.configDir}/plugins/${this.plugin.manifest.id}/data/openapi/${this.config.id}.json`;
+		const date = this.config.lastFetchedAt ? new Date(this.config.lastFetchedAt).toLocaleString() : t('settings.tools.openapi.modal.neverFetched');
+		return t('settings.tools.openapi.modal.cachedFile', { path, date });
 	}
 
 	onClose(): void {

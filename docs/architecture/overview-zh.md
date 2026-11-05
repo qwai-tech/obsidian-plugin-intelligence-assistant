@@ -110,7 +110,7 @@ UI 代码接收 `PluginHost`（`ui/plugin-host.ts`：app、manifest、settings�
 - `chat/chat-message-list.ts` — 消息渲染、空状态和预检卡片；`message-grouping.ts` 合并旧格式的工具调用链。
 - `chat/controllers/` — `ChatController`（发送、流式输出、实时智能体轨迹）。
 - `chat/managers/conversation-manager.ts` 和 `chat/conversation-list-view.ts` — 会话侧栏。
-- `settings/settings-tab.ts` — 设置界面使用 Obsidian 的声明式设置（1.13+）：常规设置是 `control` 定义，因此会出现在 Obsidian 的设置搜索中；其他每个分区都是原生页面（`settings/section-page.ts`），渲染 `settings/tabs/` 中对应的内容。`settings/settings-form.ts` 把一个设置分区绑定到开关、下拉框、文本、数字、列表和密钥字段，并统一保存。
+- `settings/settings-tab.ts` — 设置界面结合 Obsidian 的声明式设置（1.13+）与九个顶部 Tab：常规设置保留可搜索的原生定义；顶部导航在当前页面渲染 `settings/tabs/` 中已有的分区，保留子 Tab 和保存回调。顶部导航支持方向键、Home/End 和窄窗口换行。`settings/settings-form.ts` 把一个设置分区绑定到开关、下拉框、文本、数字、列表和密钥字段，并统一保存。
 - `modals/` — 对话框。
 - `state/chat-view-state.ts` — 每个视图的状态，包括当前请求的 `AbortController`。
 

@@ -4,7 +4,7 @@
  */
 
 import { buildSubprocessEnv } from '@/features/tools/subprocess-env';
-import type { Tool, ToolDefinition, ToolResult, ToolParameter } from '@/features/tools/types/tools';
+import type { Tool, ToolDefinition, ToolResult, ToolParameter, ToolExecutionContext } from '@/features/tools/types/tools';
 import type { CLIToolConfig, CLIToolParameter } from '@/features/tools/types/cli-tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/features/tools/types/cli-tools';
 import { createToolDefinition } from '@/features/tools/tool-schema';
@@ -16,12 +16,14 @@ export class CLITool implements Tool {
 	provider: string;
 
 	constructor(private config: CLIToolConfig, private readonly runner: CommandRunner) {
+		this.config = JSON.parse(JSON.stringify(config)) as CLIToolConfig;
 		this.provider = `cli:${config.id}`;
 		this.definition = createToolDefinition({
 			name: config.name,
 			description: config.description,
 			parameters: this.convertParameters(config.parameters || []),
 			sideEffects: { process: true },
+			argumentSources: config.argumentSources,
 		});
 	}
 
@@ -40,10 +42,10 @@ export class CLITool implements Tool {
 	/**
 	 * Execute the CLI command with the provided arguments
 	 */
-	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>, context: ToolExecutionContext = {}): Promise<ToolResult> {
 		try {
 			const { command, commandArgs, env } = this.buildCommand(args);
-			const result = await this.runCommand(command, commandArgs, env);
+			const result = await this.runCommand(command, commandArgs, env, context.signal);
 			return {
 				success: true,
 				result
@@ -91,6 +93,8 @@ export class CLITool implements Tool {
 
 			const stringValue = this.toStringValue(resolvedValue);
 			const insertAs = param.insertAs ?? 'template';
+			// Shell templates are trusted configuration, but model-provided data is never shell syntax.
+			if (this.config.shell && insertAs !== 'env' && !/^[A-Za-z0-9_./:@%+=,-]*$/.test(stringValue)) throw new Error('Shell parameters with special characters must be passed as environment variables');
 
 			switch (insertAs) {
 				case 'template':
@@ -113,6 +117,7 @@ export class CLITool implements Tool {
 		const processedArgs = baseArgs.map(arg => {
 			let result = arg;
 			for (const param of configParams) {
+				if ((param.insertAs ?? 'template') !== 'template') continue;
 				const value = resolvedArgs[param.name];
 				const resolvedValue = value !== undefined ? value : param.default;
 				if (resolvedValue !== undefined) {
@@ -134,14 +139,16 @@ export class CLITool implements Tool {
 	private async runCommand(
 		command: string,
 		args: string[],
-		env: Record<string, string>
+		env: Record<string, string>,
+		signal?: AbortSignal,
 	): Promise<string> {
 		const { exitCode, stdout, stderr } = await this.runner({
 			command,
 			args,
 			env: buildSubprocessEnv(env),
 			cwd: this.config.cwd,
-			shell: this.config.shell ?? true,
+			shell: this.config.shell ?? false,
+			signal,
 			timeoutMs: this.config.timeout ?? DEFAULT_CLI_TIMEOUT,
 		});
 		if (exitCode === 0) {

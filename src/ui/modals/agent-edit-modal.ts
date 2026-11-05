@@ -1,4 +1,5 @@
-import { App, ButtonComponent, Modal, Notice, Setting } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App, ButtonComponent, Modal, Setting } from 'obsidian';
 import type { PluginHost } from '@/ui/plugin-host';
 import type { Agent } from '@/features/agent';
 import { t } from '@/i18n';
@@ -37,8 +38,10 @@ export class AgentEditModal extends Modal {
 	onOpen() {
 		const { contentEl } = this;
 		contentEl.empty();
+		contentEl.addClass('ia-long-form');
+		this.modalEl.addClass('ia-agent-edit-modal');
 
-		this.setTitle(t('modals.agentEdit.title'));
+		this.setTitle(`${t('modals.agentEdit.title')} · ${this.agent.name}`);
 
 		// Icon field
 		new Setting(contentEl)
@@ -124,6 +127,7 @@ export class AgentEditModal extends Modal {
 				
 				// Set the initial value based on the current modelId
 				const initialModelId = initialModelSelection(catalog, this.agent.modelStrategy);
+				if (!modelOptions.some(option => option.id === initialModelId)) dropdown.addOption(initialModelId, t('ux.unavailableModel', { model: initialModelId }));
 				dropdown.setValue(initialModelId);
 				if (!this.agent.modelStrategy.modelId) {
 					this.agent.modelStrategy.modelId = initialModelId;
@@ -298,7 +302,7 @@ export class AgentEditModal extends Modal {
 		new AgentToolAccessSection(this.plugin, this.access).render(contentEl);
 
 		// Buttons
-		const buttonContainer = contentEl.createDiv('ia-modal-footer');
+		const buttonContainer = this.modalEl.createDiv('ia-modal-footer ia-fixed-modal-footer');
 		buttonContainer.removeClass('ia-hidden');
 
 		new ButtonComponent(buttonContainer)
@@ -308,7 +312,7 @@ export class AgentEditModal extends Modal {
 			});
 
 		const saveButton = new ButtonComponent(buttonContainer)
-			.setButtonText(t('modals.confirm.confirm'))
+			.setButtonText(t('modals.provider.save'))
 			.setCta()
 			.onClick(() => {
 				void (async () => {
@@ -316,7 +320,7 @@ export class AgentEditModal extends Modal {
 						const name = this.customPromptName?.trim();
 						const content = this.customPromptContent?.trim();
 						if (!name || !content) {
-							new Notice(t('modals.agentEdit.notices.promptRequired'));
+							notify(t('modals.agentEdit.notices.promptRequired'));
 							return;
 						}
 

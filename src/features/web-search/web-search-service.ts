@@ -48,10 +48,12 @@ export class WebSearchService {
 	/**
 	 * Search the web using configured provider
 	 */
-	async search(userInput: string): Promise<WebSearchResult[]> {
+	async search(userInput: string, options: { signal?: AbortSignal } = {}): Promise<WebSearchResult[]> {
 		try {
+			options.signal?.throwIfAborted();
+			const config = { ...this.config };
 			// Preprocess the user input
-			const processedQuery = preprocessQuery(userInput);
+			const processedQuery = preprocessQuery(userInput.slice(0, 2000));
 			
 			if (!processedQuery) {
 				return []; // Return empty results if query is not valid
@@ -65,17 +67,18 @@ export class WebSearchService {
 			// Optimize the query for better search results
 			const optimizedQuery = optimizeQuery(processedQuery);
 
-			const maxResults = this.config.maxResults || 5;
+			const maxResults = config.maxResults || 5;
 			
-			const backend = SEARCH_BACKENDS[this.config.provider];
+			const backend = SEARCH_BACKENDS[config.provider];
 			if (!backend) {
-				this.report(`Unknown web search provider: ${this.config.provider}`);
+				this.report(`Unknown web search provider: ${config.provider}`);
 				return [];
 			}
-			const results = await backend(optimizedQuery, maxResults, { config: this.config, http: this.httpClient });
+			const results = await backend(optimizedQuery, maxResults, { config, http: this.httpClient, signal: options.signal });
 
 			return this.applyDomainFilters(this.cleanResultSnippets(results));
 		} catch (error) {
+			options.signal?.throwIfAborted();
 			console.error('[WebSearch] Error:', error);
 			this.report(errorMessage(error));
 			return [];

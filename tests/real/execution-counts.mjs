@@ -1,0 +1,80 @@
+/** Actual failed-response replay and real default-reasoning continuation. No mocks. */
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+import {tmpdir} from 'node:os';
+import {createRequire} from 'node:module';
+import {randomUUID,createHash} from 'node:crypto';
+
+const key=process.env.IA_REAL_API_KEY;
+if(!key)throw Error('IA_REAL_API_KEY required; no mock fallback');
+const out=path.resolve(process.env.IA_COUNT_RESULTS||'test-results/execution-counts-2026-11-05/live-final');await fs.mkdir(out,{recursive:true});
+const temp=await fs.mkdtemp(path.join(tmpdir(),'ia-execution-counts-'));
+const bundle=path.join(temp,'production.cjs');
+await build({stdin:{contents:(await fs.readFile('tests/real/architecture-exports.ts.txt','utf8'))+"\nexport { resolveAgentTask, taskCheckpointContext, beginTaskAction, finishTaskAction } from './src/features/agent/task-checkpoint';\nexport { ExecutionCountGuard } from './src/features/agent/kernel/execution-count-guard';",resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'node',format:'cjs',external:['obsidian'],outfile:bundle,logLevel:'silent'});
+const p=createRequire(import.meta.url)(bundle);
+const prior='test-results/manual-resume-fixes-2026-11-04';
+const failed=JSON.parse(await fs.readFile(`${prior}/native-e-final-conversation.json`,'utf8'));
+const oldReply=failed.messages.at(-1);
+const oldRunReads=oldReply.agentExecutionSteps.filter(s=>s.type==='action'&&s.status==='success'&&s.toolName==='read_file').length;
+const replayGuard=new p.ExecutionCountGuard(()=>({thisRunReads:oldRunReads}));
+const replay=replayGuard.check({text:oldReply.content,calls:[],reasoning:''},{toolResults:oldRunReads,proposalsCreated:0});
+assert.equal(replay.kind,'retry');assert.equal(replay.includeCandidate,false);
+const proseReplay=new p.ExecutionCountGuard(()=>({thisRunReads:oldRunReads})).check({text:oldReply.content.replace(/```[\s\S]*?```/g,''),calls:[],reasoning:''},{toolResults:oldRunReads,proposalsCreated:0});assert.equal(proseReplay.kind,'retry','The real wrong explanation must be rejected even without its JSON');
+const blocked=replayGuard.check({text:oldReply.content,calls:[],reasoning:''},{toolResults:oldRunReads,proposalsCreated:0});assert.equal(blocked.kind,'retry');
+assert.equal(replayGuard.check({text:oldReply.content,calls:[],reasoning:''},{toolResults:oldRunReads,proposalsCreated:0}).kind,'stop');
+await fs.writeFile(path.join(out,'recorded-failure-rejection.json'),JSON.stringify({method:'Replay of actual prior native model response against its actual successful-action count; not an emulated model response',actual:oldRunReads,reported:25,verdict:replay,proseWithoutJson:proseReplay,thirdUnchangedContradiction:'stop'},null,2));
+const scopeFailure=JSON.parse(await fs.readFile('test-results/execution-counts-2026-11-05/native-a-zero-failed.json','utf8'));
+const priorRuns=scopeFailure.messages.filter(m=>m.role==='assistant');const count=m=>(m.agentExecutionSteps??[]).filter(s=>s.type==='action'&&s.status==='success'&&s.toolName==='read_file').length;
+const zero=count(priorRuns.at(-1)),previous=count(priorRuns.at(-2));assert.equal(zero,0);assert.equal(previous,16);
+const scopeRejection=new p.ExecutionCountGuard(()=>({thisRunReads:zero,previousRun:{id:'actual-prior-native-run',thisRunReads:previous}})).check({text:priorRuns.at(-1).content,calls:[],reasoning:''},{toolResults:0,proposalsCreated:0});assert.equal(scopeRejection.kind,'retry');
+await fs.writeFile(path.join(out,'recorded-scope-failure-rejection.json'),JSON.stringify({method:'Actual native zero-run explanation falsely withdrawing an actual earlier 16-read run',actualCurrent:zero,actualPrevious:previous,verdict:scopeRejection},null,2));
+
+const old=JSON.parse(await fs.readFile(`${prior}/native-e-stopped.json`,'utf8'));
+const fixture=JSON.parse(await fs.readFile(`${prior}/native-d-fixture.json`,'utf8'));
+const vault='/tmp/ia-codex-ux-20261103/vault';
+const user={role:'user',content:'Continue.',timestamp:Date.now()};
+const task=p.resolveAgentTask([...old.messages,user],user);
+const currentRun={id:randomUUID(),retainedReadVisitsAtStart:task.observations.filter(o=>o.tool==='read_file').reduce((s,o)=>s+o.visits,0),successfulCalls:0,successfulReadFileCalls:0,readFileCallsByArguments:{}};
+assert.equal(currentRun.retainedReadVisitsAtStart,19);
+const registry=new p.ToolRegistry();
+registry.registerSource(new p.CliToolSource({id:'actual-qa-read',name:'read_file',description:'Read an actual QA vault source, using its exact path',command:process.execPath,args:['-e','const p=require("path");const f=p.resolve(process.argv[1],process.argv[2]);if(!f.startsWith(p.resolve(process.argv[1])+p.sep))throw Error("Outside QA vault");process.stdout.write(require("fs").readFileSync(f,"utf8"))',vault,'{{path}}'],enabled:true,parameters:[{name:'path',type:'string',required:true}]},p.runCommand));
+await registry.reload();const tools=registry.getTools();
+const runner=new p.RegistryToolRunner({registry,enabled:new Set(['read_file']),known:new Set(['read_file']),bindings:new Map(tools.map(t=>[t.llmName,t])),autonomous:false,taskAllowed:new Set(['read_file'])});
+const assembler=new p.AgentContextAssembler({options:{model:'custom:deepseek/deepseek-flash',maxTokens:6000,inputTokenBudget:64000},historyCompactor:new p.HistoryCompactor(),systemMessages:[{role:'system',content:p.AGENT_COMPLETION_INSTRUCTION}],tools:registry.toOpenAIFunctions(tools),contextWindow:Number(process.env.IA_COUNT_CONTEXT_WINDOW||20),executionContext:()=>[p.taskCheckpointContext(task,currentRun)]});
+const real=p.createFetchHttpPort();let requests=0;
+p.setDefaultHttpPort(p.withResilience({request:r=>real.request(r),async stream(r){const body=JSON.parse(r.body);assert.equal(body.thinking,undefined);assert.equal(body.reasoning_effort,undefined);assert.equal(body.tool_choice,'auto');assert.deepEqual(body.tools.map(t=>t.function.name),['read_file']);assert.equal(body.messages.at(-1).role,'system');assert.match(body.messages.at(-1).content,/CURRENT state as of AFTER ALL preceding tool results/);await fs.writeFile(path.join(out,`request-${++requests}.json`),JSON.stringify(body,null,2));return real.stream(r);}}));
+const events=[],started=Date.now();
+const provider=p.ProviderFactory.createProvider({provider:'custom',id:'real-counts',apiKey:key,baseUrl:'http://127.0.0.1:17680/v1'});
+const kernel=new p.TurnKernel({context:assembler,model:new p.ProviderModelPort(provider),tools:runner,guards:[new p.ExecutionCountGuard(()=>({thisRunReads:currentRun.successfulReadFileCalls,previousRun:task.lastRun&&{id:task.lastRun.id,thisRunReads:task.lastRun.successfulReadFileCalls}})),new p.CompletionGuard()],budget:new p.Budget({fallbackSteps:25,ceiling:50,maxFailures:3})});
+const outcome=await kernel.run({runId:randomUUID(),history:[...old.messages.map(m=>({role:m.role,content:m.content})),user]},new AbortController().signal,event=>{
+ events.push(event);
+ if(event.type==='tool_started')p.beginTaskAction(task,event.call);
+ if(event.type==='tool_finished'){
+  const k=p.finishTaskAction(task,event.call,event.ok,event.output,event.dispatched===false);
+  if(event.ok){currentRun.successfulCalls++;if(event.call.name==='read_file'){currentRun.successfulReadFileCalls++;if(k)currentRun.readFileCallsByArguments[k]=(currentRun.readFileCallsByArguments[k]||0)+1;}}
+ }
+});
+await fs.writeFile(path.join(out,'live-result.json'),JSON.stringify({mocks:false,defaultReasoning:true,durationMs:Date.now()-started,requests,outcome,events,task,currentRun},null,2));
+assert.equal(outcome.reason.kind,'answered');
+const actual=events.filter(e=>e.type==='tool_finished'&&e.ok);
+assert.equal(actual.length,13);assert.ok(actual.every(e=>e.call.name==='read_file'&&e.call.arguments.path===fixture.items[0].path));
+const reported=JSON.parse(outcome.answer.slice(outcome.answer.lastIndexOf('{'),outcome.answer.lastIndexOf('}')+1));
+assert.equal(reported.firstMarker,fixture.items[0].marker);assert.equal(reported.lastMarker,fixture.items.at(-1).marker);assert.equal(reported.totalItems,12);assert.equal(reported.verificationReads,20);assert.equal(reported.thisRunReads,13);
+assert.equal(new p.ExecutionCountGuard(()=>({thisRunReads:13})).check({text:outcome.answer,calls:[],reasoning:''},{toolResults:13,proposalsCreated:0}).kind,'pass');
+for(const f of fixture.items)assert.equal(createHash('sha256').update(await fs.readFile(path.join(vault,f.path))).digest('hex'),f.sha256);
+await fs.writeFile(path.join(out,'live-validated.json'),JSON.stringify({status:'passed',actualReadFileCalls:13,reported,sourceHashesUnchanged:12,wireSnapshotFollowsToolHistory:true,reasoningOverrideAbsent:true,guardCorrections:events.filter(e=>e.type==='guard_triggered'&&e.guard==='execution-counts').length},null,2));
+console.log({status:'passed',requests,reads:13,reported});
+task.lastRun={id:currentRun.id,successfulCalls:13,successfulReadFileCalls:13,outcome:outcome.reason.kind};
+const finished={role:'assistant',content:outcome.answer,agentTask:task,timestamp:Date.now()};const again={role:'user',content:'Continue.',timestamp:Date.now()+1};const history=[...old.messages,user,finished,again];const resumed=p.resolveAgentTask(history,again);
+assert.equal(resumed.lastRun.successfulReadFileCalls,13);
+const zeroRun={id:randomUUID(),retainedReadVisitsAtStart:32,successfulCalls:0,successfulReadFileCalls:0,readFileCallsByArguments:{}};
+const zeroContext=new p.AgentContextAssembler({options:{model:'custom:deepseek/deepseek-flash',maxTokens:6000,inputTokenBudget:64000},historyCompactor:new p.HistoryCompactor(),systemMessages:[{role:'system',content:p.AGENT_COMPLETION_INSTRUCTION}],tools:registry.toOpenAIFunctions(tools),contextWindow:6,executionContext:()=>[p.taskCheckpointContext(resumed,zeroRun)]});
+const zeroEvents=[];const zeroKernel=new p.TurnKernel({context:zeroContext,model:new p.ProviderModelPort(provider),tools:runner,guards:[new p.ExecutionCountGuard(()=>({thisRunReads:zeroRun.successfulReadFileCalls,previousRun:{id:resumed.lastRun.id,thisRunReads:13}})),new p.CompletionGuard()],budget:new p.Budget({fallbackSteps:25,ceiling:50,maxFailures:3})});
+const zeroOutcome=await zeroKernel.run({runId:zeroRun.id,history:history.map(m=>({role:m.role,content:m.content}))},new AbortController().signal,event=>{zeroEvents.push(event);if(event.type==='tool_finished'&&event.ok&&event.call.name==='read_file')zeroRun.successfulReadFileCalls++;});
+await registry.dispose();await fs.writeFile(path.join(out,'zero-result.json'),JSON.stringify({outcome:zeroOutcome,events:zeroEvents},null,2));
+assert.equal(zeroOutcome.reason.kind,'answered');assert.equal(zeroEvents.filter(e=>e.type==='tool_started').length,0);
+const zeroReported=JSON.parse(zeroOutcome.answer.slice(zeroOutcome.answer.lastIndexOf('{'),zeroOutcome.answer.lastIndexOf('}')+1));assert.equal(zeroReported.thisRunReads,0);assert.equal(zeroReported.verificationReads,20);
+assert.equal(new p.ExecutionCountGuard(()=>({thisRunReads:0,previousRun:{id:resumed.lastRun.id,thisRunReads:13}})).check({text:zeroOutcome.answer,calls:[],reasoning:''},{toolResults:0,proposalsCreated:0}).kind,'pass');
+await fs.writeFile(path.join(out,'zero-validated.json'),JSON.stringify({status:'passed',actualReads:0,previousReadCount:13,reported:zeroReported},null,2));console.log({zeroContinuation:'passed',reported:zeroReported});

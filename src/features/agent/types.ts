@@ -1,3 +1,4 @@
+import type { TaskAuthorization } from './execution-policy';
 import type { Message } from '@/features/conversations';
 import type { RAGSource } from '@/features/knowledge';
 import type { Agent } from '@/features/agent/types/agent';
@@ -36,6 +37,12 @@ export interface AgentLoopCallbacks {
 export interface AgentLoopOptions {
 	model: string;
 	mode: 'agent';
+	authorization?: TaskAuthorization;
+	/** Original user input, without reference or attachment expansion. */
+	userText?: string;
+	/** Host-derived intersection with an explicit user task restriction. */
+	allowedTools?: string[];
+	inputTokenBudget?: number;
 	temperature?: number;
 	maxTokens?: number;
 	topP?: number;

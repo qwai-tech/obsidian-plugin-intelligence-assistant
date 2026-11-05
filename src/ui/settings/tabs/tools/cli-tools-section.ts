@@ -1,4 +1,5 @@
-import { Notice } from 'obsidian';
+import { notify } from '@/core/notifications';
+
 import { t } from '@/i18n';
 import type { PluginHost } from '@/ui/plugin-host';
 import { showConfirm } from '@/ui/modals/confirm-modal';
@@ -68,7 +69,7 @@ export function renderCliToolsSection(
 		const preset = CLI_TOOL_PRESETS.find(p => p.config.name === config.name);
 		const displayName = preset
 			? t(`settings.tools.cli.presets.names.${preset.id}`)
-			: config.name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+			: config.name.replace(/_/g, ' ');
 		nameDiv.createSpan().setText(displayName || t('settings.tools.cli.unnamed'));
 
 		const commandCell = row.insertCell();
@@ -77,7 +78,14 @@ export function renderCliToolsSection(
 		const commandText = config.args?.length
 			? `${config.command} ${config.args.join(' ')}`
 			: config.command;
-		commandCell.setText(commandText.length > 50 ? commandText.slice(0, 47) + '...' : commandText);
+		commandCell.addClass('ia-readable-source');
+		if (commandText.length > 50) {
+			const details = commandCell.createEl('details');
+			details.createEl('summary', { text: t('settings.tools.cli.tableHeaders.command') });
+			details.createEl('code', { text: commandText });
+		} else {
+			commandCell.setText(commandText);
+		}
 
 		const paramsCell = row.insertCell();
 		paramsCell.addClass('ia-table-cell');
@@ -111,7 +119,7 @@ export function renderCliToolsSection(
 		deleteBtn.addClass('mod-warning');
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (!await showConfirm(plugin.app, t('settings.tools.cli.confirm.delete', { name: config.name || config.id }))) return;
+				if (!await showConfirm(plugin.app, t('settings.tools.cli.confirm.delete', { name: config.name || config.id }), { title: t('ux.deleteCliTool'), confirmText: t('settings.tools.cli.actions.delete') })) return;
 				const list = plugin.settings.cliTools;
 				const index = list.findIndex(entry => entry.id === config.id);
 				if (index !== -1) {
@@ -120,7 +128,7 @@ export function renderCliToolsSection(
 					});
 					await plugin.services.tools.reloadCli();
 					refreshDisplay();
-					new Notice(t('settings.tools.cli.notices.removed'));
+					notify(t('settings.tools.cli.notices.removed'));
 				}
 			})();
 		});
@@ -142,7 +150,7 @@ function createDefaultCLIToolConfig(): CLIToolConfig {
 	return {
 		...CLI_TOOL_DEFAULTS,
 		id,
-		name: 'New CLI Tool',
+		name: t('ux.newCliTool'),
 		description: 'A command-line tool',
 		command: '',
 		enabled: false

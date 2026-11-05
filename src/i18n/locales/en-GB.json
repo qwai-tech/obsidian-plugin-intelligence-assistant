@@ -8,7 +8,7 @@
       "rag": "RAG",
       "prompts": "Prompts",
       "agents": "Agents",
-      "quickActions": "Quick Actions",
+      "quickActions": "Quick actions",
       "usage": "Usage"
     },
     "general": {
@@ -47,7 +47,7 @@
     },
     "models": {
       "desc": "View and manage models from all configured providers. Click \"refresh models\" to fetch the latest available models.",
-      "refreshAll": "refresh all models",
+      "refreshAll": "Refresh all models",
       "empty": "No providers configured yet. Add providers in the provider tab first.",
       "noModels": "No models available. Click \"refresh all models\" or refresh individual providers in the provider tab.",
       "noMatch": "No models match the current filters. Adjust or clear filters to see results.",
@@ -58,10 +58,10 @@
       "actions": {
         "disable": "Disable",
         "enable": "Enable",
-        "setDefaultChat": "Set Default Chat",
-        "defaultChat": "Default Chat",
-        "setDefaultEmbedding": "Set Default Embedding",
-        "defaultEmbedding": "Default Embedding"
+        "setDefaultChat": "Set default chat",
+        "defaultChat": "Default chat",
+        "setDefaultEmbedding": "Set default embedding",
+        "defaultEmbedding": "Default embedding"
       },
       "notices": {
         "fetching": "Fetching models for {{provider}}...",
@@ -92,20 +92,21 @@
       "providerCount_other": "{{count}} providers configured"
     },
     "provider": {
-      "addBtn": "+ Add provider",
+      "addBtn": "Add provider",
       "empty": "No providers configured. Select \"Add provider\" to get started.",
       "status": {
         "ready": "Ready",
-        "needsConfig": "Needs Configuration",
+        "needsConfig": "Needs configuration",
         "checking": "Checking...",
-        "credentialsSet": "Credentials Set",
+        "credentialsSet": "Credentials set",
         "serverOnline": "Server online",
         "serverOffline": "Server offline",
         "serverError": "Server error"
       },
       "guidance": {
         "configureBaseUrl": "Configure base URL",
-        "addApiKey": "Add API key"
+        "addApiKey": "Add API key",
+        "provideServiceKey": "Provide service key"
       },
       "models": {
         "none": "No models",
@@ -153,17 +154,17 @@
     "mcp": {
       "desc": "Configure Model Context Protocol (MCP) servers to extend agent capabilities with external tools and data sources.",
       "inspectorBtn": "Open MCP inspector",
-      "testAllBtn": "test all connections",
-      "refreshAllBtn": "refresh all tools",
-      "addBtn": "+ Add MCP server",
+      "testAllBtn": "Test all connections",
+      "refreshAllBtn": "Refresh all tools",
+      "addBtn": "Add MCP server",
       "empty": "No MCP servers configured. Select Add MCP server to get started.",
-      "untitled": "Untitled MCP Server",
+      "untitled": "Untitled MCP server",
       "notConfigured": "Not configured",
       "cached": "Cached",
       "status": {
         "disabled": "Disabled",
-        "connected": "connected",
-        "disconnected": "disconnected",
+        "connected": "Connected",
+        "disconnected": "Disconnected",
         "enableToManage": "Enable to manage connections",
         "manualConnect": "Manual connect",
         "autoConnect": "Auto-connect"
@@ -178,8 +179,8 @@
         "edit": "Edit",
         "enabled": "Enabled",
         "enabledOff": "Disabled",
-        "connect": "connect",
-        "disconnect": "disconnect",
+        "connect": "Connect",
+        "disconnect": "Disconnect",
         "connecting": "Connecting...",
         "disconnecting": "Disconnecting...",
         "test": "Test",
@@ -193,9 +194,9 @@
         "enableFirst": "Enable the server before connecting",
         "disconnectFailed": "Failed to disconnect from {{name}}",
         "connectFailed": "Failed to connect to {{name}}",
-        "testNoCommand": "please enter a command before testing connection",
+        "testNoCommand": "Please enter a command before testing connection",
         "testFailed": "Connection failed: {{message}}",
-        "refreshedPartial": "refreshed {{success}} servers, {{failed}} failed",
+        "refreshedPartial": "Refreshed {{success}} servers, {{failed}} failed",
         "noServersConfigured": "No MCP servers configured",
         "testAllPartial": "{{successful}} connected, {{failed}} failed",
         "refreshedAll_one": "Refreshed tools for {{count}} server",
@@ -216,15 +217,15 @@
     },
     "agents": {
       "desc": "Create and manage AI agents with specific capabilities, tools, and behaviours.",
-      "addBtn": "+ add agent",
+      "addBtn": "Add agent",
       "empty": "No agents configured. Select add agent to get started.",
       "defaultBadge": "Default",
       "systemPrompt": "System prompt • {{promptName}}",
       "customPrompt": "Custom prompt",
       "model": {
         "notSet": "Not set",
-        "useChatView": "Use Chat View Model",
-        "useDefault": "Use Default Model"
+        "useChatView": "Use chat view model",
+        "useDefault": "Use default model"
       },
       "tools": {
         "builtIn": "{{count}} built-in",
@@ -235,7 +236,7 @@
       },
       "actions": {
         "edit": "Edit",
-        "delete": "delete"
+        "delete": "Delete"
       },
       "confirm": {
         "delete": "Delete agent \"{{name}}\"?"
@@ -245,7 +246,7 @@
     },
     "prompts": {
       "desc": "Manage system prompts that define the behaviour and personality of your AI assistant.",
-      "addBtn": "+ add system prompt",
+      "addBtn": "Add system prompt",
       "empty": "No system prompts configured. Select add system prompt to get started.",
       "actions": {
         "edit": "Edit",
@@ -260,10 +261,10 @@
     "tools": {
       "desc": "Review built-in tools and explore MCP tools loaded from connected servers. Enable the actions your agents should be able to perform.",
       "subTabs": {
-        "builtIn": "Built-in Tools",
+        "builtIn": "Built-in tools",
         "mcp": "MCP tools",
         "openapi": "HTTP / OpenAPI",
-        "cli": "CLI Tools"
+        "cli": "CLI tools"
       },
       "builtIn": {
         "toolMeta": {
@@ -307,15 +308,15 @@
             "desc": "Build a link to a note using your link settings"
           }
         },
-        "infoTitle": "about tools",
+        "infoTitle": "About tools",
         "infoText": "Built-in tools are configured per plugin settings. MCP tools are managed independently—use the MCP tab to connect servers and refresh tool availability.",
         "toolNames": {
-          "read_file": "Read File",
-          "write_file": "Write File",
-          "list_files": "List Files",
-          "search_files": "Search Files",
-          "create_note": "Create Note",
-          "append_to_note": "Append Note",
+          "read_file": "Read file",
+          "write_file": "Write file",
+          "list_files": "List files",
+          "search_files": "Search files",
+          "create_note": "Create note",
+          "append_to_note": "Append note",
           "update_properties": "Update properties",
           "read_canvas": "Read canvas",
           "update_canvas": "Update canvas",
@@ -339,8 +340,8 @@
         "live": "Live",
         "cached": "Cached",
         "status": {
-          "connected": "connected",
-          "disconnected": "disconnected"
+          "connected": "Connected",
+          "disconnected": "Disconnected"
         },
         "addBtn": "Add MCP tools"
       },
@@ -376,7 +377,7 @@
           "reloaded_other": "Reloaded {{count}} operations"
         },
         "modal": {
-          "defaultTitle": "HTTP Source",
+          "defaultTitle": "HTTP source",
           "displayName": {
             "name": "Display name",
             "desc": "Shown to agents when choosing a tool source"
@@ -430,8 +431,8 @@
       },
       "cli": {
         "desc": "Define local command-line tools that agents can execute. Use templates like {{param}} for dynamic arguments.",
-        "addBtn": "Add CLI Tool",
-        "presetsBtn": "Add from Presets",
+        "addBtn": "Add CLI tool",
+        "presetsBtn": "Add from presets",
         "noTools": "No CLI tools configured yet.",
         "tableHeaders": {
           "name": "Name",
@@ -440,7 +441,7 @@
           "status": "Status",
           "actions": "Actions"
         },
-        "unnamed": "Unnamed CLI Tool",
+        "unnamed": "Unnamed CLI tool",
         "noParams": "None",
         "statusEnabled": "Enabled",
         "statusDisabled": "Disabled",
@@ -453,10 +454,10 @@
         "notices": {
           "removed": "CLI tool removed"
         },
-        "infoTitle": "About CLI Tools",
+        "infoTitle": "About CLI tools",
         "infoText": "CLI tools execute shell commands locally. Use {{paramName}} in arguments for template substitution, or configure parameters to be passed as arguments or environment variables.",
         "modal": {
-          "defaultTitle": "CLI Tool",
+          "defaultTitle": "CLI tool",
           "toolName": {
             "name": "Tool name",
             "desc": "Identifier used by agents to call this tool"
@@ -469,7 +470,7 @@
             "name": "Enabled",
             "desc": "Enable to allow agents to use this tool"
           },
-          "commandConfig": "Command Configuration",
+          "commandConfig": "Command configuration",
           "command": {
             "name": "Command",
             "desc": "The executable to run (e.g., node, python, bash, /path/to/script)"
@@ -492,7 +493,7 @@
           },
           "paramsTitle": "Parameters",
           "paramsDesc": "Define parameters that the AI can pass to this tool.",
-          "addParam": "Add Parameter",
+          "addParam": "Add parameter",
           "noParams": "No parameters defined.",
           "paramN": "Parameter {{n}}",
           "param": {
@@ -517,7 +518,7 @@
               "desc": "Override the environment variable name (defaults to uppercase parameter name)"
             }
           },
-          "envTitle": "Environment Variables",
+          "envTitle": "Environment variables",
           "envDesc": "Static environment variables to set when running the command.",
           "envVars": {
             "name": "Environment variables",
@@ -535,43 +536,43 @@
             "added": "Added \"{{name}}\" - enable it in the CLI tools list"
           },
           "categories": {
-            "file": "File Operations",
+            "file": "File operations",
             "search": "Search",
             "network": "Network",
-            "code": "Code Execution",
-            "data": "Data Processing",
-            "system": "System Information",
-            "apps": "macOS Apps & Desktop"
+            "code": "Code execution",
+            "data": "Data processing",
+            "system": "System information",
+            "apps": "macOS apps & desktop"
           },
           "names": {
-            "preset-cat": "Read File (cat)",
-            "preset-ls": "List Directory (ls)",
-            "preset-find": "Find Files (find)",
-            "preset-grep": "Search Text (grep)",
-            "preset-ripgrep": "Fast Search (rg)",
-            "preset-curl": "HTTP Request (curl)",
+            "preset-cat": "Read file (cat)",
+            "preset-ls": "List directory (ls)",
+            "preset-find": "Find files (find)",
+            "preset-grep": "Search text (grep)",
+            "preset-ripgrep": "Fast search (rg)",
+            "preset-curl": "HTTP request (curl)",
             "preset-curl-post": "HTTP POST (curl)",
-            "preset-python": "Run Python Code",
+            "preset-python": "Run Python code",
             "preset-node": "Run JavaScript (Node)",
-            "preset-bash": "Run Shell Script",
-            "preset-jq": "JSON Processor (jq)",
-            "preset-wc": "Word Count (wc)",
-            "preset-date": "Current Date/Time",
-            "preset-pwd": "Current Directory (pwd)",
-            "preset-whoami": "Current User",
-            "preset-uname": "System Info (uname)",
+            "preset-bash": "Run shell script",
+            "preset-jq": "JSON processor (jq)",
+            "preset-wc": "Word count (wc)",
+            "preset-date": "Current date/time",
+            "preset-pwd": "Current directory (pwd)",
+            "preset-whoami": "Current user",
+            "preset-uname": "System info (uname)",
             "preset-open": "Open File/URL (open)",
-            "preset-open-app": "Launch App (open -a)",
+            "preset-open-app": "Launch app (open -a)",
             "preset-safari": "Open in Safari",
             "preset-chrome": "Open in Chrome",
             "preset-firefox": "Open in Firefox",
-            "preset-pbcopy": "Copy to Clipboard",
-            "preset-pbpaste": "Paste from Clipboard",
-            "preset-say": "Text-to-Speech (say)",
-            "preset-osascript": "AppleScript Runner",
-            "preset-notify": "Desktop Notification",
+            "preset-pbcopy": "Copy to clipboard",
+            "preset-pbpaste": "Paste from clipboard",
+            "preset-say": "Text to speech (say)",
+            "preset-osascript": "AppleScript runner",
+            "preset-notify": "Desktop notification",
             "preset-screencapture": "Screenshot",
-            "preset-applescript-list-apps": "List Running Apps"
+            "preset-applescript-list-apps": "List running apps"
           }
         },
         "paramCount_one": "{{count}} parameter",
@@ -589,7 +590,7 @@
         "search": "Search",
         "filters": "Filters",
         "advanced": "Advanced",
-        "websearch": "Web Search"
+        "websearch": "Web search"
       },
       "general": {
         "title": "General settings",
@@ -600,8 +601,8 @@
         "vectorStore": {
           "name": "Vector store",
           "desc": "Vector database for storing embeddings",
-          "memory": "In-Memory",
-          "disk": "Disk-Based"
+          "memory": "In memory",
+          "disk": "On disk"
         },
         "embeddingModel": {
           "name": "Embedding model",
@@ -617,13 +618,13 @@
         "desc": "Manage your RAG index and view statistics about indexed content.",
         "statsTitle": "Index statistics",
         "stats": {
-          "totalChunks": "Total Chunks",
-          "uniqueFiles": "Unique Files",
-          "totalChars": "Total Characters",
-          "avgChunkSize": "Avg Chunk Size"
+          "totalChunks": "Total chunks",
+          "uniqueFiles": "Unique files",
+          "totalChars": "Total characters",
+          "avgChunkSize": "Avg chunk size"
         },
         "empty": "Index is empty. Select rebuild index to start indexing.",
-        "error": "unable to load index statistics",
+        "error": "Unable to load index statistics",
         "rebuild": {
           "name": "Rebuild index",
           "desc": "Re-index all files in your vault. This may take a while.",
@@ -656,10 +657,10 @@
         "strategy": {
           "name": "Chunking strategy",
           "desc": "Strategy for splitting documents into chunks",
-          "recursive": "Recursive (Smart)",
-          "fixed": "Fixed Size",
-          "sentence": "By Sentence",
-          "paragraph": "By Paragraph"
+          "recursive": "Recursive (smart)",
+          "fixed": "Fixed size",
+          "sentence": "By sentence",
+          "paragraph": "By paragraph"
         },
         "chunkSize": {
           "name": "Chunk size",
@@ -734,8 +735,8 @@
         "graderSource": {
           "name": "Grader model source",
           "desc": "Where to get the grader model from",
-          "chat": "Chat Model",
-          "custom": "Custom Model"
+          "chat": "Chat model",
+          "custom": "Custom model"
         },
         "graderModel": {
           "name": "Grader model",
@@ -860,11 +861,11 @@
         "desc": "Prefix (emoji or text) to display before all quick actions in the context menu",
         "placeholder": "⚡"
       },
-      "addBtn": "+ add quick action",
+      "addBtn": "Add quick action",
       "empty": "No quick actions configured. Select add quick action to get started.",
       "defaultModel": "Default",
       "editBtn": "Edit",
-      "deleteBtn": "delete",
+      "deleteBtn": "Delete",
       "confirm": {
         "delete": "Delete quick action \"{{name}}\"?"
       },
@@ -949,7 +950,7 @@
       "byModel": "By model",
       "noData": "No usage data yet.",
       "recentActivity": "Recent activity",
-      "last10": "last 10",
+      "last10": "Last 10",
       "noRecent": "No recent activity.",
       "tableHeaders": {
         "provider": "Provider",
@@ -1027,12 +1028,12 @@
     },
     "ragStats": {
       "title": "RAG statistics",
-      "totalChunks": "total chunks:",
-      "filesIndexed": "files indexed:",
-      "totalSize": "total size:",
-      "avgChunks": "Avg Chunks/File:",
-      "indexedFiles": "indexed files",
-      "noFilesYet": "no files have been indexed yet.",
+      "totalChunks": "Total chunks:",
+      "filesIndexed": "Files indexed:",
+      "totalSize": "Total size:",
+      "avgChunks": "Avg chunks/file:",
+      "indexedFiles": "Indexed files",
+      "noFilesYet": "No files have been indexed yet.",
       "howToBuild": "To build the RAG index:",
       "step1": "Go to Settings → RAG",
       "step2": "Enable RAG",
@@ -1042,13 +1043,13 @@
       "retrieved_other": "Retrieved from {{count}} documents"
     },
     "ragTooltip": {
-      "status": "RAG Index Status:",
+      "status": "RAG index status:",
       "totalChunks": "Total Chunks: {{count}}",
       "filesIndexed": "Files Indexed: {{count}}",
       "totalSize": "Total Size: {{size}} KB",
-      "indexedFiles": "indexed Files:",
+      "indexedFiles": "Indexed files:",
       "andMore": "  ... and {{count}} more",
-      "noFilesYet": "no files indexed yet.",
+      "noFilesYet": "No files indexed yet.",
       "goToSettings": "Go to Settings → RAG to build the index.",
       "ragOff": "ℹ️ RAG is currently turned off for this chat."
     },
@@ -1060,7 +1061,7 @@
       "webResults": "Web results",
       "attachments": "Attachments",
       "references": "References",
-      "ragSources": "RAG Sources",
+      "ragSources": "RAG sources",
       "reasoning": "Reasoning",
       "copy": "Copy",
       "copied": "Message copied",
@@ -1071,12 +1072,12 @@
       "tokenUsageCompletion": "Completion",
       "tokenUsageTotal": "Total",
       "save": "Save",
-      "insertToNotes": "Insert to Notes",
+      "insertToNotes": "Insert to notes",
       "regenerate": "Regenerate",
       "assistant": "Assistant"
     },
     "toolCall": {
-      "executionProcess": "Execution Process",
+      "executionProcess": "Execution process",
       "input": "Input",
       "output": "Output",
       "running": "Running..."
@@ -1085,7 +1086,7 @@
     "addPictureTooltip": "Attach an image to your message",
     "ragLabel": "RAG",
     "ragTooltipLabel": "Use indexed notes as context",
-    "webSearchLabel": "Web Search",
+    "webSearchLabel": "Web search",
     "webSearchTooltipLabel": "Search the internet when needed",
     "newConversation": "New conversation",
     "searchConversations": "Search conversations...",
@@ -1153,7 +1154,8 @@
       "writesProposal": "Writes: proposal only; Apply required",
       "writesNone": "Writes: unavailable",
       "rag": "RAG: {{state}}",
-      "web": "Web: {{state}}"
+      "web": "Web: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "Write proposals",
@@ -1202,7 +1204,7 @@
         "desc": "Choose how the agent will select its model"
       },
       "systemPrompt": {
-        "createNew": "create new prompt…",
+        "createNew": "Create new prompt…",
         "promptName": {
           "name": "Prompt name",
           "desc": "Display name for the new system prompt"
@@ -1276,7 +1278,7 @@
         "desc": "Enable web search capabilities"
       },
       "maxSteps": {
-        "name": "Max Tool Steps",
+        "name": "Max tool steps",
         "desc": "Maximum number of tool-call steps per agent turn"
       },
       "autonomousWrite": {
@@ -1298,7 +1300,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (local)",
         "openrouter": "OpenRouter",
-        "custom": "Custom (OpenAI compatible)"
+        "custom": "Custom (OpenAI compatible)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "Model filter",
@@ -1311,12 +1314,12 @@
         "optionalDesc": "Custom API endpoint (optional)"
       },
       "manageModels": {
-        "name": "Manage Models",
+        "name": "Manage models",
         "desc": "Pull new models or update existing ones from the Ollama registry.",
-        "btn": "Pull Ollama Model"
+        "btn": "Pull Ollama model"
       },
       "apiKey": {
-        "name": "API Key",
+        "name": "API key",
         "desc": "Authentication key for the selected provider"
       },
       "cancel": "Cancel",
@@ -1324,7 +1327,8 @@
       "validation": {
         "selectProvider": "Please select a provider type",
         "invalidUrl": "Invalid base URL format. Please enter a valid URL (e.g., https://api.example.com)",
-        "baseUrlRequired": "Enter the base URL of the OpenAI-compatible endpoint."
+        "baseUrlRequired": "Enter the base URL of the OpenAI-compatible endpoint.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "Cached models: {{count}}",
       "connectionErrors": {
@@ -1338,7 +1342,17 @@
       "testConnection": "Test connection",
       "testing": "Testing...",
       "connectionSuccess_one": "Connection successful. {{count}} model cached.",
-      "connectionSuccess_other": "Connection successful. {{count}} models cached."
+      "connectionSuccess_other": "Connection successful. {{count}} models cached.",
+      "resourceGroup": {
+        "name": "Resource group",
+        "desc": "Optional SAP AI Core resource group",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "Service key",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1348,7 +1362,7 @@
         "tools": "Tools",
         "test": "Test a tool"
       },
-      "refreshBtn": "refresh",
+      "refreshBtn": "Refresh",
       "connections": {
         "title": "MCP server connections",
         "noServers": "No MCP servers configured.",
@@ -1400,9 +1414,9 @@
         "performBtn": "Perform tool",
         "clearBtn": "Clear results",
         "executing": "Executing...",
-        "success": "execution successful",
-        "failed": "execution failed",
-        "errorTitle": "execution error",
+        "success": "Execution successful",
+        "failed": "Execution failed",
+        "errorTitle": "Execution error",
         "errorLabel": "Error: {{message}}",
         "notices": {
           "success": "Tool executed successfully",
@@ -1640,7 +1654,8 @@
       "customEnabled_one": "{{count}} MCP, OpenAPI or CLI tool enabled",
       "customEnabled_other": "{{count}} MCP, OpenAPI or CLI tools enabled",
       "referencesPlusContext_one": "{{count}} explicit reference plus active context",
-      "referencesPlusContext_other": "{{count}} explicit references plus active context"
+      "referencesPlusContext_other": "{{count}} explicit references plus active context",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_one": "{{agent}} can use {{count}} tool.",
     "subtitle_other": "{{agent}} can use {{count}} tools."
@@ -1660,5 +1675,47 @@
       "starting_one": "Indexing {{count}} note…",
       "starting_other": "Indexing {{count}} notes…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

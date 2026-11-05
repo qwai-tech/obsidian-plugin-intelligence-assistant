@@ -41,8 +41,12 @@ export function getProviderMeta(providerId: string): { label: string; iconSvg: s
 			label: 'Perplexity',
 			iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8Z"/><path d="M12 7a5 5 0 0 0-5 5h2a3 3 0 1 1 3 3v3h2v-3a5 5 0 0 0-2-9Z"/></svg>`
 		},
+		'sap-ai-core': {
+			label: 'SAP AI Core',
+			iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3v18h18V3H3zm8 14H7v-2h4v2zm0-4H7v-2h4v2zm0-4H7V7h4v2zm6 8h-4v-2h4v2zm0-4h-4v-2h4v2zm0-4h-4V7h4v2z"/></svg>`
+		},
 		'custom': {
-			label: 'Custom Provider',
+			label: 'Custom provider',
 			iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9 9.01 9.01 0 0 0-9-9Zm0 16a7 7 0 1 1 7-7 7.008 7.008 0 0 1-7 7Z"/><path d="M11 11H7v2h4v4h2v-4h4v-2h-4V7h-2v4z"/></svg>`
 		}
 	};
@@ -63,6 +67,7 @@ export function getProviderMeta(providerId: string): { label: string; iconSvg: s
 }
 
 const COLORS: Record<string, string> = {
+	'sap-ai-core': '#0070f2',
 	openai: '#10a37f',
 	anthropic: '#191919',
 	google: '#4285f4',

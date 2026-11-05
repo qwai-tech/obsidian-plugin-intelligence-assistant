@@ -36,8 +36,86 @@ jobs:
           echo "Tag $VERSION not found — will build and release."
         fi
 
-  release:
+  build:
     needs: check
+    if: needs.check.outputs.tag_exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+    - run: npm ci
+    - name: Check and build once
+      run: |
+        npm run lint
+        npm run typecheck
+        npm run build:production
+        shasum -a 256 main.js styles.css manifest.json > artifact-sha256.txt
+    - uses: actions/upload-artifact@v4
+      with:
+        name: verified-plugin-${{ github.sha }}
+        path: |
+          main.js
+          styles.css
+          manifest.json
+          artifact-sha256.txt
+          artifact-provenance.json
+
+  real-verification:
+    needs: build
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+    - run: npm ci
+    - uses: actions/download-artifact@v4
+      with:
+        name: verified-plugin-${{ github.sha }}
+        path: .
+    - name: Verify exact release bundle
+      run: shasum -a 256 -c artifact-sha256.txt
+    - name: Require a real service
+      env:
+        E2E_TEST_API_KEY: ${{ secrets.E2E_TEST_API_KEY }}
+        E2E_TEST_MODEL: ${{ secrets.E2E_TEST_MODEL }}
+        E2E_TEST_PROVIDER: ${{ secrets.E2E_TEST_PROVIDER }}
+      run: |
+        test -n "$E2E_TEST_API_KEY"
+        test -n "$E2E_TEST_MODEL"
+        test -n "$E2E_TEST_PROVIDER"
+    - name: Real Obsidian verification against downloaded bundle
+      run: |
+        npm run verify:release:real
+      env:
+        OBSIDIAN_VERSION: '1.14.5'
+        IA_RELEASE_GATE: '1'
+        RUN_LONG_TASK: '1'
+        E2E_TEST_PROVIDER: ${{ secrets.E2E_TEST_PROVIDER }}
+        E2E_TEST_API_KEY: ${{ secrets.E2E_TEST_API_KEY }}
+        E2E_TEST_MODEL: ${{ secrets.E2E_TEST_MODEL }}
+        E2E_TEST_BASE_URL: ${{ secrets.E2E_TEST_BASE_URL }}
+    - name: Ensure tests did not replace the release files
+      run: shasum -a 256 -c artifact-sha256.txt
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: real-release-evidence-${{ github.sha }}
+        path: |
+          artifact-sha256.txt
+          tests/e2e/screenshots/
+          tests/e2e/state-dumps/
+          tests/e2e/logs/
+          tests/e2e/reports/
+        if-no-files-found: error
+
+  release:
+    needs: [check, build, real-verification]
     if: needs.check.outputs.tag_exists == 'false'
     runs-on: ubuntu-latest
     permissions:
@@ -53,11 +131,13 @@ jobs:
         node-version: '22.x'
         cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+    - uses: actions/download-artifact@v4
+      with:
+        name: verified-plugin-${{ github.sha }}
+        path: .
 
-    - name: Verify and build plugin
-      run: npm run verify
+    - name: Verify tested artifact digest
+      run: shasum -a 256 -c artifact-sha256.txt
 
     - name: Verify plugin files exist
       run: |

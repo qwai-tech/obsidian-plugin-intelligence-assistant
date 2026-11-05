@@ -19,6 +19,7 @@ class AgentTaskLaunchModal extends Modal {
 		defaultTaskInput: string,
 		defaultNewConversation: boolean,
 		private readonly onSubmit: (result: AgentTaskLaunchResult | null) => void,
+		private readonly preview: string[] = [],
 	) {
 		super(app);
 		this.defaultTaskInput = defaultTaskInput;
@@ -31,6 +32,12 @@ class AgentTaskLaunchModal extends Modal {
 		contentEl.empty();
 		contentEl.addClass('ia-agent-task-modal');
 		this.setTitle(this.title);
+		if (this.preview.length) {
+			const preview = contentEl.createDiv('ia-task-preview');
+			new Setting(preview).setName(t('capability.title')).setHeading();
+			const list = preview.createEl('ul');
+			this.preview.forEach(item => list.createEl('li', { text: item }));
+		}
 
 		const fieldEl = contentEl.createDiv('ia-agent-task-modal__field');
 		fieldEl.createEl('label', {
@@ -123,8 +130,9 @@ export function showAgentTaskLaunchModal(
 	title: string,
 	defaultTaskInput: string,
 	defaultNewConversation = true,
+	preview: string[] = [],
 ): Promise<AgentTaskLaunchResult | null> {
 	return new Promise(resolve => {
-		new AgentTaskLaunchModal(app, title, defaultTaskInput, defaultNewConversation, resolve).open();
+		new AgentTaskLaunchModal(app, title, defaultTaskInput, defaultNewConversation, resolve, preview).open();
 	});
 }

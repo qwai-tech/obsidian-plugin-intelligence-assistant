@@ -12,7 +12,7 @@ interface GoogleSearchResponse {
 	items?: GoogleSearchItem[];
 }
 
-export async function searchGoogle(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchGoogle(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	if (!config.apiKey) {
 		throw new Error('Google API key is required for Google search');
 	}
@@ -24,7 +24,7 @@ export async function searchGoogle(query: string, maxResults: number, { config, 
 	const searchUrl = `https://www.googleapis.com/customsearch/v1?key=${config.apiKey}&cx=${config.googleCseId}&q=${encodeURIComponent(query)}&num=${Math.min(maxResults, 10)}&lr=${config.searchLanguage || 'lang_en'}`;
 	
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: searchUrl,
 			method: 'GET',
 		});

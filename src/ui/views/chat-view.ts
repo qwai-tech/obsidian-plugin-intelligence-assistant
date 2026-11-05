@@ -1,4 +1,6 @@
-import { ItemView, WorkspaceLeaf, Notice, TFile, TFolder, setIcon } from 'obsidian';
+import type { TaskAuthorization } from '@/features/agent';
+import { notify } from '@/core/notifications';
+import { ItemView, WorkspaceLeaf, TFile, TFolder, setIcon } from 'obsidian';
 import { t } from '@/i18n';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import { AgentCapabilityModal } from '@/ui/modals/agent-capability-modal';
@@ -15,7 +17,8 @@ import { ChatController } from '@/ui/chat/controllers/chat-controller';
 import { ChatHeaderComponent } from '@/ui/chat/chat-header.component';
 import { ChatInputComponent } from '@/ui/chat/chat-input.component';
 import { ChatSessionController } from '@/ui/chat/chat-session-controller';
-import { openingSession } from '@/features/chat';
+import { openingSession, agentModelId, pickAgentId } from '@/features/chat';
+import { modelCatalog } from '@/ui/modals/agent-model-options';
 import { MentionSuggest } from '@/ui/suggest/mention-suggest';
 import { internalLinktextFromEvent, openClickedInternalLink, triggerHoverLink } from '@/ui/chat/hover-link';
 import { RagStatusPanel } from '@/ui/chat/rag-status-panel';
@@ -26,6 +29,7 @@ import type { AppServices } from '@/ui/app-services';
 import { applyWriteProposal, type BatchWriteProposal, type WriteProposal } from '@/features/agent';
 import { describeProposal } from '@/ui/chat/write-proposal-cards';
 import { errorMessage } from '@/core/utils/errors';
+import { hasSettings } from '@/core/utils/type-guards';
 
 export const CHAT_VIEW_TYPE = 'intelligence-assistant-chat';
 
@@ -39,7 +43,7 @@ export class ChatView extends ItemView {
 	private messageList: ChatMessageList;
 	private mentionSuggest: MentionSuggest | null = null;
 	private conversationListContainer: HTMLElement;
-	private pendingAgentTask: { prompt: string; displayText: string } | null = null;
+	private pendingAgentTask: { prompt: string; displayText: string; authorization?: TaskAuthorization } | null = null;
 	private services: AppServices;
 	private ragStatusPanel: RagStatusPanel;
 
@@ -87,7 +91,9 @@ export class ChatView extends ItemView {
 
 		this.chatHeader = new ChatHeaderComponent(mainChatContainer, this.plugin, {
 			onToggleConversations: async () => { await this.conversationManager?.toggleConversationList(); },
-			onShowCapabilities: () => new AgentCapabilityModal(this.app, this.capabilitySummary(this.state.referencedFiles)).open(),
+			onShowCapabilities: () => new AgentCapabilityModal(this.app, this.capabilitySummary(this.state.referencedFiles), () => {
+				if (hasSettings(this.app)) { this.app.setting.open(); this.app.setting.openTabById(this.plugin.manifest.id); }
+			}).open(),
 			onNewChat: async () => {
 				await this.session.startNewChat();
 				await this.conversationManager.createNewConversation();
@@ -110,7 +116,7 @@ export class ChatView extends ItemView {
 			onStopStreaming: () => {
 				this.state.stopRun();
 				this.chatInput.stopBtn?.addClass('ia-hidden');
-				new Notice(t('chat.notices.stopping'));
+				notify(t('chat.notices.stopping'));
 			},
 			onModeChange: (mode) => this.session.changeMode(mode),
 			onModelChange: () => this.session.refreshImageButton(),
@@ -140,7 +146,7 @@ export class ChatView extends ItemView {
 			await this.updateRagStatus();
 		} catch (error) {
 			console.error('Error initializing RAG:', error);
-			new Notice(t('chat.notices.ragInitError', { message: errorMessage(error) }));
+			notify(t('chat.notices.ragInitError', { message: errorMessage(error) }));
 		}
 
 		void this.chatController.initialize();
@@ -179,12 +185,12 @@ export class ChatView extends ItemView {
 
 			await this.session.refreshImageButton();
 			if (showNotice) {
-				new Notice(t('chat.notices.modelsRefreshed'));
+				notify(t('chat.notices.modelsRefreshed'));
 			}
 		} catch (error) {
 			console.error('Failed to refresh models:', error);
 			if (showNotice) {
-				new Notice(t('chat.notices.modelsRefreshFailed', { message: errorMessage(error) }));
+				notify(t('chat.notices.modelsRefreshFailed', { message: errorMessage(error) }));
 			}
 		}
 	}
@@ -195,9 +201,10 @@ export class ChatView extends ItemView {
 		references?: Array<TFile | TFolder>;
 		newConversation?: boolean;
 		sendImmediately?: boolean;
-	}): Promise<void> {
+		authorization?: TaskAuthorization;
+	}): Promise<{ conversationId: string; content: string } | null> {
 		const prompt = options.prompt.trim();
-		if (!prompt) return;
+		if (!prompt || this.state.isStreaming) return null;
 		const displayText = (options.displayText?.trim() || prompt).trim();
 
 		if (options.newConversation) {
@@ -210,15 +217,29 @@ export class ChatView extends ItemView {
 		addReferences(this.state, options.references ?? []);
 		this.chatInput.updateReferenceDisplay();
 
-		this.pendingAgentTask = { prompt, displayText };
+		this.pendingAgentTask = { prompt, displayText, authorization: options.authorization };
 		this.chatInput.textarea.value = displayText;
 		this.chatInput.textarea.dispatchEvent(new Event('input', { bubbles: true }));
 		this.chatInput.textarea.focus();
 
 		if (options.sendImmediately) {
+			const before = this.state.messages.length;
 			this.messageList.showPreflight(displayText, this.capabilitySummary(options.references ?? []).preflightItems);
 			await this.sendMessage(displayText);
+			const reply = this.state.messages.slice(before).reverse().find(message => message.role === 'assistant');
+			if (reply && this.state.currentConversationId) return { conversationId: this.state.currentConversationId, content: reply.content || t('ux.emptyReply') };
 		}
+		return null;
+	}
+
+	public async taskPreview(references: Array<TFile | TFolder>): Promise<string[]> {
+		if (!pickAgentId(this.plugin.settings)) await this.plugin.ensureDefaultAgent();
+		const agent = this.plugin.settings.agents.find(candidate => candidate.id === pickAgentId(this.plugin.settings));
+		const selected = this.chatInput.modelSelect.value || this.plugin.settings.defaultModel;
+		const id = agent ? agentModelId(agent, selected, this.plugin.settings.defaultModel) : selected;
+		const label = modelCatalog(this.plugin.settings.llmConfigs).options.find(model => model.id === id)?.label || id || t('chat.header.noModels');
+		const summary = this.session.capabilitySummary(this.services.tools.registry, references, 'agent');
+		return [summary.agentName, label, ...summary.preflightItems];
 	}
 
 	onClose(): Promise<void> {
@@ -231,7 +252,7 @@ export class ChatView extends ItemView {
 		const pendingTask = this.pendingAgentTask;
 		this.pendingAgentTask = null;
 		const usePendingTask = pendingTask !== null && this.state.mode === 'agent' && text.trim() === pendingTask.displayText.trim();
-		await this.chatController.sendMessage(text, usePendingTask ? { llmContentOverride: pendingTask.prompt } : undefined);
+		await this.chatController.sendMessage(text, usePendingTask ? { llmContentOverride: pendingTask.prompt, authorization: pendingTask.authorization } : undefined);
 	}
 
 	private rendererCallbacks(): MessageRendererCallbacks {
@@ -333,11 +354,11 @@ export class ChatView extends ItemView {
 
 	private async confirmAndApplyProposal(proposal: WriteProposal | BatchWriteProposal, step: AgentExecutionStep): Promise<boolean> {
 		const summary = describeProposal(proposal);
-		if (!await showConfirm(this.app, t('chat.proposals.confirm', { summary }))) return false;
+		if (!await showConfirm(this.app, t('chat.proposals.confirm', { summary }), { title: t('ux.applyProposal'), confirmText: t('chat.proposals.apply'), destructive: false })) return false;
 		await applyWriteProposal(this.app, proposal);
 		step.proposalApplied = true;
 		await this.conversationManager.saveCurrentConversation();
-		new Notice(t('chat.proposals.appliedNotice', { summary }));
+		notify(t('chat.proposals.appliedNotice', { summary }));
 		return true;
 	}
 

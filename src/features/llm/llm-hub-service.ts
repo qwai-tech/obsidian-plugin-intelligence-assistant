@@ -27,8 +27,8 @@ export interface LLMHubHost {
  * there is no `getConfig`, no `getApiKey`, and no method that returns an
  * `LLMConfig`. Callers get an `ILLMProvider` -- the ability to send a request --
  * and the credential stays inside this closure. A caller can spend the user's
- * quota, which is inherent in lending the capability at all, but it cannot read
- * the key or reuse it elsewhere.
+ * quota, which is inherent in lending the capability at all, the facade does not expose the key. This is API encapsulation, not a security
+ * boundary against other plugins that can inspect the shared host.
  *
  * Do not add a method that returns configuration. That is the invariant.
  */
@@ -53,7 +53,7 @@ export class LLMHubService implements LLMHub {
 
 	async listModels(): Promise<ModelInfo[]> {
 		const models = await ModelManager.getAllAvailableModels(this.#host.getLLMConfigs());
-		return models.filter(model => model.enabled);
+		return models.filter(model => model.enabled).map(model => ({ ...model, capabilities: [...model.capabilities] }));
 	}
 
 	getProvider(modelId: string): Promise<ILLMProvider | null> {

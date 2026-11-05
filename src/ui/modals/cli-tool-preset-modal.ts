@@ -1,4 +1,5 @@
-import { Notice, Modal, Setting } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { Modal, Setting } from 'obsidian';
 import { t } from '@/i18n';
 import type { PluginHost } from '@/ui/plugin-host';
 import type { CLIToolConfig, CLIToolPreset } from '@/features/tools';
@@ -16,6 +17,7 @@ export class CLIToolPresetModal extends Modal {
 		const { contentEl } = this;
 		contentEl.empty();
 		this.setTitle(t('settings.tools.cli.presets.title'));
+		contentEl.createEl('p', { text: t('ux.cliRisk'), cls: 'ia-callout ia-text-warning' });
 
 		contentEl.createEl('p', {
 			text: t('settings.tools.cli.presets.desc'),
@@ -105,7 +107,7 @@ export class CLIToolPresetModal extends Modal {
 		button.removeClass('mod-cta');
 		button.addClass('ia-cli-tools-preset-add--disabled');
 
-		new Notice(t('settings.tools.cli.presets.notices.added', { name: preset.name }));
+		notify(t('settings.tools.cli.presets.notices.added', { name: preset.name }));
 	}
 
 	onClose(): void {

@@ -6,4 +6,11 @@ export interface UsageRecord {
 	totalTokens: number;
 	timestamp: number;
 	conversationId?: string;
+	requestId?: string;
+	connectionId?: string;
+	operation?: string;
+	purpose?: string;
+	status?: 'completed' | 'aborted' | 'failed';
+	durationMs?: number;
+	usageKnown?: boolean;
 }

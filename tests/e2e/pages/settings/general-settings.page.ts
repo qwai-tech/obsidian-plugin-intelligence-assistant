@@ -7,16 +7,16 @@ const CONVERSATION_ICONS = 'Conversation icons';
 export class GeneralSettingsPage extends BasePage {
 	async open(): Promise<void> {
 		await this.openPluginSettings();
-		await this.settingControl(DEFAULT_MODEL, 'input').waitForDisplayed({ timeout: 10_000 });
+		await this.settingControl(DEFAULT_MODEL, 'select').waitForDisplayed({ timeout: 10_000 });
 	}
 
 	async setDefaultModel(modelId: string): Promise<void> {
-		await this.setNamedControl(DEFAULT_MODEL, 'input', modelId);
+		await this.setNamedControl(DEFAULT_MODEL, 'select', modelId);
 		await this.waitForPluginSetting('defaultModel', modelId);
 	}
 
 	async getDefaultModel(): Promise<string> {
-		return this.settingControl(DEFAULT_MODEL, 'input').getValue();
+		return this.settingControl(DEFAULT_MODEL, 'select').getValue();
 	}
 
 	async setConversationTitleMode(mode: string): Promise<void> {

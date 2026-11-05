@@ -3,6 +3,7 @@ import { t } from '@/i18n';
 import type { PluginHost } from '@/ui/plugin-host';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
+import { getModelDisplayName } from '@/ui/chat/utils/provider-utils';
 import { TestIds } from '@/ui/utils/test-ids';
 
 export interface ConversationListActions {
@@ -155,11 +156,11 @@ export class ConversationListView {
 				}
 				if (conv.model) {
 					convInfo.createSpan('conversation-info__sep').setText('|');
-					convInfo.createSpan('conversation-info__model').setText(conv.model);
+					convInfo.createSpan('conversation-info__model').setText(getModelDisplayName(conv.model) || conv.model);
 				}
 			} else if (conv.model) {
 				convInfo.createSpan('conversation-info__sep').setText('|');
-				convInfo.createSpan('conversation-info__model').setText(conv.model);
+				convInfo.createSpan('conversation-info__model').setText(getModelDisplayName(conv.model) || conv.model);
 			}
 
 			// Add timestamps below title

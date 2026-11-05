@@ -17,8 +17,11 @@ export interface LLMAttachment {
 }
 
 export interface LLMMessage {
-	role: 'user' | 'assistant' | 'system';
+	role: 'user' | 'assistant' | 'system' | 'tool';
+	/** Retrieved data that may be trimmed; never executable policy. */
+	context?: boolean;
 	content: string;
+	reasoningContent?: string;
 	/** Wire passthrough for tool calling (OpenAI chat-completions shape). */
 	name?: string;
 	tool_calls?: unknown;
@@ -33,6 +36,10 @@ export interface ChatRequest {
 	temperature?: number;
 	maxTokens?: number;
 	stream?: boolean;
+	inputTokenBudget?: number;
+	contextTokenLimit?: number;
+	conversationId?: string;
+	purpose?: string;
 
 	// Common sampling parameters
 	topP?: number;
@@ -95,6 +102,8 @@ export interface ChatRequest {
 	metadata?: Record<string, string>;
 	store?: boolean;
 	reasoningEffort?: 'low' | 'medium' | 'high';
+	/** Explicit DeepSeek-compatible mode control; omitted preserves the server default. */
+	thinking?: { type: 'enabled' | 'disabled' };
 
 	userSecurityContext?: {
 		userId?: string;
@@ -110,6 +119,7 @@ export interface TokenUsage {
 }
 
 export interface ChatResponse {
+	toolCalls?: StreamChunk['toolCalls'];
 	content: string;
 	reasoning?: string;
 	usage?: TokenUsage;
@@ -148,8 +158,25 @@ export interface ModelInfo {
 	id: string;
 	name: string;
 	provider: string;
+	/** Human-readable configured connection, without credentials. */
+	providerLabel?: string;
 	capabilities: ModelCapability[];
 	enabled: boolean;
+	/** SAP AI Core deployment metadata retained alongside the model cache. */
+	deploymentId?: string;
+	deploymentUrl?: string;
+	configurationId?: string;
+	configurationName?: string;
+	scenarioId?: string;
+	executableId?: string;
+	modelVersion?: string;
+	status?: string;
+	targetStatus?: string;
+	createdAt?: string;
+	modifiedAt?: string;
+	submissionTime?: string;
+	startTime?: string;
+	completionTime?: string;
 }
 
 export interface ProviderCapabilities {
@@ -177,9 +204,15 @@ export interface ModelConfig {
  */
 export interface LLMConfig {
 	provider: string;
+	/** Stable identity of a configured connection, independent of its endpoint. */
+	id?: string;
+	name?: string;
 	apiKey?: string;
 	baseUrl?: string;
 	modelFilter?: string;
+	/** SAP AI Core service key. Treat the complete value as a credential. */
+	serviceKey?: string | Record<string, unknown>;
+	resourceGroup?: string;
 	cachedModels?: ModelInfo[];
 	cacheTimestamp?: number;
 }
@@ -217,7 +250,7 @@ export interface ILLMProvider {
 
 	chat(_request: ChatRequest): Promise<ChatResponse>;
 	streamChat(_request: ChatRequest, _onChunk: (_chunk: StreamChunk) => void): Promise<void>;
-	generateEmbedding?(_text: string, _model: string): Promise<number[]>;
+	generateEmbedding?(_text: string, _model: string, _options?: { signal?: AbortSignal }): Promise<number[]>;
 	initialize?(_config: LLMProviderConfig): Promise<void>;
 	countTokens?(_text: string, _model?: string): Promise<TokenCount>;
 	validateConfig?(_config: LLMProviderConfig): ValidationResult;

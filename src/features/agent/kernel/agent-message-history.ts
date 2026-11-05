@@ -6,17 +6,8 @@ import type {
 } from '../types';
 
 export function deduplicateWorkingMessages(messages: AgentWorkingMessage[]): AgentWorkingMessage[] {
-	if (messages.length <= 1) return messages;
-	const result: AgentWorkingMessage[] = [messages[0]];
-	for (let i = 1; i < messages.length; i++) {
-		const prev = messages[i - 1];
-		const cur = messages[i];
-		if (cur.role === prev.role && cur.content === prev.content) {
-			continue;
-		}
-		result.push(cur);
-	}
-	return result;
+	// Repeated content is a legitimate distinct turn/result; call IDs carry identity.
+	return [...messages];
 }
 
 export function sanitizeToolCallHistory(messages: AgentWorkingMessage[]): AgentWorkingMessage[] {
@@ -45,9 +36,9 @@ export function sanitizeToolCallHistory(messages: AgentWorkingMessage[]): AgentW
 			sanitized.push(message, ...toolResults);
 		} else {
 			const plainAssistant = stripToolCalls(message);
-			if (plainAssistant.content.trim()) {
-				sanitized.push(plainAssistant);
-			}
+			const evidence = toolResults.map(result => `Tool result ${result.tool_call_id}: ${result.content}`).join('\n');
+			plainAssistant.content = [plainAssistant.content, 'Incomplete historical tool batch; available execution records follow. Do not assume missing calls succeeded.', evidence].filter(Boolean).join('\n');
+			sanitized.push(plainAssistant);
 		}
 
 		index = cursor - 1;

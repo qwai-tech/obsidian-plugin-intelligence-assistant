@@ -102,7 +102,8 @@
       },
       "guidance": {
         "configureBaseUrl": "配置基础 URL",
-        "addApiKey": "添加 API 密钥"
+        "addApiKey": "添加 API 密钥",
+        "provideServiceKey": "提供服务密钥"
       },
       "models": {
         "none": "无模型",
@@ -1132,7 +1133,8 @@
       "writesProposal": "写入：仅生成提案；需要点击“应用”",
       "writesNone": "写入：不可用",
       "rag": "RAG：{{state}}",
-      "web": "网络：{{state}}"
+      "web": "网络：{{state}}",
+      "writesAutonomous": "写入：根据此 Agent 的明确设置自动应用。"
     },
     "proposals": {
       "title": "写入提案",
@@ -1275,7 +1277,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama（本地）",
         "openrouter": "OpenRouter",
-        "custom": "自定义（OpenAI 兼容）"
+        "custom": "自定义（OpenAI 兼容）",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "模型过滤器",
@@ -1312,9 +1315,20 @@
       "validation": {
         "selectProvider": "请选择服务商类型",
         "invalidUrl": "Base URL 格式无效，请输入有效的 URL（例如 https://api.example.com）",
-        "baseUrlRequired": "请输入与 OpenAI 兼容端点的基础 URL。"
+        "baseUrlRequired": "请输入与 OpenAI 兼容端点的基础 URL。",
+        "invalidServiceKey": "请选择有效的 SAP Service Key JSON，包含 clientid、clientsecret、OAuth 地址和 AI API 地址。"
       },
-      "connectionSuccess_other": "连接成功，已缓存 {{count}} 个模型。"
+      "connectionSuccess_other": "连接成功，已缓存 {{count}} 个模型。",
+      "resourceGroup": {
+        "name": "资源组",
+        "desc": "可选的 SAP AI Core 资源组",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "服务密钥",
+        "desc": "选择保存在钥匙串中的完整 SAP AI Core Service Key JSON。"
+      },
+      "sapBaseUrlDesc": "可选 AI API 地址，默认使用 Service Key 中的 serviceurls.AI_API_URL。"
     },
     "mcpInspector": {
       "title": "MCP 检查器",
@@ -1612,7 +1626,8 @@
       "destructive": "破坏性仓库操作",
       "notProvided": "内置工具不提供",
       "customEnabled_other": "已启用 {{count}} 个 MCP、OpenAPI 或 CLI 工具",
-      "referencesPlusContext_other": "{{count}} 个显式引用及当前上下文"
+      "referencesPlusContext_other": "{{count}} 个显式引用及当前上下文",
+      "autonomousWrites": "此 Agent 已明确启用自动写入"
     },
     "subtitle_other": "{{agent}} 可以使用 {{count}} 个工具。"
   },
@@ -1630,5 +1645,47 @@
       "cleared": "索引已清除。",
       "starting_other": "正在索引 {{count}} 篇笔记…"
     }
+  },
+  "ux": {
+    "original": "原选区",
+    "proposed": "拟替换内容",
+    "replaceSelection": "替换选中文本",
+    "emptyReply": "未生成回复，请查看会话中的详细信息。",
+    "noteChanged": "审核期间笔记内容已变化，未执行替换。请基于当前文本重新运行。",
+    "stopped": "已停止",
+    "generating": "生成中…",
+    "cliRisk": "这些预设可使用你的账户权限运行命令和访问文件。启用前请检查命令与参数；添加后的预设默认禁用。",
+    "startTask": "启动 Agent 任务",
+    "invalidAutorun": "autorun 选项无效，请使用 autorun: true 或 autorun: false。未发送请求。",
+    "noPrompt": "未填写提示词。请编辑笔记中的 ai 块，然后重新运行。",
+    "modelId": "模型标识",
+    "unavailableModel": "不可用：{{model}}",
+    "configureTools": "配置工具和 Agent",
+    "deleteProvider": "移除服务商",
+    "deleteAgent": "删除智能体",
+    "deletePrompt": "删除系统提示词",
+    "deleteQuickAction": "删除快捷操作",
+    "deleteMcpServer": "删除 MCP 服务器",
+    "deleteCliTool": "删除 CLI 工具",
+    "deleteHttpSource": "删除 HTTP 来源",
+    "deleteConversation": "删除对话",
+    "applyProposal": "应用写入提案",
+    "similarityOnly": "结果按与查询的相似度排序。",
+    "unavailableConnection": "连接不可用",
+    "newAgent": "新智能体",
+    "newQuickAction": "新快捷操作",
+    "connectionName": "连接名称",
+    "newCliTool": "新 CLI 工具",
+    "newHttpSource": "新 HTTP 来源",
+    "notificationsTitle": "最近通知",
+    "notificationsDesc": "显示本次会话最近 50 条消息。重新加载插件后清空。",
+    "notificationsEmpty": "本次会话暂无通知。",
+    "viewNotifications": "查看通知",
+    "dismissNotifications": "关闭当前通知",
+    "modelsRefreshPartial": "已刷新 {{success}} 个连接；{{failed}} 个失败。请查看下方详情。",
+    "sourceDisabled": "来源已禁用。请先启用再加载工具。",
+    "loadingSource": "正在加载工具…",
+    "sourceLoadFailed": "无法加载 {{name}}：{{reason}}",
+    "ragEnableFirst": "请先启用 RAG，再重建或刷新索引。"
   }
 }

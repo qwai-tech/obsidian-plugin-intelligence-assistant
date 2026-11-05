@@ -1,7 +1,8 @@
 import type { LLMConfig, ModelInfo } from './types';
 import { DEFAULT_MODELS } from './model-catalog';
-import { fetchDeepSeekModels, fetchGoogleModels, fetchOpenAIModels, fetchOpenRouterModels } from './model-fetchers';
+import { providerDefinition } from './provider-definitions';
 import { reportDiagnostic } from './diagnostics';
+import { scopeModel } from './model-identity';
 
 export class ModelManager {
 	private static readonly inFlight = new Map<string, Promise<ModelInfo[]>>();
@@ -25,18 +26,21 @@ export class ModelManager {
 	}
 
 	static async getModelsForConfig(config: LLMConfig, forceRefresh: boolean = false): Promise<ModelInfo[]> {
-		const stored = config.cachedModels ?? [];
+		const stored = (config.cachedModels ?? []).map(model => Object.assign(model, scopeModel(model, config)));
+		config.cachedModels = stored;
 		if (!forceRefresh && config.provider !== 'ollama' && stored.length > 0) {
 			return this.filterModels(stored, config.modelFilter);
 		}
 		const switchedOff = new Set(stored.filter((model) => model.enabled === false).map((model) => model.id));
-		const models = (await this.fetchOnce(config)).map((model) => (switchedOff.has(model.id) ? { ...model, enabled: false } : { ...model }));
+		const models = (await this.fetchOnce(config)).map(model => scopeModel(model, config)).map((model) => (switchedOff.has(model.id) ? { ...model, enabled: false } : { ...model }));
 		config.cachedModels = models;
 		config.cacheTimestamp = Date.now();
 		return this.filterModels(models, config.modelFilter);
 	}
 
 	private static fetchOnce(config: LLMConfig): Promise<ModelInfo[]> {
+		// SAP discovery is tenant/resource-group specific; never share it across connections.
+		if (config.provider === 'sap-ai-core') return this.fetchModels(config);
 		const key = `${config.provider ?? ''}:${config.apiKey ?? ''}:${config.baseUrl ?? ''}`;
 		const pending = this.inFlight.get(key);
 		if (pending) {
@@ -48,39 +52,10 @@ export class ModelManager {
 	}
 
 	private static async fetchModels(config: LLMConfig): Promise<ModelInfo[]> {
-		switch (config.provider) {
-			case 'ollama':
-				return await this.fetchOllamaModels(config);
-			case 'anthropic':
-				return DEFAULT_MODELS.anthropic;
-		}
-		if (!config.apiKey) {
-			return this.getDefaultModels(config.provider);
-		}
-		switch (config.provider) {
-			case 'openai':
-				return await fetchOpenAIModels(config.apiKey, config.baseUrl);
-			case 'custom':
-				return await fetchOpenAIModels(config.apiKey, config.baseUrl, 'custom');
-			case 'google':
-				return await fetchGoogleModels(config.apiKey, config.baseUrl);
-			case 'deepseek':
-				return await fetchDeepSeekModels(config.apiKey, config.baseUrl);
-			case 'openrouter':
-				return await fetchOpenRouterModels(config.apiKey, config.baseUrl);
-			default:
-				return [];
-		}
-	}
-
-	private static async fetchOllamaModels(config: LLMConfig): Promise<ModelInfo[]> {
-		try {
-			const { OllamaProvider } = await import('./providers/ollama-provider');
-			return await new OllamaProvider(config).fetchModels();
-		} catch (error) {
-			console.error('[ModelManager] Failed to fetch Ollama models:', error);
-			return config.cachedModels ?? [];
-		}
+		const definition = providerDefinition(config.provider);
+		if (definition.credential === 'api-key' && !config.apiKey?.trim()) throw new Error(`${definition.label} requires an API key`);
+		if (config.provider === 'custom' && !config.baseUrl?.trim()) throw new Error('Custom provider requires a base URL');
+		return definition.discover(config);
 	}
 
 	/**
@@ -121,20 +96,21 @@ export class ModelManager {
 	 * Find which provider config can use a specific model
 	 */
 	static async findConfigForModel(modelId: string, configs: LLMConfig[]): Promise<LLMConfig | null> {
+		if (modelId.startsWith('custom@')) return this.findConfigForModelByProvider(modelId, configs);
+		const matches: LLMConfig[] = [];
 		// Try to match by provider - fetch models for each config
 		for (const config of configs) {
 			try {
 				const models = await this.getModelsForConfig(config);
 				if (models.some(m => m.id === modelId)) {
-					return config;
+					matches.push(config);
 				}
 			} catch (error) {
 				console.error(`Failed to get models for ${config.provider}:`, error);
 			}
 		}
 
-		// Fallback to first config
-		return configs[0] || null;
+		return matches.length === 1 ? matches[0] : null;
 	}
 
 	/**
@@ -153,36 +129,52 @@ export class ModelManager {
 	 * Find config for model by provider type (faster than fetching all models)
 	 */
 	static findConfigForModelByProvider(modelId: string, configs: LLMConfig[]): LLMConfig | null {
+		// A removed connection must never silently route a request elsewhere.
+		if (modelId.startsWith('custom@')) {
+			const end = modelId.indexOf(':');
+			if (end < 0) return null;
+			const id = modelId.slice('custom@'.length, end);
+			const matches = configs.filter(config => config.provider === 'custom' && config.id === id);
+			return matches.length === 1 ? matches[0] : null;
+		}
 		// Check if modelId has provider prefix (provider:model-name format)
 		if (modelId.includes(':')) {
 			const [providerPrefix] = modelId.split(':');
 
 			// Find config matching the provider prefix
-			const config = configs.find(c => c.provider === providerPrefix);
-			if (config) {
-				return config;
+			const matching = configs.filter(c => c.provider === providerPrefix);
+			if (matching.length === 1) {
+				return matching[0];
 			}
+			if (matching.length > 1) {
+				if (providerPrefix === 'custom') return null;
+				const exact = matching.filter(config => config.cachedModels?.some(model => model.id === modelId));
+				return exact.length === 1 ? exact[0] : null;
+			}
+			return null;
 		}
 
 		// Fallback: Try to infer provider from model name pattern
 		const providerType = this.getProviderFromModelId(modelId);
 		if (providerType) {
-			const config = configs.find(c => c.provider === providerType);
-			if (config) return config;
+			const matching = configs.filter(c => c.provider === providerType);
+			if (matching.length === 1) return matching[0];
 		}
 
 		// If we can't determine provider from model ID, check each config to see if it contains this model
+		const matches: LLMConfig[] = [];
 		for (const config of configs) {
 			try {
 				// Check if the model exists in cached models first (more efficient)
 				if (config.cachedModels && config.cachedModels.some(model => model.id === modelId)) {
-					return config;
+					matches.push(config);
+					continue;
 				}
 
 				// Check if the model exists in default models for the provider
 				const defaultModels = this.getDefaultModels(config.provider);
 				if (defaultModels.some(model => model.id === modelId)) {
-					return config;
+					matches.push(config);
 				}
 			} catch {
 				// Continue to next config if there's an error getting models
@@ -190,8 +182,7 @@ export class ModelManager {
 			}
 		}
 
-		// If still can't find, return first config as fallback
-		return configs[0] || null;
+		return matches.length === 1 ? matches[0] : null;
 	}
 }
 

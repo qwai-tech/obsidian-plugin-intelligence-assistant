@@ -6,19 +6,10 @@ import type { PluginHost } from '@/ui/plugin-host';
 import type { Conversation, Message } from '@/features/conversations';
 import { ChatViewState } from '@/ui/state/chat-view-state';
 import type { ConversationNamer } from '@/features/chat';
-import { agentModelId } from '@/features/chat';
+import { agentModelId, newConversationConfig } from '@/features/chat';
 import { ConversationListView } from '@/ui/chat/conversation-list-view';
 import { applyConversationSettings } from '@/ui/chat/conversation-settings';
 import type { ConversationStorageService } from '@/adapters/persistence/conversation-storage-service';
-import { DEFAULT_CHAT_SAMPLING } from '@/core/constants';
-
-const NEW_CONVERSATION_CONFIG = {
-	promptId: null,
-	agentId: null,
-	...DEFAULT_CHAT_SAMPLING,
-	ragEnabled: false,
-	webSearchEnabled: false,
-};
 
 export class ConversationManager extends Events {
 	private conversationListContainer: HTMLElement;
@@ -65,6 +56,7 @@ export class ConversationManager extends Events {
 	}
 
 	async createNewConversation(): Promise<void> {
+		if (this.state.isStreaming) return;
 		const conversation: Conversation = {
 			id: `conv_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
 			title: t('chat.newConversation'),
@@ -72,7 +64,7 @@ export class ConversationManager extends Events {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
 			mode: this.plugin.settings.defaultChatMode ?? 'agent',
-			config: { ...NEW_CONVERSATION_CONFIG, modelId: this.plugin.settings.defaultModel || this.modelSelect?.value || undefined },
+			config: newConversationConfig(this.plugin.settings, this.plugin.settings.defaultChatMode ?? 'agent', this.modelSelect?.value),
 		};
 		await this.storage.createConversation(conversation);
 		await this.plugin.updateSettings((settings) => {
@@ -112,6 +104,7 @@ export class ConversationManager extends Events {
 	}
 
 	async switchConversation(convId: string): Promise<void> {
+		if (this.state.isStreaming) return;
 		if (this.state.currentConversationId === convId) {
 			this.closeListUnlessPinned();
 			return;
@@ -153,11 +146,12 @@ export class ConversationManager extends Events {
 	}
 
 	async deleteConversation(convId: string): Promise<void> {
+		if (this.state.isStreaming && convId === this.state.currentConversationId) return;
 		const conv = await this.storage.getConversationMetadata(convId);
 		if (!conv) return;
 		const wasVisible = this.state.conversationListVisible;
 
-		if (!await showConfirm(this.app, t('chat.deleteConversationConfirm', { title: conv.title })) || !await this.storage.deleteConversation(convId)) {
+		if (!await showConfirm(this.app, t('chat.deleteConversationConfirm', { title: conv.title }), { title: t('ux.deleteConversation'), confirmText: t('chat.history.delete') }) || !await this.storage.deleteConversation(convId)) {
 			this.restoreListVisibility(wasVisible);
 			return;
 		}

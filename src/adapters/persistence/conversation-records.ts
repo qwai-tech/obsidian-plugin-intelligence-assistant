@@ -84,6 +84,9 @@ function normalizeConversationConfig(config?: ConversationConfig): ConversationC
     agentId: normalizeId(config.agentId),
     temperature: typeof config.temperature === 'number' ? config.temperature : undefined,
     maxTokens: typeof config.maxTokens === 'number' ? config.maxTokens : undefined,
+    topP: typeof config.topP === 'number' ? config.topP : undefined,
+    frequencyPenalty: typeof config.frequencyPenalty === 'number' ? config.frequencyPenalty : undefined,
+    presencePenalty: typeof config.presencePenalty === 'number' ? config.presencePenalty : undefined,
     ragEnabled: typeof config.ragEnabled === 'boolean' ? config.ragEnabled : undefined,
     webSearchEnabled: typeof config.webSearchEnabled === 'boolean' ? config.webSearchEnabled : undefined
   };

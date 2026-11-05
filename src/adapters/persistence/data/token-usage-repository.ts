@@ -6,6 +6,8 @@ interface TokenUsageFile {
 	version: number;
 	updatedAt: number;
 	records: UsageRecord[];
+	archivedByProvider?: Record<string, UsageSummary>;
+	archivedByModel?: Record<string, UsageSummary>;
 }
 
 export interface UsageSummary {
@@ -28,7 +30,13 @@ export class TokenUsageRepository {
 		await this.mutate((file) => {
 			file.records.push(record);
 			if (file.records.length > MAX_RECORDS) {
-				file.records = file.records.slice(-MAX_RECORDS);
+				const retired = file.records.splice(0, file.records.length - MAX_RECORDS);
+				file.archivedByProvider ??= {};
+				file.archivedByModel ??= {};
+				for (const item of retired) {
+					accumulate(file.archivedByProvider, item.provider, item);
+					accumulate(file.archivedByModel, item.model, item);
+				}
 			}
 		});
 	}
@@ -40,7 +48,7 @@ export class TokenUsageRepository {
 
 	async getTotalByProvider(): Promise<Map<string, UsageSummary>> {
 		const file = await this.records();
-		const map = new Map<string, UsageSummary>();
+		const map = new Map<string, UsageSummary>(Object.entries(file.archivedByProvider ?? {}).map(([key, value]) => [key, { ...value }]));
 
 		for (const r of file.records) {
 			const s = map.get(r.provider) || { promptTokens: 0, completionTokens: 0, totalTokens: 0, callCount: 0 };
@@ -55,7 +63,7 @@ export class TokenUsageRepository {
 
 	async getTotalByModel(): Promise<Map<string, UsageSummary>> {
 		const file = await this.records();
-		const map = new Map<string, UsageSummary>();
+		const map = new Map<string, UsageSummary>(Object.entries(file.archivedByModel ?? {}).map(([key, value]) => [key, { ...value }]));
 
 		for (const r of file.records) {
 			const s = map.get(r.model) || { promptTokens: 0, completionTokens: 0, totalTokens: 0, callCount: 0 };
@@ -77,6 +85,9 @@ export class TokenUsageRepository {
 			s.totalTokens += r.totalTokens;
 		}
 		s.callCount = file.records.length;
+		for (const archived of Object.values(file.archivedByProvider ?? {})) {
+			s.promptTokens += archived.promptTokens; s.completionTokens += archived.completionTokens; s.totalTokens += archived.totalTokens; s.callCount += archived.callCount;
+		}
 		return s;
 	}
 
@@ -93,6 +104,8 @@ export class TokenUsageRepository {
 	async clearAll(): Promise<void> {
 		await this.mutate((file) => {
 			file.records = [];
+			file.archivedByProvider = {};
+			file.archivedByModel = {};
 		});
 	}
 
@@ -108,4 +121,9 @@ export class TokenUsageRepository {
 		const file = await this.file.read();
 		return { ...file, records: Array.isArray(file.records) ? file.records : [] };
 	}
+}
+
+function accumulate(map: Record<string, UsageSummary>, key: string, item: UsageRecord): void {
+	const old = Object.prototype.hasOwnProperty.call(map, key) ? map[key] : { promptTokens: 0, completionTokens: 0, totalTokens: 0, callCount: 0 };
+	Object.defineProperty(map, key, { configurable: true, enumerable: true, writable: true, value: { promptTokens: old.promptTokens + item.promptTokens, completionTokens: old.completionTokens + item.completionTokens, totalTokens: old.totalTokens + item.totalTokens, callCount: old.callCount + 1 } });
 }

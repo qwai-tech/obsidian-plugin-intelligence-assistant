@@ -13,4 +13,4 @@ export { DEFAULT_CLI_TIMEOUT } from './types/cli-tools';
 export type { CLIToolConfig, CLIToolPreset } from './types/cli-tools';
 export type { CachedMCPTool, MCPRegistry, MCPServerConfig } from './types/mcp';
 export type { OpenApiAuthType, OpenApiSourceType, OpenApiToolConfig } from './types/openapi-tools';
-export type { AgentToolAccess, BuiltInToolConfig, RegisteredTool, ToolParameter } from './types/tools';
+export type { ArgumentSourceRule, ToolExecutionContext, AgentToolAccess, BuiltInToolConfig, RegisteredTool, ToolParameter } from './types/tools';

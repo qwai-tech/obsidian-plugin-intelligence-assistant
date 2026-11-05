@@ -1,0 +1,22 @@
+/** Real saved settings + real disk round-trip, using production session policy. No mock host. */
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import * as fs from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+const settingsPath=process.env.IA_NATIVE_SETTINGS_PATH||'/tmp/ia-codex-ux-20261103/vault/.obsidian/plugins/intelligence-assistant/data.json';
+const out=process.env.IA_REAL_RESULTS||'test-results/long-output-investigation-2026-11-04';await fs.mkdir(out,{recursive:true});
+const scratch=await fs.mkdtemp(path.join(tmpdir(),'ia-conversation-budget-'));
+await build({stdin:{contents:`export { newConversationConfig } from './src/features/chat/chat-session-policy'; export { userConfigToPluginSettings } from './src/features/settings/settings-codec'; export { fromSettingsDocument, assertSettingsDocument } from './src/features/settings/settings-document'; export { normalizeConversation } from './src/adapters/persistence/conversation-records';`,resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'node',format:'cjs',plugins:[{name:'unused-host-import',setup(b){b.onResolve({filter:/^obsidian$/},a=>({path:a.path,external:true,sideEffects:false}));}}],outfile:path.join(scratch,'policy.cjs'),logLevel:'silent'});
+const {newConversationConfig,userConfigToPluginSettings,fromSettingsDocument,assertSettingsDocument,normalizeConversation}=createRequire(import.meta.url)(path.join(scratch,'policy.cjs'));
+const doc=JSON.parse(await fs.readFile(settingsPath,'utf8'));assertSettingsDocument(doc);
+const settings={...userConfigToPluginSettings(doc.config),...fromSettingsDocument(doc).stored};
+const agent=settings.agents.find(a=>a.id===settings.activeAgentId);assert.ok(agent);
+const agentConfig=newConversationConfig(settings,'agent',settings.defaultModel);
+assert.equal(agentConfig.maxTokens,agent.maxTokens);assert.equal(agentConfig.temperature,agent.temperature);assert.equal(agentConfig.agentId,agent.id);
+const chatConfig=newConversationConfig(settings,'chat',settings.defaultModel);assert.equal(chatConfig.maxTokens,4000);assert.equal(chatConfig.agentId,null);
+const created=normalizeConversation({id:'real-budget-round-trip',title:'Budget round trip',mode:'agent',messages:[],createdAt:Date.now(),updatedAt:Date.now(),config:agentConfig});
+await fs.writeFile(path.join(scratch,'conversation.json'),JSON.stringify(created));const restored=normalizeConversation(JSON.parse(await fs.readFile(path.join(scratch,'conversation.json'),'utf8')));assert.equal(restored.config.maxTokens,agent.maxTokens);
+const historical=normalizeConversation({...created,config:{...agentConfig,maxTokens:4000}});assert.equal(historical.config.maxTokens,4000,'An explicit old conversation cap must not be silently migrated');
+const result={mocks:false,source:'Current real QA settings and actual temporary disk persistence',configuredAgentMaxTokens:agent.maxTokens,newAgentConversationMaxTokens:agentConfig.maxTokens,newChatConversationMaxTokens:chatConfig.maxTokens,existingExplicitCapPreserved:historical.config.maxTokens,persistedAgentCap:restored.config.maxTokens,checks:[{name:'New Agent conversation inherits its configured token cap and temperature',status:'passed'},{name:'Chat retains its own defaults',status:'passed'},{name:'Real disk round trip preserves the Agent cap',status:'passed'},{name:'Existing explicit conversation overrides remain unchanged',status:'passed'}]};await fs.writeFile(path.join(out,'conversation-budget-checks.json'),JSON.stringify(result,null,2));console.log(result);

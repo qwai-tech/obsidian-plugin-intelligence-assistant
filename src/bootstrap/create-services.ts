@@ -1,14 +1,14 @@
-import { Notice, type App } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { type App } from 'obsidian';
 import { t } from '@/i18n';
-import { ModelManager, ProviderFactory, getDefaultHttpPort } from '@qwai/obsidian-llm';
+import { ModelManager, ProviderFactory, getDefaultHttpPort, setLLMRequestObserver } from '@qwai/obsidian-llm';
 import type { PluginSettings } from '@/features/settings';
-import type { UsageRecord } from '@/features/usage';
 import type { AppServices } from '@/ui/app-services';
 import { RAGManager } from '@/adapters/rag/rag-manager';
 import { ObsidianFileSystem } from '@/adapters/obsidian/obsidian-file-system';
 import { ToolRegistry, ToolSourceManager } from '@/features/tools';
 import { WebSearchService } from '@/features/web-search';
-import { AgentMemoryService, AgentSenseService, AgentEngineLoop, HistoryCompactor, RunActivity } from '@/features/agent';
+import { AgentMemoryService, AgentSenseService, AgentEngineLoop, HistoryCompactor, RunActivity, RunCoordinator } from '@/features/agent';
 import { JsonlRunJournal } from '@/adapters/persistence/jsonl-run-journal';
 import type { PluginPaths } from '@/core/plugin-paths';
 import { ChatService, VaultExportService, ConversationNamer } from '@/features/chat';
@@ -36,15 +36,19 @@ export function createServices(host: ServiceHost): OwnedServices {
 	const rag = new RAGManager(app, settings().ragConfig, settings().llmConfigs, host.paths.vectorStoreNotes);
 	const registry = new ToolRegistry();
 	const tools = new ToolSourceManager(registry, createToolSourceFactory(app, host.paths.data), settings, host.updateSettings);
-	const webSearch = new WebSearchService(() => settings().webSearchConfig, getDefaultHttpPort(), (problem) => new Notice(t('chat.notices.webSearchFailed', { message: problem })));
+	const webSearch = new WebSearchService(() => settings().webSearchConfig, getDefaultHttpPort(), (problem) => notify(t('chat.notices.webSearchFailed', { message: problem })));
 	const activity = new RunActivity();
-	const recordUsage = async (record: UsageRecord) => {
-		await data.tokenUsageRepo.recordUsage(record);
+	const runs = new RunCoordinator();
+	const removeObserver = setLLMRequestObserver(async event => {
+		await data.tokenUsageRepo.recordUsage({ model: event.model, provider: event.provider, timestamp: Date.now(),
+			promptTokens: event.usage?.promptTokens ?? 0, completionTokens: event.usage?.completionTokens ?? 0, totalTokens: event.usage?.totalTokens ?? 0,
+			usageKnown: Boolean(event.usage), requestId: event.id, connectionId: event.connectionId, conversationId: event.conversationId,
+			operation: event.operation, purpose: event.purpose, status: event.status, durationMs: event.durationMs });
 		activity.usageRecorded();
-	};
+	});
 	const agentMemory = new AgentMemoryService(data.agentMemoryRepo);
 	const agentLoop = new AgentEngineLoop({
-		app,
+		app, runs,
 		toolRegistry: registry,
 		senseService: new AgentSenseService(app, rag, agentMemory),
 		memoryWriter: agentMemory,
@@ -56,7 +60,6 @@ export function createServices(host: ServiceHost): OwnedServices {
 			const config = ModelManager.findConfigForModelByProvider(modelId, settings().llmConfigs);
 			return config ? { provider: ProviderFactory.createProvider(config), providerId: config.provider } : null;
 		},
-		recordUsage,
 		defaultModel: () => settings().defaultModel,
 	});
 	const chat = new ChatService({
@@ -64,7 +67,7 @@ export function createServices(host: ServiceHost): OwnedServices {
 		knowledge: rag,
 		webSearchService: webSearch,
 		settings,
-		usageRepo: { recordUsage },
+		runs,
 		agentEngineLoop: agentLoop,
 	});
 
@@ -77,9 +80,11 @@ export function createServices(host: ServiceHost): OwnedServices {
 		usage: data.tokenUsageRepo,
 		activity,
 		ollama: new OllamaAdmin(getDefaultHttpPort()),
-		namer: new ConversationNamer(settings, { recordUsage: (record) => void recordUsage(record) }),
+		namer: new ConversationNamer(settings),
 		dispose: async () => {
+			await runs.dispose();
 			await Promise.all([registry.dispose(), rag.destroy()]);
+			removeObserver();
 		},
 	};
 }

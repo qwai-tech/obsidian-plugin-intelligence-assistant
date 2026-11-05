@@ -105,7 +105,8 @@
       },
       "guidance": {
         "configureBaseUrl": "அடிப்படை URL ஐ உள்ளமைக்கவும்",
-        "addApiKey": "API விசையைச் சேர்க்கவும்"
+        "addApiKey": "API விசையைச் சேர்க்கவும்",
+        "provideServiceKey": "சேவை விசையை வழங்கவும்"
       },
       "models": {
         "none": "மாதிரிகள் இல்லை",
@@ -1153,7 +1154,8 @@
       "writesProposal": "எழுதுதல்: முன்மொழிவு மட்டும்; \"பயன்படுத்து\" தேவை",
       "writesNone": "எழுதுதல்: கிடைக்கவில்லை",
       "rag": "RAG: {{state}}",
-      "web": "வலை: {{state}}"
+      "web": "வலை: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "எழுதும் முன்மொழிவுகள்",
@@ -1298,7 +1300,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (உள்ளூர்)",
         "openrouter": "OpenRouter",
-        "custom": "தனிப்பயன் (OpenAI இணக்கமானது)"
+        "custom": "தனிப்பயன் (OpenAI இணக்கமானது)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "மாதிரி வடிப்பான்",
@@ -1324,7 +1327,8 @@
       "validation": {
         "selectProvider": "ஒரு வழங்குநர் வகையைத் தேர்ந்தெடுக்கவும்",
         "invalidUrl": "தவறான அடிப்படை URL வடிவம். சரியான URL ஐ உள்ளிடவும் (எ.கா., https://api.example.com)",
-        "baseUrlRequired": "OpenAI-இணக்கமான முனையத்தின் அடிப்படை URL-ஐ உள்ளிடவும்."
+        "baseUrlRequired": "OpenAI-இணக்கமான முனையத்தின் அடிப்படை URL-ஐ உள்ளிடவும்.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "தற்காலிகமாகச் சேமிக்கப்பட்ட மாதிரிகள்: {{count}}",
       "connectionErrors": {
@@ -1338,7 +1342,17 @@
       "testConnection": "இணைப்பைச் சோதி",
       "testing": "சோதிக்கிறது...",
       "connectionSuccess_one": "இணைப்பு வெற்றிகரமானது. {{count}} மாதிரி தற்காலிகமாகச் சேமிக்கப்பட்டது.",
-      "connectionSuccess_other": "இணைப்பு வெற்றிகரமானது. {{count}} மாதிரிகள் தற்காலிகமாகச் சேமிக்கப்பட்டன."
+      "connectionSuccess_other": "இணைப்பு வெற்றிகரமானது. {{count}} மாதிரிகள் தற்காலிகமாகச் சேமிக்கப்பட்டன.",
+      "resourceGroup": {
+        "name": "வளக் குழு",
+        "desc": "விருப்ப SAP AI Core வளக் குழு",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "சேவை விசை",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP ஆய்வாளர்",
@@ -1640,7 +1654,8 @@
       "customEnabled_one": "{{count}} MCP, OpenAPI அல்லது CLI கருவி இயக்கப்பட்டது",
       "customEnabled_other": "{{count}} MCP, OpenAPI அல்லது CLI கருவிகள் இயக்கப்பட்டன",
       "referencesPlusContext_one": "{{count}} வெளிப்படையான குறிப்பு மற்றும் செயலில் உள்ள சூழல்",
-      "referencesPlusContext_other": "{{count}} வெளிப்படையான குறிப்புகள் மற்றும் செயலில் உள்ள சூழல்"
+      "referencesPlusContext_other": "{{count}} வெளிப்படையான குறிப்புகள் மற்றும் செயலில் உள்ள சூழல்",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_one": "{{agent}} {{count}} கருவியைப் பயன்படுத்த முடியும்.",
     "subtitle_other": "{{agent}} {{count}} கருவிகளைப் பயன்படுத்த முடியும்."
@@ -1660,5 +1675,47 @@
       "starting_one": "{{count}} குறிப்பை அட்டவணைப்படுத்துகிறது…",
       "starting_other": "{{count}} குறிப்புகளை அட்டவணைப்படுத்துகிறது…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

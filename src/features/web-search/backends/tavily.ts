@@ -11,14 +11,14 @@ interface TavilySearchResponse {
 	results?: TavilySearchResult[];
 }
 
-export async function searchTavily(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchTavily(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	const apiKey = config.tavilyApiKey || config.apiKey;
 	if (!apiKey) {
 		throw new Error('Tavily API key is required for Tavily search');
 	}
 
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: 'https://api.tavily.com/search',
 			method: 'POST',
 			headers: {

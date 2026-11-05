@@ -2,6 +2,7 @@ import type { Agent } from '@/features/agent';
 import type { PluginSettings } from '@/features/settings/types/settings';
 import { migrateAllAgents } from '@/features/tools';
 import { DEFAULT_MAX_STEPS, DEFAULT_MODEL_CONFIG } from '@/core/constants';
+import { retagCustomProviderModels } from './model-identity-migration';
 
 type LegacyAgent = Agent & { modelId?: unknown; reactMaxSteps?: unknown; reactEnabled?: unknown; reactAutoContinue?: unknown };
 
@@ -10,43 +11,14 @@ export function migrateSettings(settings: PluginSettings): boolean {
 	const stepsChanged = settings.agents.filter(migrateStepBudget).length > 0;
 	const cliToolIds = (settings.cliTools ?? []).map((tool) => tool.id);
 	const toolAccessChanged = migrateAllAgents(settings.agents, cliToolIds).size > 0;
-	const removedProviderDropped = dropRemovedProviders(settings);
 	const titleModeRenamed = renameTitleMode(settings);
 	const connectionModesFixed = lowercaseConnectionModes(settings);
 	const presetsRenamed = renameBuiltinPresets(settings);
 	const searchProviderMoved = retireSearchProviders(settings);
 	const customModelsRetagged = retagCustomProviderModels(settings);
-	return strategyChanged || stepsChanged || toolAccessChanged || removedProviderDropped || titleModeRenamed || connectionModesFixed || presetsRenamed || searchProviderMoved || customModelsRetagged;
+	return strategyChanged || stepsChanged || toolAccessChanged || titleModeRenamed || connectionModesFixed || presetsRenamed || searchProviderMoved || customModelsRetagged;
 }
 
-function retagCustomProviderModels(settings: PluginSettings): boolean {
-	const renamed = new Map<string, string>();
-	for (const config of settings.llmConfigs.filter(candidate => candidate.provider === 'custom')) {
-		for (const model of config.cachedModels ?? []) {
-			if (!model.id.startsWith('openai:')) continue;
-			const id = `custom:${model.id.slice('openai:'.length)}`;
-			renamed.set(model.id, id);
-			model.id = id;
-			model.provider = 'custom';
-		}
-	}
-	if (renamed.size === 0) return false;
-	const openAiIds = new Set(settings.llmConfigs.filter(config => config.provider === 'openai').flatMap(config => (config.cachedModels ?? []).map(model => model.id)));
-	const retag = (id: string | undefined): string | undefined => (id && !openAiIds.has(id) ? renamed.get(id) : undefined) ?? id;
-	settings.defaultModel = retag(settings.defaultModel) ?? '';
-	settings.titleSummaryModel = retag(settings.titleSummaryModel);
-	settings.ragConfig.embeddingModel = retag(settings.ragConfig.embeddingModel) ?? settings.ragConfig.embeddingModel;
-	settings.ragConfig.graderModel = retag(settings.ragConfig.graderModel);
-	for (const agent of settings.agents) {
-		if (agent.modelStrategy?.strategy === 'fixed') {
-			agent.modelStrategy.modelId = retag(agent.modelStrategy.modelId);
-		}
-	}
-	for (const action of settings.quickActions) {
-		action.model = retag(action.model);
-	}
-	return true;
-}
 
 const RETIRED_SEARCH_PROVIDERS = new Set(['duckduckgo', 'yahoo', 'yandex']);
 
@@ -102,29 +74,6 @@ function renameTitleMode(settings: PluginSettings): boolean {
 	if (settings.conversationTitleMode !== 'llm-summary') return false;
 	settings.conversationTitleMode = 'auto-summary';
 	return true;
-}
-
-const REMOVED_PROVIDERS = ['sap-ai-core'];
-
-function dropRemovedProviders(settings: PluginSettings): boolean {
-	const isRemovedModel = (modelId: string | undefined) => REMOVED_PROVIDERS.some(provider => modelId?.startsWith(`${provider}:`));
-	let changed = false;
-	const kept = settings.llmConfigs.filter(config => !REMOVED_PROVIDERS.includes(config.provider));
-	if (kept.length !== settings.llmConfigs.length) {
-		settings.llmConfigs = kept;
-		changed = true;
-	}
-	if (isRemovedModel(settings.defaultModel)) {
-		settings.defaultModel = '';
-		changed = true;
-	}
-	for (const agent of settings.agents) {
-		if (agent.modelStrategy?.strategy === 'fixed' && isRemovedModel(agent.modelStrategy.modelId)) {
-			agent.modelStrategy = { strategy: 'default' };
-			changed = true;
-		}
-	}
-	return changed;
 }
 
 function migrateStepBudget(agent: LegacyAgent): boolean {

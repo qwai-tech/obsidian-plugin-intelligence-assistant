@@ -12,7 +12,7 @@ describe('modelCatalog', () => {
 	it('lists each model once with its provider label, sorted by label', () => {
 		expect(modelCatalog(configs).options).toEqual([
 			{ id: 'claude-3', label: 'Claude 3 • Open Router' },
-			{ id: 'openai:gpt-4o', label: 'GPT-4o • Openai' },
+			{ id: 'openai:gpt-4o', label: 'GPT-4o • OpenAI' },
 		]);
 	});
 

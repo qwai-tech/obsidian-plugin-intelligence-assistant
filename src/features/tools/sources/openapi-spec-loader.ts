@@ -51,8 +51,6 @@ async function loadRemoteSpec(config: OpenApiToolConfig, context: OpenApiLoadCon
 		throw new Error(`OpenAPI spec request failed: HTTP ${response.status}`);
 	}
 	await context.specCache.write(config.id, response.text);
-	if (context.refetch) {
-		config.lastFetchedAt = Date.now();
-	}
+	config.lastFetchedAt = Date.now();
 	return response.text;
 }

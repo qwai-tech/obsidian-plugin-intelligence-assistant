@@ -14,5 +14,6 @@ export type { ModelCapability, ModelInfo } from '@qwai/obsidian-llm';
 
 export interface LLMConfig extends EndpointConfig {
 	apiKeySecret?: string;
+	serviceKeySecret?: string;
 	disabledModels?: string[];
 }

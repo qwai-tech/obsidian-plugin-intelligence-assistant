@@ -105,7 +105,8 @@
       },
       "guidance": {
         "configureBaseUrl": "Configureer basis-URL",
-        "addApiKey": "API-sleutel toevoegen"
+        "addApiKey": "API-sleutel toevoegen",
+        "provideServiceKey": "Geef servicesleutel op"
       },
       "models": {
         "none": "Geen modellen",
@@ -1153,7 +1154,8 @@
       "writesProposal": "Schrijft: alleen voorstel; Toepassen vereist",
       "writesNone": "Schrijft: niet beschikbaar",
       "rag": "RAG: {{state}}",
-      "web": "Web: {{state}}"
+      "web": "Web: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "Schrijfvoorstellen",
@@ -1298,7 +1300,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (lokaal)",
         "openrouter": "OpenRouter",
-        "custom": "Aangepast (OpenAI compatibel)"
+        "custom": "Aangepast (OpenAI compatibel)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "Modelfilter",
@@ -1324,7 +1327,8 @@
       "validation": {
         "selectProvider": "Selecteer een providertype",
         "invalidUrl": "Ongeldig basis-URL-formaat. Voer een geldige URL in (bijv. https://api.voorbeeld.com)",
-        "baseUrlRequired": "Voer de basis-URL van het OpenAI-compatibele endpoint in."
+        "baseUrlRequired": "Voer de basis-URL van het OpenAI-compatibele endpoint in.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "Gecachede modellen: {{count}}",
       "connectionErrors": {
@@ -1338,7 +1342,17 @@
       "testConnection": "Verbinding testen",
       "testing": "Testen...",
       "connectionSuccess_one": "Verbinding geslaagd. {{count}} model gecached.",
-      "connectionSuccess_other": "Verbinding geslaagd. {{count}} modellen gecached."
+      "connectionSuccess_other": "Verbinding geslaagd. {{count}} modellen gecached.",
+      "resourceGroup": {
+        "name": "Resourcegroep",
+        "desc": "Optionele SAP AI Core resourcegroep",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "Servicesleutel",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP inspector",
@@ -1640,7 +1654,8 @@
       "customEnabled_one": "{{count}} MCP-, OpenAPI- of CLI-tool ingeschakeld",
       "customEnabled_other": "{{count}} MCP-, OpenAPI- of CLI-tools ingeschakeld",
       "referencesPlusContext_one": "{{count}} expliciete verwijzing plus actieve context",
-      "referencesPlusContext_other": "{{count}} expliciete verwijzingen plus actieve context"
+      "referencesPlusContext_other": "{{count}} expliciete verwijzingen plus actieve context",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_one": "{{agent}} kan {{count}} tool gebruiken.",
     "subtitle_other": "{{agent}} kan {{count}} tools gebruiken."
@@ -1660,5 +1675,47 @@
       "starting_one": "{{count}} notitie indexeren…",
       "starting_other": "{{count}} notities indexeren…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

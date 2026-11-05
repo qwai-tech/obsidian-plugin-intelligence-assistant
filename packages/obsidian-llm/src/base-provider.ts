@@ -7,7 +7,7 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 	/**
 	 * How this provider reaches the network. Injected rather than imported so the
 	 * provider carries no environment assumptions -- Obsidian supplies a
-	 * CORS-exempt port, tests supply a fake, Node supplies plain fetch.
+	 * CORS-exempt port, headless callers supply plain fetch.
 	 */
 	protected http: HttpPort;
 
@@ -20,7 +20,7 @@ export abstract class BaseLLMProvider implements ILLMProvider {
 	abstract chat(_request: ChatRequest): Promise<ChatResponse>;
 	abstract streamChat(_request: ChatRequest, _onChunk: (_chunk: StreamChunk) => void): Promise<void>;
 
-	generateEmbedding(_text: string, _model: string): Promise<number[]> {
+	generateEmbedding(_text: string, _model: string, _options?: { signal?: AbortSignal }): Promise<number[]> {
 		return Promise.reject(new Error(`Embedding generation not supported by ${this.name} provider.`));
 	}
 

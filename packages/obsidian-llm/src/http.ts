@@ -21,6 +21,10 @@ export interface HttpRequest {
 	body?: string;
 	signal?: AbortSignal;
 	timeoutMs?: number;
+	/** Streaming inactivity after headers. timeoutMs, when supplied, remains an absolute cap. */
+	streamIdleTimeoutMs?: number;
+	/** Only explicitly safe operations may retry. Writes default to never. */
+	retry?: 'safe' | 'never';
 }
 
 export interface HttpResponse {
@@ -118,6 +122,7 @@ export function createFetchHttpPort(fetchImpl: typeof fetch = fetch): HttpPort {
 					method: req.method ?? 'POST',
 					headers: req.headers,
 					body: req.body,
+					signal: req.signal,
 				});
 			} catch (error: unknown) {
 				throw toStreamError(error);

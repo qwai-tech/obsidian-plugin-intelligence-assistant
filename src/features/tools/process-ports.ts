@@ -6,7 +6,7 @@ export interface ProcessLaunch {
 
 export interface McpConnection {
 	readonly isOpen: boolean;
-	request(method: string, params: Record<string, unknown>): Promise<unknown>;
+	request(method: string, params: Record<string, unknown>, options?: { signal?: AbortSignal }): Promise<unknown>;
 	close(): Promise<void>;
 }
 
@@ -16,6 +16,7 @@ export interface CommandRun extends ProcessLaunch {
 	cwd?: string;
 	shell: boolean;
 	timeoutMs: number;
+	signal?: AbortSignal;
 }
 
 export interface CommandOutcome {

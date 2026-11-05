@@ -28,6 +28,12 @@ const UNITS: Record<PersistUnit, (settings: PluginSettings) => unknown> = {
 
 export class SettingsStore {
 	private settings: PluginSettings | null = null;
+	private queue: Promise<unknown> = Promise.resolve();
+	private serialize<T>(work: () => Promise<T>): Promise<T> {
+		const next = this.queue.then(work, work);
+		this.queue = next.catch(() => undefined);
+		return next;
+	}
 	private conversations: Conversation[] = [];
 	private snapshots = new Map<PersistUnit, string>();
 	private readonly listeners = new Set<(units: ReadonlySet<PersistUnit>) => void>();
@@ -52,7 +58,9 @@ export class SettingsStore {
 		return this.conversations;
 	}
 
-	async load(): Promise<void> {
+	load(): Promise<void> { return this.serialize(() => this.performLoad()); }
+
+	private async performLoad(): Promise<void> {
 		const { userConfig, legacyData, outdated } = await this.persistence.read();
 		const legacy = userConfig ? null : asLegacySettings(legacyData);
 		const settings: PluginSettings = { ...userConfigToPluginSettings(userConfig), ...legacy };
@@ -62,8 +70,6 @@ export class SettingsStore {
 		const migrated = migrateSettings(settings);
 		const keysMoved = moveKeysToVault(settings, this.vault);
 		revealKeys(settings, this.vault);
-		this.settings = this.settings ? replaceContents(this.settings, settings) : settings;
-		this.snapshots = this.snapshot(settings);
 		const pending = new Set<PersistUnit>();
 		if (!userConfig) pending.add('config');
 		if (outdated) (Object.keys(UNITS) as PersistUnit[]).forEach((unit) => pending.add(unit));
@@ -72,6 +78,8 @@ export class SettingsStore {
 		if (pending.size > 0) {
 			await this.persistence.write(withoutKeys(settings), pending);
 		}
+		this.settings = this.settings ? replaceContents(this.settings, settings) : settings;
+		this.snapshots = this.snapshot(settings);
 	}
 
 	private async save(): Promise<void> {
@@ -81,18 +89,23 @@ export class SettingsStore {
 		if (changed.size === 0) {
 			return;
 		}
-		await this.persistence.write(withoutKeys(settings), changed);
+		await this.persistence.write(JSON.parse(JSON.stringify(withoutKeys(settings))) as PluginSettings, changed);
 		this.snapshots = next;
 		for (const listener of this.listeners) {
-			listener(changed);
+			try { listener(changed); } catch (error) { console.error('Settings listener failed after commit:', error); }
 		}
 	}
 
-	async update(change: (settings: PluginSettings) => void): Promise<void> {
-		change(this.current);
-		moveKeysToVault(this.current, this.vault);
-		revealKeys(this.current, this.vault);
-		await this.save();
+	update(change: (settings: PluginSettings) => void): Promise<void> {
+		return this.serialize(async () => {
+			const previous = JSON.parse(JSON.stringify(this.current)) as PluginSettings;
+			try {
+				change(this.current);
+				moveKeysToVault(this.current, this.vault);
+				revealKeys(this.current, this.vault);
+				await this.save();
+			} catch (error) { replaceContents(this.current, previous); throw error; }
+		});
 	}
 
 	refreshKeys(): void {

@@ -13,7 +13,7 @@ interface BingSearchResponse {
 	};
 }
 
-export async function searchBing(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchBing(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	if (!config.apiKey) {
 		throw new Error('Bing API key is required for Bing search');
 	}
@@ -21,7 +21,7 @@ export async function searchBing(query: string, maxResults: number, { config, ht
 	const searchUrl = `https://api.bing.microsoft.com/v7.0/search?q=${encodeURIComponent(query)}&count=${Math.min(maxResults, 50)}&mkt=${config.searchCountry || 'en-US'}&setLang=${config.searchLanguage || 'en'}`;
 	
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: searchUrl,
 			method: 'GET',
 			headers: {

@@ -33,7 +33,7 @@ export class DocumentGrader {
     this.llmConfigs = llmConfigs;
   }
 
-  async gradeDocument(request: GradeRequest, chatModel?: string, defaultModel?: string): Promise<DocumentGrade> {
+  async gradeDocument(request: GradeRequest, chatModel?: string, defaultModel?: string, signal?: AbortSignal): Promise<DocumentGrade> {
     if (!this.config.enableGradingThreshold) {
       return this.getDefaultGrade(request);
     }
@@ -65,6 +65,7 @@ export class DocumentGrader {
           }
         ],
         model: graderModel,
+        purpose: 'grading', signal,
         temperature: 0.3,
         maxTokens: 2000,
         responseFormat: { type: 'json_object' }
@@ -93,6 +94,7 @@ export class DocumentGrader {
 
       return grade;
     } catch (error) {
+      signal?.throwIfAborted();
       console.error('[DocumentGrader] Error grading document:', error);
       const err = error instanceof Error ? error : new Error(String(error));
       return {
@@ -107,7 +109,7 @@ export class DocumentGrader {
     }
   }
 
-  async gradeDocuments(requests: GradeRequest[], chatModel?: string, defaultModel?: string): Promise<DocumentGrade[]> {
+  async gradeDocuments(requests: GradeRequest[], chatModel?: string, defaultModel?: string, signal?: AbortSignal): Promise<DocumentGrade[]> {
     if (!this.config.enableGradingThreshold) {
       return requests.map(req => this.getDefaultGrade(req));
     }
@@ -116,9 +118,10 @@ export class DocumentGrader {
     const grades: DocumentGrade[] = [];
 
     for (let i = 0; i < requests.length; i += parallelLimit) {
+      signal?.throwIfAborted();
       const batch = requests.slice(i, i + parallelLimit);
       const batchGrades = await Promise.all(
-        batch.map(request => this.gradeDocument(request, chatModel, defaultModel))
+        batch.map(request => this.gradeDocument(request, chatModel, defaultModel, signal))
       );
       grades.push(...batchGrades);
 

@@ -3,7 +3,7 @@ import type { DataAdapter } from 'obsidian';
 /**
  * Ensure that a folder (and its parents) exist inside the vault adapter.
  */
-export async function ensureFolderExists(adapter: DataAdapter, folder: string): Promise<void> {
+export async function ensureFolderExists(adapter: Pick<DataAdapter, 'exists' | 'mkdir'>, folder: string): Promise<void> {
 	if (!folder) {
 		return;
 	}
@@ -55,5 +55,6 @@ export function buildSafeName(value: string, fallback: string): string {
 }
 
 export function parentFolder(path: string): string {
-	return path.slice(0, path.lastIndexOf('/'));
+	const slash = path.lastIndexOf('/');
+	return slash < 0 ? '' : path.slice(0, slash);
 }

@@ -1,4 +1,5 @@
-import { App, Modal, Notice, TFile } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App, Modal, TFile } from 'obsidian';
 import { t } from '@/i18n';
 import type { RAGManager } from '@/adapters/rag/rag-manager';
 import type { RAGConfig, RAGSource } from '@/features/knowledge';
@@ -107,7 +108,7 @@ export class RagStatusPanel {
 					if (file instanceof TFile) {
 						await this.app.workspace.getLeaf().openFile(file);
 					} else {
-						new Notice(t('chat.notices.fileNotFound', { path: source.path }));
+						notify(t('chat.notices.fileNotFound', { path: source.path }));
 					}
 				})();
 			});
@@ -121,7 +122,7 @@ export class RagStatusPanel {
 		} catch (_error) {
 			const errMsg = errorMessage(_error);
 			console.error('Error loading RAG stats modal:', errMsg);
-			new Notice(t('chat.notices.unableToLoadRag'));
+			notify(t('chat.notices.unableToLoadRag'));
 		}
 	}
 
@@ -182,7 +183,7 @@ export class RagStatusPanel {
 							await this.app.workspace.getLeaf().openFile(file);
 							modal.close();
 						} else {
-							new Notice(t('chat.notices.fileNotFound', { path: filePath }));
+							notify(t('chat.notices.fileNotFound', { path: filePath }));
 						}
 					})();
 				});

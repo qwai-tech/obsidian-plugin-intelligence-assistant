@@ -1,7 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import type { Frameworks } from '@wdio/types';
-import { mockLLM } from './mock-llm';
 import { getLivePluginDir } from './vault-fixture';
 
 const REPO_ROOT = path.resolve(__dirname, '../../..');
@@ -136,17 +135,17 @@ export async function captureE2EDiagnostics(
 	await fs.writeFile(pluginTreePath, `${pluginTree.join('\n')}\n`, 'utf-8');
 	artifacts.pluginTree = toRepoRelative(pluginTreePath);
 
-	const mockCallsPath = path.join(logDir, `${testName}.mock-calls.json`);
-	try {
-		const calls = await mockLLM.getCalls();
-		await writeJson(mockCallsPath, calls.slice(-MOCK_CALL_LIMIT));
-	} catch (error) {
-		await writeJson(mockCallsPath, {
-			unavailable: true,
-			message: formatUnknown(error),
-		});
+	if (process.env.IA_RELEASE_GATE !== '1') {
+		const mockCallsPath = path.join(logDir, `${testName}.mock-calls.json`);
+		try {
+			const { mockLLM } = await import('./mock-llm');
+			const calls = await mockLLM.getCalls();
+			await writeJson(mockCallsPath, calls.slice(-MOCK_CALL_LIMIT));
+		} catch (error) {
+			await writeJson(mockCallsPath, { unavailable: true, message: formatUnknown(error) });
+		}
+		artifacts.mockCalls = toRepoRelative(mockCallsPath);
 	}
-	artifacts.mockCalls = toRepoRelative(mockCallsPath);
 
 	const failurePath = path.join(logDir, `${testName}.failure.json`);
 	artifacts.failure = toRepoRelative(failurePath);

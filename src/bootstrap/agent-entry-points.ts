@@ -1,4 +1,5 @@
-import { Notice, TFile, TFolder, type App, type Editor, type MarkdownView, type Plugin } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { TFile, TFolder, type App, type Editor, type MarkdownView, type Plugin } from 'obsidian';
 import { t } from '@/i18n';
 import {
 	buildAskCurrentNotePrompt,
@@ -26,7 +27,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openNoteToAsk'));
+				notify(t('commands.notices.openNoteToAsk'));
 				return;
 			}
 			await launcher.launch(
@@ -43,7 +44,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openNoteToSummarize'));
+				notify(t('commands.notices.openNoteToSummarize'));
 				return;
 			}
 			await launcher.launch(buildSummarizeCurrentNotePrompt(file.path), [file]);
@@ -56,7 +57,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openNoteToOrganize'));
+				notify(t('commands.notices.openNoteToOrganize'));
 				return;
 			}
 			await launcher.launch(buildOrganizeCurrentNotePrompt(file.path), [file]);
@@ -82,7 +83,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openProjectNote'));
+				notify(t('commands.notices.openProjectNote'));
 				return;
 			}
 			await launcher.launch(buildProjectBriefPrompt(file.path), [file]);
@@ -95,7 +96,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openNoteToResearch'));
+				notify(t('commands.notices.openNoteToResearch'));
 				return;
 			}
 			await launcher.launch(
@@ -124,7 +125,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openNoteToFindRelated'));
+				notify(t('commands.notices.openNoteToFindRelated'));
 				return;
 			}
 			await launcher.launch(buildRelatedNotesPrompt(file.path), [file]);
@@ -145,7 +146,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openNoteToImproveLinks'));
+				notify(t('commands.notices.openNoteToImproveLinks'));
 				return;
 			}
 			await launcher.launch(buildBacklinkTagDoctorPrompt(file.path), [file]);
@@ -158,7 +159,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		callback: async () => {
 			const file = activeMarkdownFile(plugin.app);
 			if (!file) {
-				new Notice(t('commands.notices.openNoteToDraft'));
+				notify(t('commands.notices.openNoteToDraft'));
 				return;
 			}
 			await launcher.launch(
@@ -183,7 +184,7 @@ export function registerAgentEntryPoints(plugin: Plugin, launcher: AgentTaskLaun
 		editorCallback: async (editor: Editor, view: MarkdownView) => {
 			const selection = editor.getSelection();
 			if (!selection.trim()) {
-				new Notice(t('commands.notices.selectTextToImprove'));
+				notify(t('commands.notices.selectTextToImprove'));
 				return;
 			}
 			const file = view.file ?? activeMarkdownFile(plugin.app);

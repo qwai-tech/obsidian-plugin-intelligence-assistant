@@ -62,3 +62,16 @@ function toStoredProvider({ cachedModels, cacheTimestamp: _at, disabledModels, .
 	];
 	return disabled.length > 0 ? { ...provider, disabledModels: disabled } : provider;
 }
+
+/** Reject malformed/future documents before migration can save defaults over them. */
+export function assertSettingsDocument(value: unknown): asserts value is SettingsDocument {
+	if (!isSettingsDocument(value)) throw new Error('Unsupported settings document format');
+	const object = (item: unknown): item is Record<string, unknown> => Boolean(item && typeof item === 'object' && !Array.isArray(item));
+	if (!object(value.config) || !Array.isArray(value.providers) || !object(value.prompts) || !Array.isArray(value.prompts.list) || !object(value.agents) || !Array.isArray(value.agents.list)) {
+		throw new Error('Invalid settings document; existing data was preserved');
+	}
+	if (value.config.version !== 1 || !object(value.config.providers) || !object(value.config.conversations) || !object(value.config.tools) || !object(value.config.rag) || !object(value.config.search)) throw new Error('Invalid or unsupported settings configuration; existing data was preserved');
+	if (value.providers.some(provider => !object(provider) || typeof provider.provider !== 'string') || value.agents.list.some(agent => !object(agent) || typeof agent.id !== 'string') || value.prompts.list.some(prompt => !object(prompt) || typeof prompt.id !== 'string')) {
+		throw new Error('Invalid stored provider, agent or prompt; existing data was preserved');
+	}
+}

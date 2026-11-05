@@ -52,15 +52,15 @@ export abstract class BasePage {
 		await this.openPluginSettings();
 		await browser.waitUntil(
 			async () => browser.execute((label) => {
-				const row = Array.from(activeDocument.querySelectorAll('.vertical-tab-content .setting-item.mod-navigable'))
-					.find(item => item.querySelector('.setting-item-name')?.textContent === label);
-				if (!(row instanceof HTMLElement)) return false;
-				row.click();
+				const tab = Array.from(activeDocument.querySelectorAll('.ia-settings-main-tabs [role="tab"]'))
+					.find(item => item.textContent === label);
+				if (!(tab instanceof HTMLElement)) return false;
+				tab.click();
 				return true;
 			}, name),
 			{ timeout: 10_000, timeoutMsg: `Settings section not found: ${name}` }
 		);
-		await $('.setting-page-content').waitForDisplayed({ timeout: 10_000 });
+		await $('#ia-settings-section-panel').waitForDisplayed({ timeout: 10_000 });
 		await this.waitForAnimations();
 	}
 

@@ -57,10 +57,10 @@ export class MCPClient {
 		}
 	}
 
-	async callTool(name: string, args: Record<string, unknown>): Promise<unknown> {
+	async callTool(name: string, args: Record<string, unknown>, signal?: AbortSignal): Promise<unknown> {
 		const session = await this.liveSession();
 		try {
-			const response = await session.request('tools/call', { name, arguments: args }) as { isError?: boolean; content?: unknown; structuredContent?: unknown };
+			const response = await session.request('tools/call', { name, arguments: args }, { signal }) as { isError?: boolean; content?: unknown; structuredContent?: unknown };
 			if (response.isError) {
 				throw new Error(`Tool execution error: ${JSON.stringify(response.content)}`);
 			}

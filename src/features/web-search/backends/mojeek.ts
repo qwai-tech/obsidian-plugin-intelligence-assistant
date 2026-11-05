@@ -13,7 +13,7 @@ interface MojeekSearchResponse {
 	};
 }
 
-export async function searchMojeek(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchMojeek(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	if (!config.mojeekApiKey) {
 		throw new Error('Mojeek API key is required for Mojeek search');
 	}
@@ -41,7 +41,7 @@ export async function searchMojeek(query: string, maxResults: number, { config, 
 	const searchUrl = `https://api.mojeek.com/api/search?${params.toString()}`;
 	
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: searchUrl,
 			method: 'GET',
 			headers: {

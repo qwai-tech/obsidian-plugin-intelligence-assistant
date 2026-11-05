@@ -16,7 +16,7 @@
  * plugin the user has installed, including ones they don't trust. Therefore the
  * hub lends out CAPABILITY, never CREDENTIALS: callers receive an
  * `ILLMProvider` that can make requests, and there is deliberately no method
- * that returns an `LLMConfig` or an `apiKey`. A caller can use
+ * that returns an `LLMConfig`, an `apiKey`, or a SAP `serviceKey`. A caller can use
  * the user's quota -- unavoidable, and the user consents by installing the
  * plugin -- but it cannot walk off with the key itself.
  *

@@ -7,7 +7,7 @@ import type { AgentContextSection, AgentSenseContext } from './types';
 import type { AgentMemorySnapshot } from '@/features/agent/types/memory';
 
 interface AgentMemoryReader {
-	getSnapshot(agentId: string): Promise<AgentMemorySnapshot>;
+	getSnapshot(agentId: string, mode?: 'short-term' | 'long-term'): Promise<AgentMemorySnapshot>;
 }
 
 interface SenseInput {
@@ -16,6 +16,8 @@ interface SenseInput {
 	defaultModel?: string;
 	enableRAG?: boolean;
 	agentId?: string;
+	memoryMode?: 'none' | 'short-term' | 'long-term';
+	signal?: AbortSignal;
 	references?: FileReference[];
 }
 
@@ -91,8 +93,8 @@ export class AgentSenseService {
 			}
 		}
 
-		const memory = input.agentId && this.memoryService
-			? await this.memoryService.getSnapshot(input.agentId)
+		const memory = input.agentId && input.memoryMode !== 'none' && this.memoryService
+			? await this.memoryService.getSnapshot(input.agentId, input.memoryMode === 'short-term' ? 'short-term' : 'long-term')
 			: null;
 		if (memory) {
 			sections.push({
@@ -157,7 +159,7 @@ export class AgentSenseService {
 
 	private async queryRag(input: SenseInput): Promise<RAGSource[]> {
 		if (!input.enableRAG) return [];
-		return this.knowledge.search(input.userQuery, input.model, input.defaultModel);
+		return this.knowledge.search(input.userQuery, input.model, input.defaultModel, { agentId: input.agentId, memoryMode: input.memoryMode ?? 'none', signal: input.signal });
 	}
 
 	private resolveReferences(references: FileReference[]): Array<TFile | TFolder> {

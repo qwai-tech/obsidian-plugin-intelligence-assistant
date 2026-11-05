@@ -41,7 +41,7 @@ export function displayAgentsTab(
 			.map(tool => tool.type);
 		const newAgent: Agent = {
 			id: `agent-${Date.now()}`,
-			name: 'New Agent',
+			name: t('ux.newAgent'),
 			description: 'A helpful AI assistant',
 			icon: 'bot',
 			modelStrategy: {
@@ -149,7 +149,7 @@ export function displayAgentsTab(
 				button.setButtonText(t('settings.agents.actions.delete')).setDestructive();
 				tagButton(button.buttonEl, TestIds.settings.agentDeleteBtn, { 'data-agent-id': agent.id });
 				button.onClick(async () => {
-					if (await showConfirm(app, t('settings.agents.confirm.delete', { name: agent.name }))) {
+					if (await showConfirm(app, t('settings.agents.confirm.delete', { name: agent.name }), { title: t('ux.deleteAgent'), confirmText: t('settings.agents.actions.delete') })) {
 						await plugin.updateSettings((settings) => {
 							settings.agents = settings.agents.filter(candidate => candidate.id !== agent.id);
 						});

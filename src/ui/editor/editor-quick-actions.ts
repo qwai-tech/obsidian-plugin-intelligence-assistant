@@ -1,4 +1,5 @@
-import { App, Menu, Editor, MarkdownView, Notice } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { App, Menu, Editor, MarkdownView } from 'obsidian';
 import { t } from '@/i18n';
 import { ExplainTextModal } from '@/ui/modals/explain-text-modal';
 import { ModelManager } from '@qwai/obsidian-llm';
@@ -6,6 +7,7 @@ import { ProviderFactory } from '@qwai/obsidian-llm';
 import type { LLMConfig } from '@/features/llm';
 import type { QuickActionConfig } from '@/features/settings';
 import { errorMessage } from '@/core/utils/errors';
+import { reviewReplacement } from '@/ui/modals/replacement-preview-modal';
 
 export interface EditorQuickActionsConfig {
 	quickActions: QuickActionConfig[];
@@ -60,27 +62,34 @@ export class EditorQuickActions {
 	}
 
 	private async executeAction(editor: Editor, selectedText: string, action: QuickActionConfig): Promise<void> {
+		const originalDocument = editor.getValue();
+		const from = editor.getCursor('from');
+		const to = editor.getCursor('to');
+		if (editor.getRange(from, to) !== selectedText) {
+			notify(t('ux.noteChanged'));
+			return;
+		}
 		const { prompt: promptPrefix, actionType, model: customModel } = action;
 		const { llmConfigs, defaultModel } = this.getConfig();
 
 		if (llmConfigs.length === 0) {
-			new Notice(t('notices.noProvider'));
+			notify(t('notices.noProvider'));
 			return;
 		}
 
 		const modelId = customModel || defaultModel;
 		if (!modelId) {
-			new Notice(t('notices.noModel'));
+			notify(t('notices.noModel'));
 			return;
 		}
 
 		const config = ModelManager.findConfigForModelByProvider(modelId, llmConfigs);
 		if (!config) {
-			new Notice(t('notices.noValidProvider', { modelId }));
+			notify(t('notices.noValidProvider', { modelId }));
 			return;
 		}
 
-		const loadingNotice = new Notice(t('notices.processing'), 0);
+		const loadingNotice = notify(t('notices.processing'), 0);
 
 		try {
 			const provider = ProviderFactory.createProvider(config);
@@ -94,7 +103,7 @@ export class EditorQuickActions {
 
 			let result = '';
 			await provider.streamChat(
-				{ messages: [{ role: 'user', content: fullPrompt }], model: modelId, temperature: 0.7 },
+				{ messages: [{ role: 'user', content: fullPrompt }], model: modelId, temperature: 0.7, purpose: 'editor-action' },
 				(chunk) => {
 					if (!chunk.done && chunk.content) {
 						result += chunk.content;
@@ -106,15 +115,22 @@ export class EditorQuickActions {
 			loadingNotice.hide();
 
 			if (actionType === 'replace') {
-				editor.replaceSelection(result.trim());
-				new Notice(t('notices.textUpdated'));
+				if (!result.trim()) throw new Error(t('ux.emptyReply'));
+				const replacement = (selectedText.match(/^\s*/)?.[0] || '') + result.trim() + (selectedText.match(/\s*$/)?.[0] || '');
+				if (!await reviewReplacement(this.app, action.name, selectedText, replacement)) return;
+				if (editor.getValue() !== originalDocument) {
+					notify(t('ux.noteChanged'));
+					return;
+				}
+				editor.replaceRange(replacement, from, to);
+				notify(t('notices.textUpdated'));
 			} else if (actionType === 'explain' && !result) {
 				modal?.showError(t('chat.notices.chatError', { message: 'No explanation generated' }));
 			}
 		} catch (error) {
 			loadingNotice.hide();
 			const errorMsg = errorMessage(error);
-			new Notice(t('notices.error', { message: errorMsg }));
+			notify(t('notices.error', { message: errorMsg }));
 			console.error('[Editor AI Action] Error:', error);
 		}
 	}

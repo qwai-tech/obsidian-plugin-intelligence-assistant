@@ -1,9 +1,10 @@
+import { notify } from '@/core/notifications';
 /**
  * MCP Settings Tab
  * Displays Model Context Protocol server management
  */
 
-import { App, Notice, Setting } from 'obsidian';
+import { App, Setting } from 'obsidian';
 import { showConfirm } from '@/ui/modals/confirm-modal';
 import type { PluginHost } from '@/ui/plugin-host';
 import type { MCPServerConfig, RegisteredTool } from '@/features/tools';
@@ -14,6 +15,7 @@ import { MCPInspectorModal } from '@/ui/modals/mcp-inspector-modal';
 import { MCPServerModal } from '@/ui/modals/mcp-server-modal';
 import { errorMessage } from '@/core/utils/errors';
 import { openAddMcpServer } from './mcp-actions';
+import { getMcpFailure, setMcpFailure } from './mcp-feedback';
 
 export function displayMCPTab(
 	containerEl: HTMLElement,
@@ -55,14 +57,15 @@ export function displayMCPTab(
 	refreshAllBtn.addEventListener('click', () => {
 		void (async () => {
 			const results = await plugin.services.tools.refreshMcpServers();
+			results.forEach(result => setMcpFailure(plugin, result.server, result.error));
 			refreshDisplay();
 
 			const failed = results.filter(r => r.error).length;
 			const successful = results.length - failed;
 			if (failed === 0) {
-				new Notice(t('settings.mcp.notices.refreshedAll', { count: successful }));
+				notify(t('settings.mcp.notices.refreshedAll', { count: successful }));
 			} else {
-				new Notice(t('settings.mcp.notices.refreshedPartial', { success: successful, failed }));
+				notify(t('settings.mcp.notices.refreshedPartial', { success: successful, failed }));
 			}
 		})();
 	});
@@ -122,6 +125,8 @@ export function displayMCPTab(
 
 		// Status column
 		const statusStack = row.descEl.createDiv();
+		const failure = getMcpFailure(plugin, server.name);
+		if (failure) statusStack.createDiv({ text: failure, cls: 'ia-text-danger', attr: { role: 'alert' } });
 		const connectionMode = server.connectionMode ?? 'auto';
 		const cachedToolCount = server.cachedTools?.length ?? 0;
 		const cacheDate = server.cacheTimestamp ? new Date(server.cacheTimestamp) : null;
@@ -204,7 +209,7 @@ export function displayMCPTab(
 							await plugin.services.tools.connectMcp(server);
 						} catch (error) {
 							console.error(`[MCP] Failed to auto-connect ${server.name}:`, error);
-							new Notice(t('settings.mcp.notices.autoConnectFailed', { name: server.name }));
+							notify(t('settings.mcp.notices.autoConnectFailed', { name: server.name }));
 						}
 					}
 				} finally {
@@ -229,21 +234,23 @@ export function displayMCPTab(
 				try {
 					if (currentlyConnected) {
 						await plugin.services.tools.disconnectMcp(server.name);
-						new Notice(t('settings.mcp.notices.disconnected', { name: server.name }));
+						notify(t('settings.mcp.notices.disconnected', { name: server.name }));
 					} else {
 						if (!server.enabled) {
-							new Notice(t('settings.mcp.notices.enableFirst'));
+							notify(t('settings.mcp.notices.enableFirst'));
 							return;
 						}
 						await plugin.services.tools.connectMcp(server);
-						new Notice(t('settings.mcp.notices.connected', { name: server.name }));
+						setMcpFailure(plugin, server.name);
+						notify(t('settings.mcp.notices.connected', { name: server.name }));
 					}
 				} catch (error) {
+					setMcpFailure(plugin, server.name, errorMessage(error));
 					console.error(`[MCP] Failed to ${currentlyConnected ? 'disconnect' : 'connect'} ${server.name}:`, error);
 					if (currentlyConnected) {
-						new Notice(t('settings.mcp.notices.disconnectFailed', { name: server.name }));
+						notify(t('settings.mcp.notices.disconnectFailed', { name: server.name }));
 					} else {
-						new Notice(t('settings.mcp.notices.connectFailed', { name: server.name }));
+						notify(t('settings.mcp.notices.connectFailed', { name: server.name }));
 					}
 				} finally {
 					connectBtn.disabled = !server.enabled;
@@ -261,7 +268,7 @@ export function displayMCPTab(
 			void (async () => {
 				// Validate command before testing
 				if (!server.command || server.command.trim() === '') {
-					new Notice(t('settings.mcp.notices.testNoCommand'));
+					notify(t('settings.mcp.notices.testNoCommand'));
 					return;
 				}
 
@@ -270,12 +277,13 @@ export function displayMCPTab(
 
 				try {
 					const tools = await plugin.services.tools.probeMcp(server);
+					setMcpFailure(plugin, server.name);
 					await plugin.updateSettings(() => {
 						server.cachedTools = tools;
 						server.cacheTimestamp = Date.now();
 					});
 
-					new Notice(t('settings.mcp.notices.testSuccess', { count: tools.length }));
+					notify(t('settings.mcp.notices.testSuccess', { count: tools.length }));
 					refreshDisplay(); // Refresh the entire view to update status indicators
 				} catch (error) {
 					console.error('[MCP] Test connection failed:', error);
@@ -291,7 +299,9 @@ export function displayMCPTab(
 						displayMessage = `Command "${server.command}" not found. Please check the command path.`;
 					}
 
-					new Notice(t('settings.mcp.notices.testFailed', { message: displayMessage }));
+					notify(t('settings.mcp.notices.testFailed', { message: displayMessage }));
+					setMcpFailure(plugin, server.name, displayMessage);
+					refreshDisplay();
 				} finally {
 					testBtn.disabled = false;
 					testBtn.textContent = t('settings.mcp.actions.test');
@@ -307,7 +317,7 @@ export function displayMCPTab(
 		deleteBtn.setAttribute('data-mcp-name', server.name);
 		deleteBtn.addEventListener('click', () => {
 			void (async () => {
-				if (await showConfirm(app, t('settings.mcp.confirm.delete', { name: server.name }))) {
+				if (await showConfirm(app, t('settings.mcp.confirm.delete', { name: server.name }), { title: t('ux.deleteMcpServer'), confirmText: t('settings.mcp.actions.delete') })) {
 					await plugin.updateSettings((settings) => {
 						settings.mcpServers.splice(index, 1);
 					});

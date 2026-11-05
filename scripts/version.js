@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { readFileSync, writeFileSync } = require('fs');
+const { readFileSync, writeFileSync, existsSync } = require('fs');
 const { join } = require('path');
 const logger = require('./utils/logger');
 
@@ -120,6 +120,16 @@ class VersionManager {
         packageJson.version = newVersion;
         
         writeFileSync(this.packagePath, JSON.stringify(packageJson, null, '\t'));
+        for (const name of ['package-lock.json', 'npm-shrinkwrap.json']) {
+            const file = join(this.sourceDir, name);
+            if (!existsSync(file)) continue;
+            const raw = readFileSync(file, 'utf8');
+            const lock = JSON.parse(raw);
+            lock.version = newVersion;
+            if (lock.packages && lock.packages['']) lock.packages[''].version = newVersion;
+            const indent = raw.match(/\n([ \t]+)"/)?.[1] || '\t';
+            writeFileSync(file, JSON.stringify(lock, null, indent) + (raw.endsWith('\n') ? '\n' : ''));
+        }
         logger.success(`package.json updated to ${newVersion}`);
     }
 

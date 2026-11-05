@@ -1,5 +1,6 @@
 import type { Agent } from '@/features/agent/types/agent';
 import type { RegisteredTool, ToolRegistry } from '@/features/tools';
+import { resolveExecutionPolicy } from './execution-policy';
 import { t } from '@/i18n';
 
 export interface CapabilityReference {
@@ -87,7 +88,7 @@ export function buildAgentCapabilitySummary(input: BuildAgentCapabilitySummaryIn
 		{
 			label: t('capability.rows.writes'),
 			value: vaultWriteProposalToolCount > 0
-				? t('capability.rows.proposalOnly')
+				? t(resolveExecutionPolicy(input.agent).autonomousWrite ? 'capability.rows.autonomousWrites' : 'capability.rows.proposalOnly')
 				: t('capability.rows.unavailable'),
 			tone: vaultWriteProposalToolCount > 0 ? 'warn' : 'muted',
 		},
@@ -132,6 +133,7 @@ export function buildAgentCapabilitySummary(input: BuildAgentCapabilitySummaryIn
 			toolCount: input.tools.length,
 			references,
 			vaultWriteProposalToolCount,
+			autonomousWrite: resolveExecutionPolicy(input.agent).autonomousWrite,
 			ragConfigured: input.ragConfigured,
 			ragActive: input.ragActive,
 			webSearchConfigured: input.webSearchConfigured,
@@ -192,6 +194,7 @@ function buildPreflightItems(input: {
 	toolCount: number;
 	references: CapabilityReference[];
 	vaultWriteProposalToolCount: number;
+	autonomousWrite: boolean;
 	ragConfigured: boolean;
 	ragActive: boolean;
 	webSearchConfigured: boolean;
@@ -204,7 +207,7 @@ function buildPreflightItems(input: {
 			: t('chat.preflight.readsDefault'),
 		t('chat.preflight.tools', { count: input.toolCount }),
 		input.vaultWriteProposalToolCount > 0
-			? t('chat.preflight.writesProposal')
+			? t(input.autonomousWrite ? 'chat.preflight.writesAutonomous' : 'chat.preflight.writesProposal')
 			: t('chat.preflight.writesNone'),
 		t('chat.preflight.rag', { state: lineState(input.ragConfigured, input.ragActive) }),
 		t('chat.preflight.web', { state: lineState(input.webSearchConfigured, input.webSearchActive) }),

@@ -20,7 +20,7 @@ This plugin has evolved beyond a simple chat interface into a full **SPAR (Sense
 - **Cognitive Memory System** — Long-term associative memory via a local vector store. The Agent remembers your preferences and key research findings across conversations.
 - **Modern Logical UI** — A redesigned **Execution Timeline** that merges reasoning and actions into a single flow. Compact tool pills save space while remaining fully inspectable.
 - **Vault-Native Tools** — Specialized tools for **Properties (YAML)** management, batch file operations (move, create, delete), and directory-tree awareness.
-- **Multiple LLM Providers** — OpenAI, Anthropic (Claude 3.5), Google Gemini, DeepSeek, Ollama (local), and OpenRouter.
+- **Multiple LLM Providers** — OpenAI, Anthropic (Claude 3.5), Google Gemini, DeepSeek, Ollama (local), OpenRouter, and SAP AI Core.
 - **MCP & OpenAPI Integration** — Seamlessly connect Model Context Protocol servers or any OpenAPI-spec service to expand your Agent's toolset.
 - **Privacy First** — Your notes stay local. Indexing (RAG) uses a local vector store with configurable embedding providers.
 
@@ -39,6 +39,8 @@ This plugin has evolved beyond a simple chat interface into a full **SPAR (Sense
 | Obsidian | v1.13.0 or later (desktop only) |
 | LLM API key | OpenAI, Anthropic, Google, DeepSeek, etc. Keys live in Obsidian's Keychain; the plugin saves only the secret's name, and moves keys saved by older versions there on first start. |
 
+SAP AI Core: add a provider, select a Keychain secret containing the complete Service Key JSON, set the resource group (default: `default`), then test the connection to discover running deployments. The AI API URL is read from `serviceurls.AI_API_URL` unless overridden. Legacy SAP settings are preserved and plaintext Service Keys are moved to Keychain. Previously deleted settings must be re-entered.
+
 ## 🤖 Agents
 
 Defined under **Settings → Agents**. Each agent has:
@@ -49,6 +51,14 @@ Defined under **Settings → Agents**. Each agent has:
 - Custom icon and display name
 
 Agent mode uses **native function calling** (OpenAI) with automatic fallback to text-based tool parsing for other providers.
+
+After **Stop**, send `Continue.` in the same conversation to resume with the saved
+original task and bounded tool evidence, including after an app reload.
+Verification re-reads retain separate visit counts instead of resetting progress.
+This does not automatically replay tools or guarantee exactly-once external effects.
+For a task-level restriction, use exact names, for example `Use only read_file;`
+or `No tools.`; this narrows the Agent's existing permissions and survives a bare
+continuation. A distinct new task starts a fresh restriction scope.
 
 ## 🧭 Agentic Scenarios
 

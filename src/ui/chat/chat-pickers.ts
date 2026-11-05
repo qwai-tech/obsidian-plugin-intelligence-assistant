@@ -1,4 +1,5 @@
-import { Notice, type App, type TFile, type TFolder } from 'obsidian';
+import { notify } from '@/core/notifications';
+import { type App, type TFile, type TFolder } from 'obsidian';
 import { t } from '@/i18n';
 import type { ChatViewState } from '@/ui/state/chat-view-state';
 import { SearchableReferenceModal } from '@/ui/modals/searchable-reference-modal';
@@ -9,7 +10,7 @@ export function pickReferences(app: App, state: ChatViewState, onChange: () => v
 		addReferences(state, selected);
 		onChange();
 		if (selected.length > 0) {
-			new Notice(t('chat.notices.referencesAdded', { count: selected.length }));
+			notify(t('chat.notices.referencesAdded', { count: selected.length }));
 		}
 	}).open();
 }
@@ -31,7 +32,7 @@ export function pickImages(app: App, state: ChatViewState, onChange: () => void)
 			}
 			onChange();
 			if (selected.length > 0) {
-				new Notice(t('chat.notices.attachedImages', { count: selected.length }));
+				notify(t('chat.notices.attachedImages', { count: selected.length }));
 			}
 		})();
 	}).open();

@@ -97,7 +97,7 @@ export function displayPromptsTab(
 				button.setButtonText(t('settings.prompts.actions.delete')).setDestructive();
 				tagButton(button.buttonEl, TestIds.settings.promptDeleteBtn, { 'data-prompt-id': prompt.id });
 				button.onClick(async () => {
-					if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }))) {
+					if (await showConfirm(app, t('settings.prompts.confirm.delete', { name: prompt.name }), { title: t('ux.deletePrompt'), confirmText: t('settings.prompts.actions.delete') })) {
 						await plugin.updateSettings((settings) => {
 							settings.systemPrompts = settings.systemPrompts.filter(candidate => candidate.id !== prompt.id);
 						});

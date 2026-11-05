@@ -2,6 +2,7 @@
  * CLI Tool Types
  * Types for local command-line tool execution
  */
+import type { ArgumentSourceRule } from './tools';
 
 /**
  * Configuration for a CLI tool
@@ -25,10 +26,12 @@ export interface CLIToolConfig {
 	enabled: boolean;
 	/** Execution timeout in milliseconds (default: 30000) */
 	timeout?: number;
-	/** Whether to run in shell (default: true) */
+	/** Whether to run in shell (default: false; explicit shell configurations remain supported) */
 	shell?: boolean;
 	/** Input parameters that LLM can provide */
 	parameters?: CLIToolParameter[];
+	/** Optional trusted read-before-use contract, configured without new UI controls. */
+	argumentSources?: ArgumentSourceRule[];
 }
 
 /**

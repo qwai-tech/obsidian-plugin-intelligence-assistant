@@ -30,7 +30,7 @@ export class ModelCacheRepository {
 		const map = new Map((cache.entries ?? []).map(entry => [entry.key, entry]));
 
 		for (const config of configs) {
-			const entry = map.get(this.buildKey(config));
+			const entry = map.get(this.buildKey(config)) ?? (config.provider === 'sap-ai-core' ? undefined : map.get(this.legacyKey(config)));
 			if (entry) {
 				config.cachedModels = entry.cachedModels ?? [];
 				config.cacheTimestamp = entry.cacheTimestamp ?? cache.updatedAt;
@@ -51,7 +51,12 @@ export class ModelCacheRepository {
 		await this.file.write({ version: CACHE_VERSION, updatedAt: Date.now(), entries });
 	}
 
-	private buildKey(config: Pick<LLMConfig, 'provider' | 'baseUrl'>): string {
+	private buildKey(config: Pick<LLMConfig, 'provider' | 'baseUrl' | 'id' | 'resourceGroup' | 'serviceKeySecret'>): string {
+		if (config.provider === 'sap-ai-core') return `${config.provider}@${config.id ?? config.serviceKeySecret ?? 'legacy'}:${config.baseUrl ?? ''}:${config.resourceGroup || 'default'}:${config.serviceKeySecret ?? ''}`;
+		return config.provider === 'custom' && config.id ? `${config.provider}@${config.id}:${config.baseUrl?.trim() || 'default'}` : this.legacyKey(config);
+	}
+
+	private legacyKey(config: Pick<LLMConfig, 'provider' | 'baseUrl'>): string {
 		const base = config.baseUrl?.trim().toLowerCase() || 'default';
 		return `${config.provider}:${base}`;
 	}

@@ -9,6 +9,9 @@ export interface DocumentChunk {
     timestamp: number;
     contentHash?: string;
     embeddingModel?: string;
+    agentId?: string;
+    entryId?: string;
+    memoryMode?: 'short-term' | 'long-term';
   };
 }
 

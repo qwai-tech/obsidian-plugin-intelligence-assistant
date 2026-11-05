@@ -1,4 +1,5 @@
-import { Notice } from 'obsidian';
+import { notify } from '@/core/notifications';
+
 import type { Message } from '@/features/conversations';
 import {
 	isBatchWriteProposal,
@@ -96,7 +97,7 @@ function renderApplyButton(element: HTMLElement, note: HTMLElement, label: strin
 			showApplied();
 		}, (error: unknown) => {
 			console.error('[WriteProposalCards] Failed to apply proposal', error);
-			new Notice(errorMessage(error));
+			notify(errorMessage(error));
 			button.disabled = false;
 		});
 	});

@@ -207,7 +207,7 @@
 .ia-table-header {
 	padding: 12px 16px;
 	text-align: left;
-	text-transform: uppercase;
+	text-transform: none;
 	letter-spacing: 0.04em;
 	font-size: var(--ia-font-size-2xs);
 	font-weight: 700;
@@ -273,13 +273,19 @@
 }
 
 .ia-filter-bar {
-	display: flex;
-	align-items: center;
-	gap: 8px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+	align-items: end;
+	gap: 12px;
 	margin-left: auto;
 	width: 100%;
-	flex-wrap: nowrap;
 }
+
+.ia-filter-field { display: grid; gap: 4px; min-width: 0; }
+.ia-filter-label { font-size: var(--ia-font-size-xs); color: var(--text-muted); }
+.ia-filter-field--search { grid-column: 1 / -1; }
+.ia-filter-field > .ia-filter-control { width: 100%; min-width: 0; height: var(--input-height); }
+.ia-filter-field > select.ia-filter-control { appearance: auto; padding-inline-end: 28px; text-align: start; cursor: pointer; }
 
 .ia-filter-control {
 	padding: 6px 10px;
@@ -295,8 +301,7 @@
 }
 
 .ia-filter-search {
-	flex: 1 1 240px;
-	min-width: 180px;
+	min-width: 0;
 }
 
 .ia-filter-control:focus {
@@ -330,6 +335,7 @@
 	font-family: var(--font-monospace);
 	font-size: var(--ia-font-size-2xs);
 	color: var(--text-muted);
+	overflow-wrap: anywhere;
 }
 
 .ia-count-badge {
@@ -1544,7 +1550,32 @@
 .conversation-list-floating.is-pinned {
 	position: relative;
 	box-shadow: none;
+	order: -1;
+	width: 100%;
+	max-height: 35%;
+	min-height: 120px;
+	flex-shrink: 0;
+	top: auto;
+	bottom: auto;
+	left: auto;
 }
+
+
+.chat-main-layout:has(.conversation-list-floating.is-pinned) {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	grid-template-rows: minmax(100px, 30%) minmax(0, 1fr);
+	min-height: 0;
+	overflow: hidden;
+}
+.chat-main-layout:has(.is-pinned) > .conversation-list-floating.is-pinned {
+	grid-row: 1;
+	position: static;
+	max-height: none;
+	min-height: 0;
+}
+.chat-main-layout:has(.is-pinned) > .main-chat-area { grid-row: 2; overflow: hidden; }
+.main-chat-area { min-width: 0; min-height: 0; }
 
 .main-chat-area {
 	flex: 1;
@@ -3273,6 +3304,27 @@ details[open] .ia-chat-message__summary::before {
 }
 
 /* Tab Navigation */
+.ia-settings-tab-shell.setting-item {
+	display: block;
+	width: 100%;
+	min-width: 0;
+	border: 0;
+}
+
+.ia-settings-main-tabs {
+	margin-bottom: 16px;
+}
+
+.ia-settings-main-tabs .settings-tab:focus-visible {
+	outline: 2px solid var(--interactive-accent);
+	outline-offset: 2px;
+}
+
+.ia-settings-main-panel[hidden],
+.ia-settings-general-group [role="tabpanel"][hidden] {
+	display: none !important;
+}
+
 .settings-tabs {
 	display: flex;
 	flex-wrap: wrap;
@@ -3519,7 +3571,7 @@ details[open] .ia-chat-message__summary::before {
 	align-items: center;
 	gap: 8px;
 	font-weight: 600;
-	text-transform: capitalize;
+	text-transform: none;
 }
 
 .provider-icon {
@@ -4027,3 +4079,53 @@ details[open] .ia-chat-message__summary::before {
 	font-size: var(--ia-font-size-xs);
 	color: var(--text-muted);
 }
+
+/* Essential actions stay visible and wrap at the actual sidebar width. */
+.chat-message .message-actions,
+.chat-message .message-body:hover .message-actions,
+.chat-message .message-body:focus-within .message-actions {
+	display: flex;
+	flex-wrap: wrap;
+	max-height: none;
+	height: auto;
+	opacity: 1;
+	overflow: visible;
+	pointer-events: auto;
+	margin-top: 6px;
+	max-width: 100%;
+}
+.chat-message .message-actions button { max-width: 100%; white-space: normal; }
+.ia-long-form .ia-modal-footer { position: sticky; bottom: 0; background: var(--background-primary); padding: 12px 0; z-index: 3; border-top: 1px solid var(--background-modifier-border); }
+.ia-replacement-preview pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 30vh; overflow: auto; padding: 12px; background: var(--background-secondary); }
+.ia-ai-block__result { white-space: pre-wrap; overflow-wrap: anywhere; }
+.ia-task-preview { padding: 12px; background: var(--background-secondary); border-radius: 8px; overflow-wrap: anywhere; }
+.ia-task-preview ul { padding-inline-start: 20px; }
+.ia-usage-stat-card__label { text-transform: none; }
+.message-assistant .ia-chat-message__status:not(.ia-hidden) {
+	display: inline-flex;
+	text-transform: none;
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+}
+
+
+.ia-agent-edit-modal { display: flex; flex-direction: column; }
+.ia-agent-edit-modal .modal-content { min-height: 0; overflow-y: auto; }
+.ia-fixed-modal-footer { flex-shrink: 0; padding: 12px 0 0; border-top: 1px solid var(--background-modifier-border); background: var(--background-primary); }
+
+.ia-readable-field { flex-direction: column; align-items: stretch; gap: 10px; }
+.ia-readable-field .setting-item-info { margin-inline-end: 0; }
+.ia-readable-field .setting-item-control { width: 100%; }
+.ia-readable-field textarea { box-sizing: border-box; width: 100%; max-width: 100%; min-height: 4.5em; max-height: 30vh; resize: vertical; white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--font-monospace); }
+.ia-readable-source { overflow-wrap: anywhere; max-width: 36ch; }
+.ia-readonly-value { font-weight: 500; color: var(--text-muted); }
+
+/* Limit only this plugin's toast geometry; host and other plugins are untouched. */
+.ia-plugin-notice { max-width: min(420px, calc(100vw - 24px)); max-height: 140px; overflow: auto; overflow-wrap: anywhere; }
+.ia-notification-history { padding-inline-start: 24px; }
+.ia-notification-history li { padding: 10px 4px; border-bottom: 1px solid var(--background-modifier-border); overflow-wrap: anywhere; }
+.ia-notification-history p { margin: 0 0 4px; white-space: pre-wrap; }
+.ia-notification-history small { color: var(--text-muted); }
+.ia-operation-feedback { margin: 12px 0; overflow-wrap: anywhere; }
+.ia-operation-error { color: var(--text-error); font-weight: 500; }
+.ia-plugin-notice[hidden] { display: none !important; }

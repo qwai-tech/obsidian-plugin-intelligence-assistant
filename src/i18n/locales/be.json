@@ -111,7 +111,8 @@
       },
       "guidance": {
         "configureBaseUrl": "Наладзіць базавы URL",
-        "addApiKey": "Дадаць ключ API"
+        "addApiKey": "Дадаць ключ API",
+        "provideServiceKey": "Прадаставіць ключ службы"
       },
       "models": {
         "none": "Няма мадэляў",
@@ -1195,7 +1196,8 @@
       "writesProposal": "Запіс: толькі прапанова; патрабуецца «Ужыць»",
       "writesNone": "Запіс: недаступны",
       "rag": "RAG: {{state}}",
-      "web": "Вэб: {{state}}"
+      "web": "Вэб: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "Прапановы запісу",
@@ -1344,7 +1346,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (лакальны)",
         "openrouter": "OpenRouter",
-        "custom": "Карыстальніцкі (сумяшчальны з OpenAI)"
+        "custom": "Карыстальніцкі (сумяшчальны з OpenAI)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "Фільтр мадэляў",
@@ -1370,7 +1373,8 @@
       "validation": {
         "selectProvider": "Выберыце тып пастаўшчыка",
         "invalidUrl": "Няправільны фармат базавага URL. Увядзіце дзейны URL (напр., https://api.example.com)",
-        "baseUrlRequired": "Увядзіце базавы URL канцавой кропкі, сумяшчальнай з OpenAI."
+        "baseUrlRequired": "Увядзіце базавы URL канцавой кропкі, сумяшчальнай з OpenAI.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "Кэшаваныя мадэлі: {{count}}",
       "connectionErrors": {
@@ -1386,7 +1390,17 @@
       "connectionSuccess_one": "Злучэнне паспяховае. У кэшы захавана {{count}} мадэль.",
       "connectionSuccess_few": "Злучэнне паспяховае. У кэшы захаваны {{count}} мадэлі.",
       "connectionSuccess_many": "Злучэнне паспяховае. У кэшы захавана {{count}} мадэлей.",
-      "connectionSuccess_other": "Злучэнне паспяховае. У кэшы захавана {{count}} мадэлі."
+      "connectionSuccess_other": "Злучэнне паспяховае. У кэшы захавана {{count}} мадэлі.",
+      "resourceGroup": {
+        "name": "Група рэсурсаў",
+        "desc": "Неабавязковая група рэсурсаў SAP AI Core",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "Ключ службы",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "Інспектар MCP",
@@ -1696,7 +1710,8 @@
       "referencesPlusContext_one": "{{count}} яўная спасылка плюс актыўны кантэкст",
       "referencesPlusContext_few": "{{count}} яўныя спасылкі плюс актыўны кантэкст",
       "referencesPlusContext_many": "{{count}} яўных спасылак плюс актыўны кантэкст",
-      "referencesPlusContext_other": "{{count}} яўнай спасылкі плюс актыўны кантэкст"
+      "referencesPlusContext_other": "{{count}} яўнай спасылкі плюс актыўны кантэкст",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_one": "{{agent}} можа выкарыстоўваць {{count}} інструмент.",
     "subtitle_few": "{{agent}} можа выкарыстоўваць {{count}} інструменты.",
@@ -1720,5 +1735,47 @@
       "starting_many": "Індэксацыя {{count}} нататак…",
       "starting_other": "Індэксацыя {{count}} нататкі…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

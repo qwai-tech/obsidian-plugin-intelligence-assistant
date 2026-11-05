@@ -69,10 +69,7 @@ export class ConversationNamer {
 			return null;
 		}
 		try {
-			const response = await this.createProvider(config).chat({ messages: [{ role: 'user', content: prompt }], model, temperature });
-			if (response.usage) {
-				this.deps.recordUsage?.({ model, provider: config.provider, ...response.usage, timestamp: Date.now() });
-			}
+			const response = await this.createProvider(config).chat({ messages: [{ role: 'user', content: prompt }], model, temperature, purpose: 'conversation-name' });
 			return response.content;
 		} catch (error) {
 			console.error('[ConversationNamer] Model request failed:', error);

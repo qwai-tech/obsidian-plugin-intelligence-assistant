@@ -351,6 +351,7 @@ export class ChatViewState extends Events {
 	 * Reset all state to defaults
 	 */
 	reset(): void {
+		this.stopRun();
 		this.clearMessages();
 		this.currentConversationId = null;
 		this.availableModels = [];

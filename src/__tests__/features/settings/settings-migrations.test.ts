@@ -141,11 +141,11 @@ describe('migrateSettings — agent step budget', () => {
 	});
 });
 
-describe('migrateSettings — removed SAP AI Core provider', () => {
+describe('migrateSettings — restored SAP AI Core provider', () => {
 	const sapSettings = () => {
 		const settings = userConfigToPluginSettings(null);
 		settings.llmConfigs = [
-			{ provider: 'sap-ai-core', serviceKey: '{}' } as never,
+			{ provider: 'sap-ai-core', serviceKey: '{}' },
 			{ provider: 'openai', apiKey: 'k' },
 		];
 		settings.defaultModel = 'sap-ai-core:gpt-4o';
@@ -153,14 +153,14 @@ describe('migrateSettings — removed SAP AI Core provider', () => {
 		return settings;
 	};
 
-	it('drops SAP provider configs and models that point at them', () => {
+	it('preserves SAP provider configs and model selections', () => {
 		const settings = sapSettings();
 
 		expect(migrateSettings(settings)).toBe(true);
 
-		expect(settings.llmConfigs.map(config => config.provider)).toEqual(['openai']);
-		expect(settings.defaultModel).toBe('');
-		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'default' });
+		expect(settings.llmConfigs.map(config => config.provider)).toEqual(['sap-ai-core', 'openai']);
+		expect(settings.defaultModel).toBe('sap-ai-core:gpt-4o');
+		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'fixed', modelId: 'sap-ai-core:gpt-4o' });
 	});
 
 	it('reports no change when no SAP config is present', () => {
@@ -219,16 +219,16 @@ describe('migrateSettings — removed SAP AI Core provider', () => {
 		const settings = userConfigToPluginSettings(null);
 		settings.llmConfigs = [
 			{ provider: 'openai', apiKey: 'k', cachedModels: [{ id: 'openai:gpt-4o', name: 'gpt-4o', provider: 'openai', capabilities: ['chat'], enabled: true }] },
-			{ provider: 'custom', apiKey: 'k', baseUrl: 'http://localhost:11434/v1', cachedModels: [{ id: 'openai:qwen3.5:0.8b', name: 'qwen3.5:0.8b', provider: 'openai', capabilities: ['chat'], enabled: true }] },
+			{ provider: 'custom', id: 'custom-test', apiKey: 'k', baseUrl: 'http://localhost:11434/v1', cachedModels: [{ id: 'openai:qwen3.5:0.8b', name: 'qwen3.5:0.8b', provider: 'openai', capabilities: ['chat'], enabled: true }] },
 		];
 		settings.defaultModel = 'openai:qwen3.5:0.8b';
 		settings.agents = [makeLegacyAgent({ id: 'a', modelStrategy: { strategy: 'fixed', modelId: 'openai:qwen3.5:0.8b' }, toolAccess: { sources: {} } })];
 
 		expect(migrateSettings(settings)).toBe(true);
 
-		expect(settings.llmConfigs[1].cachedModels).toEqual([expect.objectContaining({ id: 'custom:qwen3.5:0.8b', provider: 'custom' })]);
+		expect(settings.llmConfigs[1].cachedModels).toEqual([expect.objectContaining({ id: 'custom@custom-test:qwen3.5:0.8b', provider: 'custom' })]);
 		expect(settings.llmConfigs[0].cachedModels?.[0].id).toBe('openai:gpt-4o');
-		expect(settings.defaultModel).toBe('custom:qwen3.5:0.8b');
-		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'fixed', modelId: 'custom:qwen3.5:0.8b' });
+		expect(settings.defaultModel).toBe('custom@custom-test:qwen3.5:0.8b');
+		expect(settings.agents[0].modelStrategy).toEqual({ strategy: 'fixed', modelId: 'custom@custom-test:qwen3.5:0.8b' });
 	});
 });

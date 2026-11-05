@@ -1,3 +1,4 @@
+import { runtimeClock } from '@qwai/obsidian-llm';
 import spawn from 'cross-spawn';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import type { McpConnection, ProcessLaunch } from '@/features/tools';
@@ -17,7 +18,8 @@ interface JsonRpcMessage {
 interface PendingRequest {
 	resolve(value: unknown): void;
 	reject(error: Error): void;
-	timer: number;
+	timer: ReturnType<typeof runtimeClock.schedule>;
+	cleanup(): void;
 }
 
 export class McpStdioSession implements McpConnection {
@@ -48,18 +50,28 @@ export class McpStdioSession implements McpConnection {
 		return session;
 	}
 
-	request(method: string, params: Record<string, unknown>): Promise<unknown> {
+	request(method: string, params: Record<string, unknown>, options: { signal?: AbortSignal } = {}): Promise<unknown> {
 		if (this.closed) {
 			return Promise.reject(new Error('MCP session is closed'));
 		}
+		if (options.signal?.aborted) return Promise.reject(options.signal.reason instanceof Error ? options.signal.reason : new Error('MCP request aborted'));
 		const id = this.nextId++;
 		return new Promise((resolve, reject) => {
-			const timer = window.setTimeout(() => {
+			const cancel = (reason: Error) => {
+				const pending = this.pending.get(id);
+				if (!pending) return;
 				this.pending.delete(id);
-				reject(new Error(`MCP request ${method} timed out after ${this.requestTimeoutMs} ms`));
-			}, this.requestTimeoutMs);
-			this.pending.set(id, { resolve, reject, timer });
+				pending.cleanup();
+				if (method !== 'initialize') this.send({ method: 'notifications/cancelled', params: { requestId: id, reason: reason.message } });
+				reject(reason);
+			};
+			const abort = () => cancel(new Error(`MCP request ${method} aborted`));
+			const timer = runtimeClock.schedule(() => cancel(new Error(`MCP request ${method} timed out after ${this.requestTimeoutMs} ms`)), this.requestTimeoutMs);
+			const cleanup = () => { runtimeClock.cancel(timer); options.signal?.removeEventListener('abort', abort); };
+			this.pending.set(id, { resolve, reject, timer, cleanup });
+			options.signal?.addEventListener('abort', abort, { once: true });
 			this.send({ id, method, params });
+			if (options.signal?.aborted) abort();
 		});
 	}
 
@@ -76,9 +88,9 @@ export class McpStdioSession implements McpConnection {
 		}
 		const exited = new Promise<void>((resolve) => this.child.once('close', () => resolve()));
 		this.child.kill();
-		const forceKill = window.setTimeout(() => this.child.kill('SIGKILL'), KILL_GRACE_MS);
+		const forceKill = runtimeClock.schedule(() => this.child.kill('SIGKILL'), KILL_GRACE_MS);
 		await exited;
-		window.clearTimeout(forceKill);
+		runtimeClock.cancel(forceKill);
 	}
 
 	private send(message: { id?: number | string; method?: string; params?: unknown; result?: unknown; error?: unknown }): void {
@@ -116,7 +128,7 @@ export class McpStdioSession implements McpConnection {
 			return;
 		}
 		this.pending.delete(message.id);
-		window.clearTimeout(pending.timer);
+		pending.cleanup();
 		if (message.error) {
 			pending.reject(new Error(message.error.message));
 		} else {
@@ -135,7 +147,7 @@ export class McpStdioSession implements McpConnection {
 	private fail(error: Error): void {
 		this.closed = true;
 		for (const [id, pending] of this.pending) {
-			window.clearTimeout(pending.timer);
+			pending.cleanup();
 			pending.reject(error);
 			this.pending.delete(id);
 		}

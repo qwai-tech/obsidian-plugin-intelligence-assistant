@@ -42,5 +42,9 @@ describe('Release real agent', () => {
 		expect(traceText).toContain('read_file');
 		expect(traceText).toContain('AGENT_TOOL_SENTINEL');
 		expect(reply).toContain('AGENT_TOOL_SENTINEL');
+		const id = await chat.getConversationId();
+		const stored = await vault.readRuntimeDataFile<{ messages: Array<{ role: string; agentExecutionSteps?: Array<{ type: string; toolName?: string; status?: string; args?: { path?: string }; result?: string }> }> }>(await vault.findRuntimeConversationFile(id));
+		const reads = stored.messages.flatMap(m => m.agentExecutionSteps ?? []).filter(s => s.type === 'action' && s.toolName === 'read_file' && s.status === 'success');
+		expect(reads.some(s => s.args?.path === 'test-note.md' && s.result?.includes('AGENT_TOOL_SENTINEL'))).toBe(true);
 	});
 });

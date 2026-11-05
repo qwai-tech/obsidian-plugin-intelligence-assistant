@@ -7,7 +7,7 @@ import { t } from '@/i18n';
  * then renders a small widget: the prompt text, a result area, and a Run button
  * that hands the prompt to the agent path. We deliberately do NOT auto-run on
  * every preview render (that would fire the LLM on every scroll/re-render);
- * `autorun: true` is honoured only as an explicit opt-in.
+ * `autorun` metadata does not grant execution; the user must press Run.
  *
  * The parse + DOM-build logic is split out here so it can be unit-tested without
  * the Obsidian `Plugin` / MarkdownPostProcessor machinery.
@@ -18,8 +18,9 @@ export interface AiBlockDirective {
 	prompt: string;
 	/** Optional title shown on the widget header. */
 	title?: string;
-	/** Explicit opt-in to run automatically when the block first renders. */
+	/** Legacy metadata retained for parsing compatibility; never grants execution. */
 	autorun: boolean;
+	error?: string;
 }
 
 /**
@@ -31,6 +32,7 @@ export function parseAiBlock(source: string): AiBlockDirective {
 	const lines = source.replace(/\r\n/g, '\n').split('\n');
 	let title: string | undefined;
 	let autorun = false;
+	let error: string | undefined;
 	let i = 0;
 
 	// Consume a contiguous run of leading "key: value" option lines.
@@ -45,6 +47,7 @@ export function parseAiBlock(source: string): AiBlockDirective {
 		if (key === 'title') {
 			title = value;
 		} else if (key === 'autorun') {
+			if (!['true', 'false'].includes(value.toLowerCase())) error = t('ux.invalidAutorun');
 			autorun = value.toLowerCase() === 'true';
 		} else {
 			// Not a recognised option line — treat from here on as the prompt.
@@ -53,7 +56,7 @@ export function parseAiBlock(source: string): AiBlockDirective {
 	}
 
 	const prompt = lines.slice(i).join('\n').trim();
-	return { prompt, title, autorun };
+	return { prompt, title, autorun, ...(error ? { error } : {}) };
 }
 
 export interface AiWidgetHandle {
@@ -69,8 +72,8 @@ export interface AiWidgetHandle {
 
 /**
  * Build the widget DOM into `el`. `onRun` is invoked when the user clicks Run
- * (or once on autorun). Uses the Obsidian-augmented `createDiv`/`createEl`
- * helpers that exist on HTMLElement at runtime and in the jest obsidian mock.
+ * only. Uses the Obsidian-augmented `createDiv`/`createEl`
+ * helpers provided by Obsidian at runtime.
  */
 export function buildAiWidget(
 	el: HTMLElement,
@@ -92,6 +95,8 @@ export function buildAiWidget(
 
 	const resultEl = root.createDiv('ia-ai-block__result');
 	resultEl.addClass('ia-hidden');
+	resultEl.setAttribute('role', 'status');
+	resultEl.setAttribute('aria-live', 'polite');
 
 	const handle: AiWidgetHandle = {
 		root,
@@ -104,14 +109,16 @@ export function buildAiWidget(
 		},
 		setRunning(running: boolean) {
 			runButton.disabled = running;
-			runButton.setText(running ? 'Running…' : 'Run');
+			runButton.setText(running ? t('ux.generating') : t('markdown.run'));
+			root.setAttribute('aria-busy', String(running));
 			root.toggleClass('is-running', running);
 		},
 	};
 
 	const trigger = (): void => {
+		if (directive.error) { handle.setResult(directive.error); return; }
 		if (!directive.prompt) {
-			handle.setResult('No prompt provided in the ai block.');
+			handle.setResult(t('ux.noPrompt'));
 			return;
 		}
 		onRun(directive.prompt, handle);
@@ -122,9 +129,11 @@ export function buildAiWidget(
 		trigger();
 	});
 
-	if (directive.autorun && directive.prompt) {
-		trigger();
+	if (directive.error) {
+		handle.setResult(directive.error);
+		runButton.disabled = true;
 	}
+	// Legacy autorun metadata is parsed for compatibility; execution requires the existing Run button.
 
 	return handle;
 }

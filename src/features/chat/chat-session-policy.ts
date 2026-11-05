@@ -1,4 +1,4 @@
-import { DEFAULT_AGENT_ID } from '@/core/constants';
+import { DEFAULT_AGENT_ID, DEFAULT_CHAT_SAMPLING } from '@/core/constants';
 import type { Agent, SystemPrompt } from '@/features/agent';
 import type { ConversationConfig } from '@/features/conversations';
 
@@ -66,4 +66,18 @@ export function openingSession(settings: Pick<SessionSettings, 'agents' | 'activ
 	return agentId
 		? { mode: 'agent', activeAgentId: agentId }
 		: { mode: 'chat', activeAgentId: settings.activeAgentId ?? null };
+}
+
+/** Snapshot the selected Agent's effective values; Chat defaults must not overwrite them. */
+export function newConversationConfig(settings: SessionSettings & { defaultModel?: string }, mode: ChatMode, selectedModel = ''): ConversationConfig {
+	const modelId = settings.defaultModel || selectedModel || undefined;
+	const defaults: ConversationConfig = { promptId: null, agentId: null, ...DEFAULT_CHAT_SAMPLING, ragEnabled: false, webSearchEnabled: false, modelId };
+	if (mode !== 'agent') return defaults;
+	const agentId = pickAgentId(settings);
+	const agent = settings.agents.find(candidate => candidate.id === agentId);
+	if (!agent) return defaults;
+	return { ...defaults, agentId: agent.id, promptId: agent.systemPromptId ?? null,
+		modelId: agentModelId(agent, selectedModel, settings.defaultModel ?? '') || undefined,
+		temperature: agent.temperature, maxTokens: agent.maxTokens,
+		ragEnabled: agent.ragEnabled, webSearchEnabled: agent.webSearchEnabled };
 }

@@ -1,12 +1,8 @@
+import { providerFacade } from './provider-facade';
 import { ILLMProvider } from './types';
 import type { LLMConfig } from './types';
 import { type HttpPort, getDefaultHttpPort } from './http';
-import { OpenAIProvider } from './providers/openai-provider';
-import { AnthropicProvider } from './providers/anthropic-provider';
-import { GoogleProvider } from './providers/google-provider';
-import { DeepSeekProvider } from './providers/deepseek-provider';
-import { OpenRouterProvider } from './providers/openrouter-provider';
-import { OllamaProvider } from './providers/ollama-provider';
+import { providerDefinition } from './provider-definitions';
 
 export class ProviderFactory {
 	/**
@@ -16,24 +12,11 @@ export class ProviderFactory {
 	 *   explicitly in tests to keep them off the network.
 	 */
 	static createProvider(config: LLMConfig, http: HttpPort = getDefaultHttpPort()): ILLMProvider {
-		switch (config.provider) {
-			case 'openai':
-				return new OpenAIProvider(config, http);
-			case 'anthropic':
-				return new AnthropicProvider(config, http);
-			case 'google':
-				return new GoogleProvider(config, http);
-			case 'deepseek':
-				return new DeepSeekProvider(config, http);
-			case 'openrouter':
-				return new OpenRouterProvider(config, http);
-			case 'ollama':
-				return new OllamaProvider(config, http);
-			case 'custom':
-				// Custom provider uses OpenAI-compatible API
-				return new OpenAIProvider(config, http);
-			default:
-				throw new Error(`Unknown provider: ${config.provider}`);
-		}
+		// Snapshot the connection for this provider's lifetime.
+		const snapshot = JSON.parse(JSON.stringify(config)) as LLMConfig;
+		return providerFacade(this.createRawProvider(snapshot, http), { provider: snapshot.provider, id: snapshot.id });
+	}
+	private static createRawProvider(config: LLMConfig, http: HttpPort): ILLMProvider {
+		return providerDefinition(config.provider).create(config, http);
 	}
 }

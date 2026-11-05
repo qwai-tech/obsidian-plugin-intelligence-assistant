@@ -16,7 +16,7 @@ interface QwantSearchResponse {
 	};
 }
 
-export async function searchQwant(query: string, maxResults: number, { config, http }: BackendContext): Promise<WebSearchResult[]> {
+export async function searchQwant(query: string, maxResults: number, { config, http, signal }: BackendContext): Promise<WebSearchResult[]> {
 	const params = new URLSearchParams({
 		q: query,
 		count: maxResults.toString(),
@@ -41,7 +41,7 @@ export async function searchQwant(query: string, maxResults: number, { config, h
 	const searchUrl = `https://api.qwant.com/api/search/web?${params.toString()}`;
 	
 	try {
-		const response = await http.request({
+		const response = await http.request({ signal,
 			url: searchUrl,
 			method: 'GET',
 			headers: headers

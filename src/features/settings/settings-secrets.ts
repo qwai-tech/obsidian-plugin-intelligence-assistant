@@ -31,6 +31,11 @@ export function moveKeysToVault(settings: PluginSettings, vault: SecretVault): b
 	};
 	let moved = false;
 	for (const config of settings.llmConfigs) {
+		if (config.serviceKey && !config.serviceKeySecret) {
+			const value = typeof config.serviceKey === 'string' ? config.serviceKey : JSON.stringify(config.serviceKey);
+			config.serviceKeySecret = store(`${config.provider}-service-key`, value);
+			moved = true;
+		}
 		if (config.apiKey && !config.apiKeySecret) {
 			config.apiKeySecret = store(config.provider, config.apiKey);
 			moved = true;
@@ -55,6 +60,9 @@ export function moveKeysToVault(settings: PluginSettings, vault: SecretVault): b
 
 export function revealKeys(settings: PluginSettings, vault: SecretVault): void {
 	for (const config of settings.llmConfigs) {
+		if (config.serviceKeySecret) {
+			config.serviceKey = vault.get(config.serviceKeySecret) ?? undefined;
+		}
 		if (config.apiKeySecret) {
 			config.apiKey = vault.get(config.apiKeySecret) ?? undefined;
 		}
@@ -81,7 +89,7 @@ export function withoutKeys(settings: PluginSettings): PluginSettings {
 }
 
 export function withoutProviderKeys(configs: LLMConfig[]): LLMConfig[] {
-	return configs.map(({ apiKey: _apiKey, ...rest }) => rest);
+	return configs.map(({ apiKey: _apiKey, serviceKey: _serviceKey, ...rest }) => rest);
 }
 
 function withoutWebSearchKeys(config: WebSearchConfig): WebSearchConfig {

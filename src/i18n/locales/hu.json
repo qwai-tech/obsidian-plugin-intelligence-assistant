@@ -105,7 +105,8 @@
       },
       "guidance": {
         "configureBaseUrl": "Konfigurálja az alap URL-t",
-        "addApiKey": "Adjon hozzá API-kulcsot"
+        "addApiKey": "Adjon hozzá API-kulcsot",
+        "provideServiceKey": "Adja meg a szolgáltatáskulcsot"
       },
       "models": {
         "none": "Nincsenek modellek",
@@ -1153,7 +1154,8 @@
       "writesProposal": "Írás: csak javaslat; Alkalmazás szükséges",
       "writesNone": "Írás: nem érhető el",
       "rag": "RAG: {{state}}",
-      "web": "Web: {{state}}"
+      "web": "Web: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "Írási javaslatok",
@@ -1298,7 +1300,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (helyi)",
         "openrouter": "OpenRouter",
-        "custom": "Egyéni (OpenAI-kompatibilis)"
+        "custom": "Egyéni (OpenAI-kompatibilis)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "Modellszűrő",
@@ -1324,7 +1327,8 @@
       "validation": {
         "selectProvider": "Kérjük, válasszon egy szolgáltató típust",
         "invalidUrl": "Érvénytelen alap URL formátum. Kérjük, adjon meg érvényes URL-t (pl. https://api.example.com)",
-        "baseUrlRequired": "Add meg az OpenAI-kompatibilis végpont alap URL-jét."
+        "baseUrlRequired": "Add meg az OpenAI-kompatibilis végpont alap URL-jét.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "Gyorsítótárazott modellek: {{count}}",
       "connectionErrors": {
@@ -1338,7 +1342,17 @@
       "testConnection": "Kapcsolat tesztelése",
       "testing": "Tesztelés...",
       "connectionSuccess_one": "Sikeres kapcsolat. {{count}} modell gyorsítótárazva.",
-      "connectionSuccess_other": "Sikeres kapcsolat. {{count}} modell gyorsítótárazva."
+      "connectionSuccess_other": "Sikeres kapcsolat. {{count}} modell gyorsítótárazva.",
+      "resourceGroup": {
+        "name": "Erőforráscsoport",
+        "desc": "Opcionális SAP AI Core erőforráscsoport",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "Szolgáltatáskulcs",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP vizsgáló",
@@ -1640,7 +1654,8 @@
       "customEnabled_one": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
       "customEnabled_other": "{{count}} MCP, OpenAPI vagy CLI eszköz engedélyezve",
       "referencesPlusContext_one": "{{count}} explicit hivatkozás és az aktív kontextus",
-      "referencesPlusContext_other": "{{count}} explicit hivatkozás és az aktív kontextus"
+      "referencesPlusContext_other": "{{count}} explicit hivatkozás és az aktív kontextus",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_one": "{{agent}} {{count}} eszközt használhat.",
     "subtitle_other": "{{agent}} {{count}} eszközt használhat."
@@ -1660,5 +1675,47 @@
       "starting_one": "{{count}} jegyzet indexelése…",
       "starting_other": "{{count}} jegyzet indexelése…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

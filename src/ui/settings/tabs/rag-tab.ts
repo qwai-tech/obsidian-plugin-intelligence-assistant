@@ -138,10 +138,10 @@ function renderSearchSettings(containerEl: HTMLElement, plugin: PluginHost): voi
 	new Setting(section).setName(t('settings.rag.search.title')).setHeading();
 	const form = ragForm(section, plugin);
 
-	form.dropdown('searchType', {
-		label: t('settings.rag.search.searchType.name'),
-		description: t('settings.rag.search.searchType.desc'),
-	}, { similarity: t('settings.rag.search.searchType.similarity') });
+	const method = new Setting(section)
+		.setName(t('settings.rag.search.searchType.name'))
+		.setDesc(t('ux.similarityOnly'));
+	method.controlEl.createSpan({ text: t('settings.rag.search.searchType.similarity'), cls: 'ia-readonly-value' });
 	form.number('topK', {
 		label: t('settings.rag.search.topK.name'),
 		description: t('settings.rag.search.topK.desc'),

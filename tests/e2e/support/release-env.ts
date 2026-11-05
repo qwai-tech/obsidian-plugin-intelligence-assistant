@@ -83,6 +83,7 @@ export function skipUnlessReleaseLLM(ctx: { skip(): void }): ReleaseEnv {
 	const env = getReleaseEnv();
 	const missing = missingReleaseLLMVars(env);
 	if (missing.length > 0) {
+		if (process.env.IA_RELEASE_GATE === '1') throw new Error(`Release gate missing: ${missing.join(', ')}`);
 		console.warn(`[release-e2e] Skipping real LLM spec; missing ${missing.join(', ')}`);
 		ctx.skip();
 	}

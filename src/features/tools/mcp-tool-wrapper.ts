@@ -1,4 +1,4 @@
-import { Tool, ToolDefinition, ToolParameter, ToolResult } from '@/features/tools/types/tools';
+import { Tool, ToolDefinition, ToolParameter, ToolResult, ToolExecutionContext } from '@/features/tools/types/tools';
 import { MCPClient, MCPTool } from './mcp-client';
 import { createToolDefinition, singleJsonSchemaType } from '@/features/tools/tool-schema';
 
@@ -80,9 +80,9 @@ export class MCPToolWrapper implements Tool {
 	/**
 	 * Execute the MCP tool
 	 */
-	async execute(args: Record<string, unknown>): Promise<ToolResult> {
+	async execute(args: Record<string, unknown>, context: ToolExecutionContext = {}): Promise<ToolResult> {
 		try {
-			const result = await this.mcpClient.callTool(this.mcpTool.name, args);
+			const result = await this.mcpClient.callTool(this.mcpTool.name, args, context.signal);
 
 			return {
 				success: true,

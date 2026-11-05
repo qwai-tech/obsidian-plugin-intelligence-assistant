@@ -1,3 +1,5 @@
+import { assertCompletionStatus, completionError } from '../completion-status';
+import { assertRequestOptions } from '../request-options';
 import { BaseStreamingProvider, type ChunkParser, type ParsedStreamChunk } from '../base-streaming-provider';
 import type { ChatRequest, ChatResponse, LLMMessage } from '../types';
 
@@ -50,19 +52,16 @@ export class AnthropicProvider extends BaseStreamingProvider {
 		return `${this.getBaseUrl('https://api.anthropic.com/v1')}/messages`;
 	}
 
-	async chat(request: ChatRequest): Promise<ChatResponse> {
-		const response = await this.makeRequest(this.messagesUrl, this.buildBody(request, false), request.signal) as {
-			json: { content: Array<{ type: string; text?: string }>; usage: { input_tokens: number; output_tokens: number } };
-		};
-		const { content, usage } = response.json;
-		return {
-			content: content.filter((block) => block.type === 'text').map((block) => block.text ?? '').join(''),
-			usage: {
-				promptTokens: usage.input_tokens,
-				completionTokens: usage.output_tokens,
-				totalTokens: usage.input_tokens + usage.output_tokens,
-			},
-		};
+	protected prepareBufferedRequest(request: ChatRequest): { url: string; body: unknown } {
+		return { url: this.messagesUrl, body: this.buildBody(request, false) };
+	}
+	protected decodeBufferedResponse(raw: unknown): ChatResponse {
+		const data = raw as { stop_reason?: string; content?: Array<{ type: string; text?: string; id?: string; name?: string; input?: unknown }>; usage?: { input_tokens?: number; output_tokens?: number } };
+		assertCompletionStatus(data?.stop_reason, data.usage ? { promptTokens: data.usage.input_tokens ?? 0, completionTokens: data.usage.output_tokens ?? 0, totalTokens: (data.usage.input_tokens ?? 0) + (data.usage.output_tokens ?? 0) } : undefined, data.content?.filter(block => block.type === 'text').map(block => block.text ?? '').join(''));
+		if (!Array.isArray(data?.content)) throw new Error('The service returned no Anthropic content blocks');
+		return { content: data.content.filter(block => block.type === 'text').map(block => block.text ?? '').join(''),
+			toolCalls: data.content.filter(block => block.type === 'tool_use').map(block => ({ id: block.id ?? '', type: 'function', function: { name: block.name ?? '', arguments: JSON.stringify(block.input ?? {}) } })),
+			usage: data.usage ? { promptTokens: data.usage.input_tokens ?? 0, completionTokens: data.usage.output_tokens ?? 0, totalTokens: (data.usage.input_tokens ?? 0) + (data.usage.output_tokens ?? 0) } : undefined };
 	}
 
 	protected prepareStreamRequest(request: ChatRequest): { url: string; body: unknown } {
@@ -116,6 +115,8 @@ export class AnthropicProvider extends BaseStreamingProvider {
 	): ParsedStreamChunk {
 		const outputTokens = event.usage?.output_tokens ?? 0;
 		const usage = { promptTokens: inputTokens, completionTokens: outputTokens, totalTokens: inputTokens + outputTokens };
+		const failure = completionError(event.delta?.stop_reason, usage);
+		if (failure) return { content: null, done: false, complete: true, usage, failure };
 		if (toolBlocks.size === 0) {
 			return { content: null, done: false, usage };
 		}
@@ -129,7 +130,8 @@ export class AnthropicProvider extends BaseStreamingProvider {
 	}
 
 	private buildBody(request: ChatRequest, stream: boolean): Record<string, unknown> {
-		const { system, messages } = convertMessages(request.messages as WireMessage[]);
+		assertRequestOptions(this.name, request, ['topK', 'user', 'metadata', 'parallelToolCalls']);
+		const { system, messages } = convertAnthropicMessages(request.messages);
 		const body: Record<string, unknown> = {
 			model: this.extractModelName(request.model),
 			messages,
@@ -137,10 +139,16 @@ export class AnthropicProvider extends BaseStreamingProvider {
 			temperature: request.temperature ?? 0.7,
 			stream,
 		};
+		if (request.user) body.metadata = { user_id: request.user };
+		if (request.metadata && Object.keys(request.metadata).some(key => key !== 'user_id')) throw new Error('Anthropic metadata only supports user_id');
+		if (request.metadata?.user_id) body.metadata = { user_id: request.metadata.user_id };
 		const systemPrompt = withResponseFormat(system, request.responseFormat);
 		if (systemPrompt) {
 			body.system = systemPrompt;
 		}
+		if (request.topP !== undefined) body.top_p = request.topP;
+		if (request.topK !== undefined) body.top_k = request.topK;
+		if (request.stopSequences ?? request.stop) body.stop_sequences = request.stopSequences ?? (typeof request.stop === 'string' ? [request.stop] : request.stop);
 		if (request.tools && request.tools.length > 0) {
 			body.tools = request.tools.map((tool) => ({
 				name: tool.function.name,
@@ -149,14 +157,15 @@ export class AnthropicProvider extends BaseStreamingProvider {
 			}));
 			const choice = toolChoiceOf(request.toolChoice);
 			if (choice) {
-				body.tool_choice = choice;
+				body.tool_choice = { ...choice, ...(request.parallelToolCalls === false ? { disable_parallel_tool_use: true } : {}) };
 			}
 		}
 		return body;
 	}
 }
 
-function convertMessages(messages: WireMessage[]): { system?: string; messages: AnthropicMessage[] } {
+export function convertAnthropicMessages(input: LLMMessage[]): { system?: string; messages: AnthropicMessage[] } {
+	const messages = input as WireMessage[];
 	const system = messages.filter((m) => m.role === 'system').map((m) => m.content).join('\n\n') || undefined;
 	const converted: AnthropicMessage[] = [];
 	for (const message of messages) {

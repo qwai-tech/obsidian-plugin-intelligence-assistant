@@ -30,6 +30,8 @@ module.exports = {
   },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
+    'packages/obsidian-llm/src/**/*.ts',
+    '!packages/obsidian-llm/src/__tests__/**',
     '!src/**/*.d.ts',
     '!src/test-support/**'
   ],

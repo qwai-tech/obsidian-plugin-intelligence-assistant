@@ -3,6 +3,7 @@ import { t } from '@/i18n';
 import type { PluginHost } from '@/ui/plugin-host';
 import type { CLIToolConfig } from '@/features/tools';
 import { DEFAULT_CLI_TIMEOUT } from '@/features/tools';
+import { readableTextField } from '@/ui/utils/readable-text-field';
 
 export class CLIToolConfigModal extends Modal {
 	private readonly config: CLIToolConfig;
@@ -69,18 +70,11 @@ export class CLIToolConfigModal extends Modal {
 
 		new Setting(contentEl).setName(t('settings.tools.cli.modal.commandConfig')).setHeading();
 
-		new Setting(contentEl)
+		const commandInput = readableTextField(new Setting(contentEl)
 			.setName(t('settings.tools.cli.modal.command.name'))
-			.setDesc(t('settings.tools.cli.modal.command.desc'))
-			.addText(text => {
-				const commandPlaceholder = 'python';
-				text.setPlaceholder(commandPlaceholder)
-					.setValue(this.config.command ?? '')
-					.onChange(value => {
-						this.config.command = value;
-					});
-				text.inputEl.onblur = () => { void persist(); };
-			});
+			.setDesc(t('settings.tools.cli.modal.command.desc')),
+		this.config.command ?? '', value => { this.config.command = value; }, { placeholder: 'python' });
+		commandInput.onblur = () => { void persist(); };
 
 		new Setting(contentEl)
 			.setName(t('settings.tools.cli.modal.args.name'))
@@ -95,17 +89,11 @@ export class CLIToolConfigModal extends Modal {
 				text.inputEl.rows = 4;
 			});
 
-		new Setting(contentEl)
+		const cwdInput = readableTextField(new Setting(contentEl)
 			.setName(t('settings.tools.cli.modal.cwd.name'))
-			.setDesc(t('settings.tools.cli.modal.cwd.desc'))
-			.addText(text => {
-				text.setPlaceholder('/path/to/directory')
-					.setValue(this.config.cwd ?? '')
-					.onChange(value => {
-						this.config.cwd = value.trim() || undefined;
-					});
-				text.inputEl.onblur = () => { void persist(); };
-			});
+			.setDesc(t('settings.tools.cli.modal.cwd.desc')),
+		this.config.cwd ?? '', value => { this.config.cwd = value.trim() || undefined; }, { placeholder: '/path/to/directory' });
+		cwdInput.onblur = () => { void persist(); };
 
 		new Setting(contentEl)
 			.setName(t('settings.tools.cli.modal.timeout.name'))
@@ -124,7 +112,7 @@ export class CLIToolConfigModal extends Modal {
 			.setName(t('settings.tools.cli.modal.shell.name'))
 			.setDesc(t('settings.tools.cli.modal.shell.desc'))
 			.addToggle(toggle => toggle
-				.setValue(this.config.shell ?? true)
+				.setValue(this.config.shell ?? false)
 				.onChange(async (value) => {
 					this.config.shell = value;
 					await persist();

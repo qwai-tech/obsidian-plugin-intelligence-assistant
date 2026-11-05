@@ -102,7 +102,8 @@
       },
       "guidance": {
         "configureBaseUrl": "기본 URL 구성",
-        "addApiKey": "API 키 추가"
+        "addApiKey": "API 키 추가",
+        "provideServiceKey": "서비스 키 제공"
       },
       "models": {
         "none": "모델 없음",
@@ -1132,7 +1133,8 @@
       "writesProposal": "쓰기: 제안만 가능, 적용 필요",
       "writesNone": "쓰기: 사용할 수 없음",
       "rag": "RAG: {{state}}",
-      "web": "웹: {{state}}"
+      "web": "웹: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "쓰기 제안",
@@ -1275,7 +1277,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (로컬)",
         "openrouter": "OpenRouter",
-        "custom": "사용자 정의 (OpenAI 호환)"
+        "custom": "사용자 정의 (OpenAI 호환)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "모델 필터",
@@ -1301,7 +1304,8 @@
       "validation": {
         "selectProvider": "제공자 유형을 선택하세요",
         "invalidUrl": "기본 URL 형식이 잘못되었습니다. 유효한 URL을 입력하세요 (예: https://api.example.com)",
-        "baseUrlRequired": "OpenAI 호환 엔드포인트의 기본 URL을 입력하세요."
+        "baseUrlRequired": "OpenAI 호환 엔드포인트의 기본 URL을 입력하세요.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "캐시된 모델: {{count}}",
       "connectionErrors": {
@@ -1314,7 +1318,17 @@
       "noCachedModels": "캐시된 모델 없음",
       "testConnection": "연결 테스트",
       "testing": "테스트 중...",
-      "connectionSuccess_other": "연결에 성공했습니다. 모델 {{count}}개를 캐시했습니다."
+      "connectionSuccess_other": "연결에 성공했습니다. 모델 {{count}}개를 캐시했습니다.",
+      "resourceGroup": {
+        "name": "리소스 그룹",
+        "desc": "선택적 SAP AI Core 리소스 그룹",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "서비스 키",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP 검사기",
@@ -1612,7 +1626,8 @@
       "destructive": "파괴적인 볼트 작업",
       "notProvided": "기본 제공 도구에서 제공하지 않음",
       "customEnabled_other": "MCP, OpenAPI 또는 CLI 도구 {{count}}개 활성화됨",
-      "referencesPlusContext_other": "명시적 참조 {{count}}개와 활성 컨텍스트"
+      "referencesPlusContext_other": "명시적 참조 {{count}}개와 활성 컨텍스트",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_other": "{{agent}}은(는) 도구 {{count}}개를 사용할 수 있습니다."
   },
@@ -1630,5 +1645,47 @@
       "cleared": "인덱스가 지워졌습니다.",
       "starting_other": "노트 {{count}}개 인덱싱 중…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

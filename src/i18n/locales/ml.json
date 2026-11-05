@@ -105,7 +105,8 @@
       },
       "guidance": {
         "configureBaseUrl": "ബേസ് URL കോൺഫിഗർ ചെയ്യുക",
-        "addApiKey": "API കീ ചേർക്കുക"
+        "addApiKey": "API കീ ചേർക്കുക",
+        "provideServiceKey": "സേവന കീ നൽകുക"
       },
       "models": {
         "none": "മോഡലുകളൊന്നുമില്ല",
@@ -1153,7 +1154,8 @@
       "writesProposal": "എഴുത്ത്: നിർദ്ദേശം മാത്രം; പ്രയോഗിക്കുക ആവശ്യമാണ്",
       "writesNone": "എഴുത്ത്: ലഭ്യമല്ല",
       "rag": "RAG: {{state}}",
-      "web": "വെബ്: {{state}}"
+      "web": "വെബ്: {{state}}",
+      "writesAutonomous": "Writes: automatically applied under this agent’s explicit setting."
     },
     "proposals": {
       "title": "എഴുത്ത് നിർദ്ദേശങ്ങൾ",
@@ -1298,7 +1300,8 @@
         "deepseek": "DeepSeek",
         "ollama": "Ollama (ലോക്കൽ)",
         "openrouter": "OpenRouter",
-        "custom": "ഇഷ്ടാനുസൃതം (OpenAPI അനുയോജ്യം)"
+        "custom": "ഇഷ്ടാനുസൃതം (OpenAPI അനുയോജ്യം)",
+        "sapAiCore": "SAP AI Core"
       },
       "modelFilter": {
         "name": "മോഡൽ ഫിൽറ്റർ",
@@ -1324,7 +1327,8 @@
       "validation": {
         "selectProvider": "ദയവായി ഒരു ദാതാവ് തരം തിരഞ്ഞെടുക്കുക",
         "invalidUrl": "അസാധുവായ ബേസ് URL ഫോർമാറ്റ്. ദയവായി സാധുവായ ഒരു URL നൽകുക (ഉദാ., https://api.example.com)",
-        "baseUrlRequired": "OpenAI-അനുയോജ്യമായ എൻഡ്‌പോയിന്റിന്റെ അടിസ്ഥാന URL നൽകുക."
+        "baseUrlRequired": "OpenAI-അനുയോജ്യമായ എൻഡ്‌പോയിന്റിന്റെ അടിസ്ഥാന URL നൽകുക.",
+        "invalidServiceKey": "Select a valid SAP Service Key JSON with clientid, clientsecret, OAuth URL and an AI API URL."
       },
       "cachedModels": "കാഷെ ചെയ്ത മോഡലുകൾ: {{count}}",
       "connectionErrors": {
@@ -1338,7 +1342,17 @@
       "testConnection": "കണക്ഷൻ പരിശോധിക്കുക",
       "testing": "പരിശോധിക്കുന്നു...",
       "connectionSuccess_one": "കണക്ഷൻ വിജയിച്ചു. {{count}} മോഡൽ കാഷെ ചെയ്തു.",
-      "connectionSuccess_other": "കണക്ഷൻ വിജയിച്ചു. {{count}} മോഡലുകൾ കാഷെ ചെയ്തു."
+      "connectionSuccess_other": "കണക്ഷൻ വിജയിച്ചു. {{count}} മോഡലുകൾ കാഷെ ചെയ്തു.",
+      "resourceGroup": {
+        "name": "റിസോഴ്സ് ഗ്രൂപ്പ്",
+        "desc": "ഓപ്ഷണൽ SAP AI Core റിസോഴ്സ് ഗ്രൂപ്പ്",
+        "placeholder": "default"
+      },
+      "serviceKey": {
+        "name": "സേവന കീ",
+        "desc": "Select a Keychain secret containing the complete SAP AI Core Service Key JSON."
+      },
+      "sapBaseUrlDesc": "Optional AI API URL override. Defaults to serviceurls.AI_API_URL in the Service Key."
     },
     "mcpInspector": {
       "title": "MCP ഇൻസ്പെക്ടർ",
@@ -1640,7 +1654,8 @@
       "customEnabled_one": "{{count}} MCP, OpenAPI അല്ലെങ്കിൽ CLI ഉപകരണം പ്രവർത്തനക്ഷമം",
       "customEnabled_other": "{{count}} MCP, OpenAPI അല്ലെങ്കിൽ CLI ഉപകരണങ്ങൾ പ്രവർത്തനക്ഷമം",
       "referencesPlusContext_one": "{{count}} വ്യക്തമായ റഫറൻസും സജീവ സന്ദർഭവും",
-      "referencesPlusContext_other": "{{count}} വ്യക്തമായ റഫറൻസുകളും സജീവ സന്ദർഭവും"
+      "referencesPlusContext_other": "{{count}} വ്യക്തമായ റഫറൻസുകളും സജീവ സന്ദർഭവും",
+      "autonomousWrites": "Automatic writes enabled for this agent"
     },
     "subtitle_one": "{{agent}}-ന് {{count}} ഉപകരണം ഉപയോഗിക്കാം.",
     "subtitle_other": "{{agent}}-ന് {{count}} ഉപകരണങ്ങൾ ഉപയോഗിക്കാം."
@@ -1660,5 +1675,47 @@
       "starting_one": "{{count}} നോട്ട് ഇൻഡക്സ് ചെയ്യുന്നു…",
       "starting_other": "{{count}} നോട്ടുകൾ ഇൻഡക്സ് ചെയ്യുന്നു…"
     }
+  },
+  "ux": {
+    "original": "Original selection",
+    "proposed": "Proposed replacement",
+    "replaceSelection": "Replace selected text",
+    "emptyReply": "No reply was generated. Check the conversation for details.",
+    "noteChanged": "The note changed while the result was being reviewed. Nothing was replaced; run the action again on the current text.",
+    "stopped": "Stopped",
+    "generating": "Generating…",
+    "cliRisk": "These presets can run shell commands and access files with your account permissions. Review commands and arguments before enabling a tool. Added presets remain disabled.",
+    "startTask": "Start agent task",
+    "invalidAutorun": "Invalid autorun option. Use autorun: true or autorun: false. No request was sent.",
+    "noPrompt": "No prompt was provided. Edit the ai block in the note, then run it again.",
+    "modelId": "Model ID",
+    "unavailableModel": "Unavailable: {{model}}",
+    "configureTools": "Configure tools and agents",
+    "deleteProvider": "Remove provider",
+    "deleteAgent": "Delete agent",
+    "deletePrompt": "Delete system prompt",
+    "deleteQuickAction": "Delete quick action",
+    "deleteMcpServer": "Delete MCP server",
+    "deleteCliTool": "Delete CLI tool",
+    "deleteHttpSource": "Delete HTTP source",
+    "deleteConversation": "Delete conversation",
+    "applyProposal": "Apply write proposal",
+    "similarityOnly": "Results are ranked by similarity to your query.",
+    "unavailableConnection": "Unavailable connection",
+    "newAgent": "New agent",
+    "newQuickAction": "New quick action",
+    "connectionName": "Connection name",
+    "newCliTool": "New CLI tool",
+    "newHttpSource": "New HTTP source",
+    "notificationsTitle": "Recent notifications",
+    "notificationsDesc": "Up to 50 recent messages from this session. Reloading the plugin clears this list.",
+    "notificationsEmpty": "No notifications in this session.",
+    "viewNotifications": "View notifications",
+    "dismissNotifications": "Dismiss visible notifications",
+    "modelsRefreshPartial": "Connection refresh: {{success}} succeeded; {{failed}} failed. Review the details below.",
+    "sourceDisabled": "Source disabled. Enable it before loading tools.",
+    "loadingSource": "Loading tools…",
+    "sourceLoadFailed": "Could not load {{name}}: {{reason}}",
+    "ragEnableFirst": "Enable RAG before rebuilding or refreshing the index."
   }
 }

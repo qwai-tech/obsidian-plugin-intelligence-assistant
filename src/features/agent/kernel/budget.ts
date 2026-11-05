@@ -47,6 +47,9 @@ export class Budget {
 		this.lastFailure = { tool, streak: this.lastFailure?.tool === tool ? this.lastFailure.streak + 1 : 1 };
 	}
 
+	/** Rejected proposals cost a step, but are not executed-tool failures. */
+	recordPreflightRejection(): void { this.steps++; }
+
 	exhausted(): FinishReason | null {
 		if (this.failures >= this.options.maxFailures && this.lastFailure) {
 			return {
