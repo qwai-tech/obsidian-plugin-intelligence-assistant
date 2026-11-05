@@ -7,7 +7,7 @@ describe('Budget', () => {
 		expect(budget().stepLimit).toBe(25);
 	});
 
-	it('takes the first-turn estimate plus slack, clamped between the floor and the ceiling', () => {
+	it('lets estimates raise the budget without reducing the configured allowance', () => {
 		const small = budget();
 		const medium = budget();
 		const huge = budget();
@@ -16,8 +16,8 @@ describe('Budget', () => {
 		medium.estimate('plan\n<!-- ESTIMATED_STEPS: 12 -->');
 		huge.estimate('<!-- ESTIMATED_STEPS: 400 -->');
 
-		expect(small.stepLimit).toBe(10);
-		expect(medium.stepLimit).toBe(15);
+		expect(small.stepLimit).toBe(25);
+		expect(medium.stepLimit).toBe(25);
 		expect(huge.stepLimit).toBe(50);
 	});
 
@@ -34,7 +34,7 @@ describe('Budget', () => {
 
 		b.estimate('<!-- ESTIMATED_STEPS: 40 -->');
 
-		expect(b.stepLimit).toBe(15);
+		expect(b.stepLimit).toBe(25);
 	});
 
 	it('is exhausted once the tool steps reach the limit', () => {

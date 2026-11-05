@@ -30,7 +30,9 @@ export class Budget {
 		if (!this.estimated && match) {
 			const steps = parseInt(match[1], 10);
 			if (steps > 0) {
-				this.limit = Math.max(MIN_ESTIMATED_STEPS, Math.min(steps + ESTIMATE_SLACK, this.options.ceiling));
+				// An optimistic model estimate must not revoke the host's configured
+				// allowance before real execution/verification has used it.
+				this.limit = Math.max(this.limit, MIN_ESTIMATED_STEPS, Math.min(steps + ESTIMATE_SLACK, this.options.ceiling));
 			}
 		}
 		this.estimated = true;
