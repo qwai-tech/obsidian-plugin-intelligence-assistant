@@ -7,7 +7,7 @@ describe('M6 max-steps-budget', () => {
   afterEach(async () => { await stopMockLLM(); });
   it('halts gracefully when the step budget is exhausted', async () => {
     for (let i = 0; i < 5; i++) await mockLLM.toolCall('read_file', { path: 'loop.md' });
-    await mockLLM.replyWith('done');
+    await mockLLM.completeWith('done');
     const app = createHarnessApp({ 'loop.md': 'content' });
     const outcome = await runAgentMission({ app, userMessage: 'Keep reading loop.md.', maxSteps: 2 });
     expect(outcome.error).toBeUndefined();

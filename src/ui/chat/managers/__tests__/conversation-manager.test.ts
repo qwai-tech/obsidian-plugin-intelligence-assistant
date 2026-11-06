@@ -72,6 +72,8 @@ describe('ConversationManager', () => {
 			settings: {
 				conversations: [], // Will be empty after migration
 				activeConversationId: null,
+				agents: [],
+				systemPrompts: [],
 				conversationTitleMode: 'first-message',
 				conversationIconEnabled: false,
 				titleSummaryModel: null,
@@ -540,7 +542,7 @@ describe('ConversationManager', () => {
 			await manager.deleteConversation('1');
 			await manager.renameConversation('1');
 
-			expect(showConfirm).toHaveBeenLastCalledWith(mockApp, '删除对话“计划”?');
+			expect(showConfirm).toHaveBeenLastCalledWith(mockApp, '删除对话“计划”?', { confirmText: '删除', title: '删除对话' });
 			expect(showPrompt).toHaveBeenLastCalledWith(mockApp, '新标题', '计划');
 			initI18n('en');
 		});

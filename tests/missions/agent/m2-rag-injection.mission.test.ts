@@ -6,7 +6,7 @@ describe('M2 rag-injection', () => {
   beforeEach(async () => { await startMockLLM(); });
   afterEach(async () => { await stopMockLLM(); });
   it('feeds retrieved RAG context into the agent LLM request', async () => {
-    await mockLLM.replyWith('Based on the knowledge base, the answer is 42.');
+    await mockLLM.completeWith('Based on the knowledge base, the answer is 42.');
     const app = createHarnessApp({});
     const outcome = await runAgentMission({
       app, userMessage: 'What is the answer according to my notes?',

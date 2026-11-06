@@ -8,7 +8,7 @@ describe('M8 stop-mid-task', () => {
   it('aborts cleanly after the first tool call and skips the rest', async () => {
     await mockLLM.toolCall('write_file', { path: 'first.md', content: 'one' });
     await mockLLM.toolCall('write_file', { path: 'second.md', content: 'two' });
-    await mockLLM.replyWith('done');
+    await mockLLM.completeWith('done');
     const app = createHarnessApp({});
     const outcome = await runAgentMission({ app, userMessage: 'Write first then second.', autonomousWrite: true, abortAfterToolCalls: 1 });
     expect(outcome.error).toBeUndefined();

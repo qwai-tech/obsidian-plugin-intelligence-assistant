@@ -22,7 +22,7 @@ describe('withResilience', () => {
 	it('retries a retryable status and returns the eventual success', async () => {
 		const port = fakePort([async () => response(503), async () => response(200)]);
 
-		const result = await withResilience(port, { retries: 2, ...noDelay }).request({ url: 'https://x' });
+		const result = await withResilience(port, { retries: 2, ...noDelay }).request({ url: 'https://x', method: 'GET' });
 
 		expect(result.status).toBe(200);
 		expect(port.calls).toBe(2);
@@ -31,7 +31,7 @@ describe('withResilience', () => {
 	it('retries a network failure', async () => {
 		const port = fakePort([async () => { throw new StreamTransportUnavailableError('reset'); }, async () => response(200)]);
 
-		const result = await withResilience(port, { retries: 1, ...noDelay }).request({ url: 'https://x' });
+		const result = await withResilience(port, { retries: 1, ...noDelay }).request({ url: 'https://x', method: 'GET' });
 
 		expect(result.ok).toBe(true);
 	});
@@ -39,7 +39,7 @@ describe('withResilience', () => {
 	it('does not retry a client error', async () => {
 		const port = fakePort([async () => response(400)]);
 
-		const result = await withResilience(port, { retries: 3, ...noDelay }).request({ url: 'https://x' });
+		const result = await withResilience(port, { retries: 3, ...noDelay }).request({ url: 'https://x', method: 'GET' });
 
 		expect(result.status).toBe(400);
 		expect(port.calls).toBe(1);
@@ -48,7 +48,7 @@ describe('withResilience', () => {
 	it('gives up after the configured retries and returns the last response', async () => {
 		const port = fakePort([async () => response(429)]);
 
-		const result = await withResilience(port, { retries: 2, ...noDelay }).request({ url: 'https://x' });
+		const result = await withResilience(port, { retries: 2, ...noDelay }).request({ url: 'https://x', method: 'GET' });
 
 		expect(result.status).toBe(429);
 		expect(port.calls).toBe(3);
@@ -57,7 +57,7 @@ describe('withResilience', () => {
 	it('rejects with a timeout when the request takes too long', async () => {
 		const port = fakePort([() => new Promise<HttpResponse>(() => undefined)]);
 
-		await expect(withResilience(port, { timeoutMs: 10, retries: 0 }).request({ url: 'https://x' }))
+		await expect(withResilience(port, { timeoutMs: 10, retries: 0 }).request({ url: 'https://x', method: 'GET' }))
 			.rejects.toThrow('timed out after 10 ms');
 	});
 

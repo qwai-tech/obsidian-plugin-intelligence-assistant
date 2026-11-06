@@ -44,15 +44,17 @@ describe('buildAiWidget', () => {
 		expect(onRun).toHaveBeenCalledWith('Go', handle);
 	});
 
-	it('auto-runs once when autorun is set', () => {
+	it('requires a Run click even for legacy autorun metadata', () => {
 		const el = document.createElement('div');
 		const onRun = jest.fn();
-		buildAiWidget(el, { prompt: 'Auto', autorun: true }, onRun);
+		const handle = buildAiWidget(el, { prompt: 'Auto', autorun: true }, onRun);
+		expect(onRun).not.toHaveBeenCalled();
+		handle.runButton.click();
 		expect(onRun).toHaveBeenCalledTimes(1);
 		expect(onRun).toHaveBeenCalledWith('Auto', expect.objectContaining({ runButton: expect.any(HTMLButtonElement) }));
 	});
 
-	it('auto-runs with the widget handle so the run can show its progress while the block renders', () => {
+	it('passes the widget handle after an explicit Run click so progress can be displayed', () => {
 		const el = document.createElement('div');
 		const states: boolean[] = [];
 
@@ -61,6 +63,8 @@ describe('buildAiWidget', () => {
 			states.push(widget.runButton.disabled);
 		});
 
+		expect(states).toEqual([]);
+		handle.runButton.click();
 		expect(states).toEqual([true]);
 		expect(handle.runButton.disabled).toBe(true);
 	});

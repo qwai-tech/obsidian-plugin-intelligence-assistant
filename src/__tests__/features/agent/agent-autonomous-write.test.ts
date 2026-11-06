@@ -1,6 +1,7 @@
+import { bindAgentRegistry, finalAgentReply } from '@/test-support/agent-fixtures';
 /**
- * Autonomous write: when granted (per-agent toggle OR a per-task intent in the
- * user's message), the agent applies its write proposals to the vault directly
+ * Autonomous write requires the per-Agent setting and an approved host action.
+ * Prompt text is not authorization. An authorized run applies its proposals
  * instead of leaving Apply-gated cards. Without a grant, proposals are NOT applied.
  */
 import { AgentEngineLoop } from '@/features/agent/agent-engine-loop';
@@ -29,14 +30,14 @@ const registry = () => ({
 const provider = () => ({
 	streamChat: jest.fn()
 		.mockImplementationOnce(async (_r: any, onChunk: any) => { onChunk({ toolCalls: [{ id: 'c1', function: { name: 'create_note', arguments: JSON.stringify({ title: 'Plan', content: '# Plan' }) } }] }); })
-		.mockImplementationOnce(async (_r: any, onChunk: any) => { onChunk({ content: 'Created.' }); }),
+		.mockImplementation(finalAgentReply('Created.')),
 });
 
 const sense = () => ({ sense: jest.fn(async () => ({ userQuery: '', activeFilePath: null, references: [], sections: [], ragSources: [], memory: null })), formatSenseContext: jest.fn(() => 'ctx') });
 
 const makeLoop = (app: any, reg: any, prov: any) => new AgentEngineLoop({
 	app,
-	toolRegistry: reg,
+	toolRegistry: bindAgentRegistry(reg),
 	senseService: sense() as any,
 	historyCompactor: new HistoryCompactor(),
 	webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -47,7 +48,7 @@ const agent = (extra: Record<string, unknown> = {}) => ([{ id: 'a1', maxSteps: 5
 const cb = (over: Record<string, unknown> = {}) => ({ onChunk: jest.fn(), onToolCall: jest.fn(), onToolResult: jest.fn(), onThought: jest.fn(), onComplete: jest.fn(), onError: (e: Error) => { throw e; }, ...over });
 
 describe('Autonomous write', () => {
-	it('per-task intent ("自主完成 / 不需要确认") applies the proposal to the vault', async () => {
+	it('prompt intent alone does not authorize automatic vault writes', async () => {
 		const app = makeApp();
 		const onToolResult = jest.fn();
 		await makeLoop(app, registry(), provider()).execute(
@@ -55,8 +56,8 @@ describe('Autonomous write', () => {
 			{ model: 'gpt-4o', mode: 'agent', agentId: 'a1', agents: agent() },
 			cb({ onToolResult }),
 		);
-		expect(app.vault.create).toHaveBeenCalledWith('TOEFL/Plan.md', '# Plan');
-		expect(onToolResult.mock.calls.some((c: any[]) => String(c[2]).includes('applied'))).toBe(true);
+		expect(app.vault.create).not.toHaveBeenCalled();
+		expect(onToolResult.mock.calls.some((c: any[]) => String(c[2]).includes('write_proposal'))).toBe(true);
 	});
 
 	it('per-agent autonomousWrite toggle applies the proposal', async () => {
@@ -76,6 +77,16 @@ describe('Autonomous write', () => {
 			{ model: 'gpt-4o', mode: 'agent', agentId: 'a1', agents: agent() },
 			cb(),
 		);
+		expect(app.vault.create).not.toHaveBeenCalled();
+	});
+
+	it('an unapproved host task cannot use the Agent toggle to apply a write', () => {
+		const app = makeApp();
+		expect(() => makeLoop(app, registry(), provider()).execute(
+			[{ role: 'user', content: 'create a note without confirmation' }],
+			{ model: 'gpt-4o', mode: 'agent', agentId: 'a1', agents: agent({ autonomousWrite: true }), authorization: { origin: 'deep-link', approved: false } },
+			cb(),
+		)).toThrow('not been approved in the host');
 		expect(app.vault.create).not.toHaveBeenCalled();
 	});
 });

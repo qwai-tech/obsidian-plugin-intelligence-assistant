@@ -16,7 +16,7 @@ describe('empty-turn recovery (truncated tool call)', () => {
 	it('retries past an empty model turn instead of silently completing', async () => {
 		await mockLLM.replyWith('');                          // empty turn (simulated truncation)
 		await mockLLM.toolCall('read_file', { path: 'a.md' }); // recovery turn
-		await mockLLM.replyWith('Recovered: SENTINEL_OK.');    // final
+		await mockLLM.completeWith('Recovered: SENTINEL_OK.');    // final
 		const app = createHarnessApp({ 'a.md': 'x' });
 
 		const outcome = await runAgentMission({ app, userMessage: 'read a.md' });
@@ -38,8 +38,8 @@ describe('empty-turn recovery (truncated tool call)', () => {
 
 		const outcome = await runAgentMission({ app, userMessage: 'do something large' });
 
-		expect(outcome.error).toBeUndefined();
-		// Not a silent empty completion — the final message explains what happened.
-		expect((outcome.finalMessage?.content ?? '').toLowerCase()).toMatch(/empty|truncat|max tokens/);
+		expect(outcome.error?.message).toMatch(/stopped without confirming|incomplete/i);
+		expect(outcome.finalMessage).toBeUndefined();
+		expect(outcome.toolCalls).toEqual([]);
 	});
 });

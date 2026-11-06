@@ -81,7 +81,7 @@ describe('McpToolSource', () => {
 		const tools = await source.load();
 		const result = await tools[0].execute({ query: 'hello' });
 
-		expect(client.callTool).toHaveBeenCalledWith('search_docs', { query: 'hello' });
+		expect(client.callTool).toHaveBeenCalledWith('search_docs', { query: 'hello' }, undefined);
 		expect(result.success).toBe(true);
 	});
 

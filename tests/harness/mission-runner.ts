@@ -56,7 +56,7 @@ export interface MissionOutcome {
    * Number of LLM turns (agent iterations) — the count of streaming chat
    * completion requests the agent actually made to the model. This is the
    * efficiency signal the budget oracle (assertWithinBudget) reasons about.
-   * A one-tool trajectory = 2 turns (tool turn + final turn).
+   * A completed one-tool trajectory = 3 turns (tool + candidate + factual review).
    */
   steps: number;
   /** Number of tool invocations the agent made (distinct from agent turns). */

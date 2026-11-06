@@ -8,7 +8,19 @@ export function mockLLMPort(): number {
   return server.port();
 }
 
-export const mockLLM = createMockLLMClient(mockLLMPort);
+const client = createMockLLMClient(mockLLMPort);
+export const mockLLM = {
+  ...client,
+  /** A scripted final answer followed by the production guard's factual review. */
+  async completeWith(text: string): Promise<void> {
+    const answer = `${text}\n<!-- AGENT_STATUS: complete -->`;
+    await client.replyWith(answer);
+    await client.replyWith(answer);
+  },
+  async blockedWith(text: string): Promise<void> {
+    await client.replyWith(`${text}\n<!-- AGENT_STATUS: blocked -->`);
+  },
+};
 
 export async function startMockLLM(): Promise<void> {
   server = createMockLLMServer({ port: 0 });

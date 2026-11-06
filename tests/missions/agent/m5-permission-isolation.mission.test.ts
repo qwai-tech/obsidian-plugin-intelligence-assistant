@@ -7,7 +7,7 @@ describe('M5 permission-isolation', () => {
   afterEach(async () => { await stopMockLLM(); });
   it('denies a tool outside the agent allowlist and never executes the real tool', async () => {
     await mockLLM.toolCall('write_file', { path: 'forbidden.md', content: 'X' });
-    await mockLLM.replyWith('I am not allowed to write.');
+    await mockLLM.completeWith('I am not allowed to write.');
     const app = createHarnessApp({ 'readable.md': 'ok' });
     const outcome = await runAgentMission({
       app, userMessage: 'Write forbidden.md.', autonomousWrite: true,

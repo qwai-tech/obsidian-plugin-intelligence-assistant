@@ -4,6 +4,9 @@ const makeAdapter = () => {
 	const files = new Map<string, string>();
 	return {
 		files,
+		stat: jest.fn(async () => ({ mtime: 1000 })),
+		list: jest.fn(async () => ({ files: [...files.keys()], folders: [] })),
+		remove: jest.fn(async (path: string) => { files.delete(path); }),
 		exists: jest.fn(async (path: string) => files.has(path) || path === 'runs'),
 		mkdir: jest.fn(async () => undefined),
 		append: jest.fn(async (path: string, data: string) => {

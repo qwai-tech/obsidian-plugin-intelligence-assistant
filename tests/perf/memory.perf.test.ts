@@ -9,7 +9,7 @@ const GROWTH_LIMIT = 1.5;
 async function oneMission(): Promise<void> {
   await mockLLM.clearAll();
   await mockLLM.toolCall('read_file', { path: 'a.md' });
-  await mockLLM.replyWith('done');
+  await mockLLM.completeWith('done');
   const outcome = await runAgentMission({ app: createHarnessApp({ 'a.md': 'x' }), userMessage: 'read a' });
   if (outcome.error) throw outcome.error;
 }

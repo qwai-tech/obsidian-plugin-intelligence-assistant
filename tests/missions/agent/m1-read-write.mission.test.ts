@@ -14,14 +14,14 @@ const M1: MissionDefinition = {
     { type: 'final', text: 'Wrote summary.md.' },
   ],
   expect: { toolSequence: ['read_file', 'write_file'], vaultFiles: [{ path: 'summary.md', contains: 'SOURCE_FACT' }] },
-  budget: { steps: 3 },
+  budget: { steps: 4 },
 };
 
 describe(M1.name, () => {
   beforeEach(async () => { await startMockLLM(); });
   afterEach(async () => { await stopMockLLM(); });
   it('reads the source and autonomously writes a derived summary', async () => {
-    for (const t of M1.trajectory) { if (t.type === 'tool') await mockLLM.toolCall(t.name, t.args); else await mockLLM.replyWith(t.text); }
+    for (const t of M1.trajectory) { if (t.type === 'tool') await mockLLM.toolCall(t.name, t.args); else await mockLLM.completeWith(t.text); }
     const app = createHarnessApp(M1.seed);
     const outcome = await runAgentMission({ app, userMessage: M1.userMessage, autonomousWrite: true });
     expect(outcome.error).toBeUndefined();

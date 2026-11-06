@@ -147,6 +147,7 @@ describe('ChatController (upgraded message pipeline)', () => {
 			}),
 			expect.any(String),
 			expect.any(Number),
+			false,
 		);
 	});
 
@@ -174,6 +175,7 @@ describe('ChatController (upgraded message pipeline)', () => {
 			expect.objectContaining({ content: 'Create research brief: synthesis' }),
 			'internal agent instructions',
 			expect.any(Number),
+			true,
 		);
 	});
 
@@ -272,6 +274,7 @@ describe('ChatController (upgraded message pipeline)', () => {
 			expect.objectContaining({ content: 'summarize the attached note' }),
 			'summarize the attached note',
 			expect.any(Number),
+			true,
 		);
 	});
 

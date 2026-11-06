@@ -15,7 +15,7 @@ describe('timing metrics (non-blocking record)', () => {
   it('records wall-clock for a representative mission', async () => {
     await mockLLM.toolCall('read_file', { path: 'a.md' });
     await mockLLM.toolCall('write_file', { path: 'b.md', content: 'y' });
-    await mockLLM.replyWith('done');
+    await mockLLM.completeWith('done');
 
     const t0 = process.hrtime.bigint();
     const outcome = await runAgentMission({

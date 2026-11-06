@@ -1,3 +1,4 @@
+import { bindAgentRegistry, finalAgentReply } from '@/test-support/agent-fixtures';
 /**
  * Agent self-estimated step budget: the agent declares `<!-- ESTIMATED_STEPS: N -->`
  * on its first turn, which sets the working budget (clamped to [floor, ceiling]).
@@ -19,7 +20,7 @@ const agentWith = (maxSteps: number) => ([{ id: 'a1', maxSteps, contextWindow: 2
 const baseCallbacks = () => ({ onChunk: jest.fn(), onToolCall: jest.fn(), onToolResult: jest.fn(), onThought: jest.fn() });
 
 const makeLoop = (provider: any, registry: any) => new AgentEngineLoop({
-	toolRegistry: registry,
+	toolRegistry: bindAgentRegistry(registry),
 	senseService: senseStub() as any,
 	historyCompactor: new HistoryCompactor(),
 	webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -53,9 +54,7 @@ describe('Agent self-estimated step budget', () => {
 
 	it('strips the ESTIMATED_STEPS marker from the final answer (invisible HTML comment)', async () => {
 		const provider = {
-			streamChat: jest.fn(async (_r: any, onChunk: any) => {
-				onChunk({ content: 'Done.\n<!-- ESTIMATED_STEPS: 5 -->' });
-			}),
+			streamChat: jest.fn().mockImplementationOnce(finalAgentReply('Done.\n<!-- ESTIMATED_STEPS: 5 -->')).mockImplementation(finalAgentReply('Done.')),
 		};
 		const registry = { ...oneTool(), executeTool: jest.fn() };
 		const completed: Message[] = [];

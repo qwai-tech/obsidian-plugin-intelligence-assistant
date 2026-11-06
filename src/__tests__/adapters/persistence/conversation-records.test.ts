@@ -11,13 +11,13 @@ const conversation = (overrides: Partial<Conversation> = {}): Conversation => ({
 });
 
 describe('conversation records', () => {
-	it('fills defaults and drops unknown config fields when normalizing', () => {
+	it('fills defaults and retains supported sampling fields when normalizing', () => {
 		const normalized = normalizeConversation({ id: 'c', title: '', messages: undefined as never, createdAt: 1, updatedAt: 2, config: { promptId: '', agentId: null, temperature: 0.4, topP: 1 } });
 
 		expect(normalized.title).toBe('Untitled Conversation');
 		expect(normalized.messages).toEqual([]);
 		expect(normalized.mode).toBe('chat');
-		expect(normalized.config).toEqual({ modelId: undefined, promptId: undefined, agentId: null, temperature: 0.4, maxTokens: undefined, ragEnabled: undefined, webSearchEnabled: undefined });
+		expect(normalized.config).toEqual({ modelId: undefined, promptId: undefined, agentId: null, temperature: 0.4, topP: 1, frequencyPenalty: undefined, presencePenalty: undefined, maxTokens: undefined, ragEnabled: undefined, webSearchEnabled: undefined });
 	});
 
 	it('builds metadata with the last assistant model when no model is configured', () => {

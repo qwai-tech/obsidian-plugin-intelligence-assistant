@@ -16,7 +16,7 @@ const PM2: MissionDefinition = {
     toolSequence: ['write_file'],
     vaultFiles: [{ path: 'summary.md', contains: 'DONE_SENTINEL' }],
   },
-  budget: { steps: 2 },
+  budget: { steps: 3 },
 };
 
 describe(PM2.name, () => {
@@ -26,7 +26,7 @@ describe(PM2.name, () => {
   it('auto-applies the write and the real vault reflects it', async () => {
     for (const turn of PM2.trajectory) {
       if (turn.type === 'tool') await mockLLM.toolCall(turn.name, turn.args);
-      else await mockLLM.replyWith(turn.text);
+      else await mockLLM.completeWith(turn.text);
     }
 
     const app = createHarnessApp(PM2.seed);

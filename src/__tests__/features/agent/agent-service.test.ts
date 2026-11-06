@@ -3,7 +3,7 @@ import { userConfigToPluginSettings } from '@/features/settings/settings-codec';
 import { migrateSettings } from '@/features/settings/settings-migrations';
 import { BUILTIN_AGENT_PRESETS } from '@/features/agent/presets/builtin-agents';
 import { BUILTIN_PROMPT_PRESETS } from '@/features/agent/presets/builtin-prompts';
-import { DEFAULT_AGENT_ID, DEFAULT_MODEL_CONFIG } from '@/core/constants';
+import { DEFAULT_AGENT_ID } from '@/core/constants';
 import type { PluginSettings } from '@/features/settings';
 
 const freshSettings = (): PluginSettings => {
@@ -32,7 +32,7 @@ describe('ensureDefaultAgent', () => {
 		expect(settings.activeAgentId).toBe(DEFAULT_AGENT_ID);
 		expect(BUILTIN_AGENT_PRESETS.every(preset => settings.agents.some(a => a.id === preset.id))).toBe(true);
 		expect(BUILTIN_PROMPT_PRESETS.every(preset => settings.systemPrompts.some(p => p.id === preset.id))).toBe(true);
-		expect(settings.defaultChatMode).toBe('agent');
+		expect(settings.defaultChatMode).toBe('chat');
 	});
 
 	it('changes nothing when everything is already set up', () => {
@@ -59,7 +59,7 @@ describe('ensureDefaultAgent', () => {
 		expect(defaultAgentOf(settings).toolAccess.sources['builtin:builtin']).toBe('all');
 	});
 
-	it('repairs the old token limit and a system prompt that no longer exists', () => {
+	it('preserves the saved token budget while repairing a missing system prompt', () => {
 		const settings = freshSettings();
 		ensureDefaultAgent(settings);
 		const agent = defaultAgentOf(settings);
@@ -68,7 +68,7 @@ describe('ensureDefaultAgent', () => {
 
 		ensureDefaultAgent(settings);
 
-		expect(agent.maxTokens).toBe(DEFAULT_MODEL_CONFIG.MAX_TOKENS);
+		expect(agent.maxTokens).toBe(2000);
 		expect(settings.systemPrompts.some(prompt => prompt.id === agent.systemPromptId)).toBe(true);
 	});
 

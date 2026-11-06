@@ -12,7 +12,7 @@ const portStreaming = (events: unknown[]) => {
 			requests.push(req);
 			const body = new ReadableStream<Uint8Array>({
 				start(controller) {
-					controller.enqueue(encoder.encode(events.map((e) => `data: ${JSON.stringify(e)}\n`).join('')));
+					controller.enqueue(encoder.encode(events.map((e) => `data: ${JSON.stringify(e)}\n\n`).join('')));
 					controller.close();
 				},
 			});
@@ -32,7 +32,7 @@ const searchTool = {
 };
 
 const run = async (request: Partial<ChatRequest>, events: unknown[] = []) => {
-	const { port, requests } = portStreaming(events);
+	const { port, requests } = portStreaming([...events, { candidates: [{ finishReason: 'STOP' }] }]);
 	const chunks: StreamChunk[] = [];
 	await new GoogleProvider({ provider: 'google', apiKey: 'k' }, port).streamChat({ model: 'gemini-x', messages: [], ...request } as ChatRequest, (c) => chunks.push(c));
 	return { body: JSON.parse(requests[0].body ?? '{}') as Record<string, unknown>, chunks };

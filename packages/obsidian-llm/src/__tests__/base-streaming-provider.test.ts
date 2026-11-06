@@ -76,7 +76,7 @@ function createMockStream(lines: string[]): ReadableStream<Uint8Array> {
 	return new ReadableStream({
 		pull(controller) {
 			if (index < lines.length) {
-				controller.enqueue(encoder.encode(lines[index] + '\n'));
+				controller.enqueue(encoder.encode(lines[index] + '\n\n'));
 				index++;
 			} else {
 				controller.close();
@@ -110,39 +110,27 @@ describe('BaseStreamingProvider', () => {
 	describe('streamChat — requestUrl fallback for non-CORS gateways', () => {
 		const request: ChatRequest = { model: 'test:m', messages: [{ role: 'user', content: 'hi' }] };
 
-		it('falls back to non-streaming requestUrl on a fetch TypeError and emits content + tool_calls + usage', async () => {
+		it('buffers the same SSE endpoint after CORS refusal, preserving calls, usage and stream mode', async () => {
 			(global.fetch as jest.Mock).mockRejectedValue(new TypeError('Failed to fetch'));
-			(requestUrl as jest.Mock).mockResolvedValueOnce({
-				status: 200,
-				json: {
-					choices: [{
-						message: {
-							content: 'done',
-							tool_calls: [{ id: 'c1', type: 'function', function: { name: 'read_file', arguments: '{"path":"a.md"}' } }],
-						},
-					}],
-					usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
-				},
-			});
-
+			provider.mockStreamBody = { stream: true };
+			provider.setParseChunkImplementation(data => data);
+			const call = { id: 'c1', type: 'function' as const, function: { name: 'read_file', arguments: '{"path":"a.md"}' } };
+			(requestUrl as jest.Mock).mockResolvedValueOnce({ status: 200, text: [
+				{ content: 'done', done: false },
+				{ content: '', done: false, toolCalls: [call] },
+				{ content: '', done: true, usage: { promptTokens: 1, completionTokens: 2, totalTokens: 3 } },
+			].map(event => `data: ${JSON.stringify(event)}\n\n`).join('') });
 			const chunks: StreamChunk[] = [];
-			await provider.streamChat(request, (c) => chunks.push(c));
-
-			// Retried non-streaming via requestUrl with stream:false.
+			await provider.streamChat(request, chunk => chunks.push(chunk));
 			expect(requestUrl).toHaveBeenCalledTimes(1);
-			const sentBody = JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body);
-			expect(sentBody.stream).toBe(false);
-			// Synthetic chunks match the streaming protocol the planner consumes.
-			expect(chunks.some((c) => c.content === 'done')).toBe(true);
-			const toolChunk = chunks.find((c) => c.toolCalls && c.toolCalls.length > 0);
-			expect(toolChunk?.toolCalls?.[0].function?.name).toBe('read_file');
-			const doneChunk = chunks.find((c) => c.done);
-			expect(doneChunk?.usage).toEqual({ promptTokens: 1, completionTokens: 2, totalTokens: 3 });
+			expect((requestUrl as jest.Mock).mock.calls[0][0].url).toBe('https://test.api.com/stream');
+			expect(JSON.parse((requestUrl as jest.Mock).mock.calls[0][0].body).stream).toBe(true);
+			expect(chunks).toEqual([{ content: 'done', done: false, toolCalls: [call], usage: { promptTokens: 1, completionTokens: 2, totalTokens: 3 } }, { content: '', done: true, usage: { promptTokens: 1, completionTokens: 2, totalTokens: 3 } }]);
 		});
 
 		it('does NOT fall back on an HTTP error response (4xx/5xx) — rethrows', async () => {
 			(global.fetch as jest.Mock).mockResolvedValue({ ok: false, status: 401, text: async () => 'unauthorized' });
-			await expect(provider.streamChat(request, jest.fn())).rejects.toThrow('API request failed: 401');
+			await expect(provider.streamChat(request, jest.fn())).rejects.toThrow('API request failed: HTTP 401');
 			expect(requestUrl).not.toHaveBeenCalled();
 		});
 	});
@@ -207,7 +195,7 @@ describe('BaseStreamingProvider', () => {
 			};
 
 			await expect(provider.streamChat(request, jest.fn())).rejects.toThrow(
-				'API request failed: 401 Unauthorized'
+				'API request failed: HTTP 401'
 			);
 		});
 
@@ -223,7 +211,7 @@ describe('BaseStreamingProvider', () => {
 			};
 
 			await expect(provider.streamChat(request, jest.fn())).rejects.toThrow(
-				'Response body is null'
+				'The service returned no stream body'
 			);
 		});
 
@@ -383,7 +371,7 @@ describe('BaseStreamingProvider', () => {
 			expect(contentChunks).toHaveLength(1);
 		});
 
-		it('should handle malformed JSON gracefully', async () => {
+		it('rejects malformed JSON instead of silently treating the stream as valid', async () => {
 			const chunks: StreamChunk[] = [];
 
 			(global.fetch as jest.Mock).mockResolvedValue({
@@ -402,15 +390,8 @@ describe('BaseStreamingProvider', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 			};
 
-			// Should not throw, just log error
-			await expect(
-				provider.streamChat(request, (chunk) => {
-					chunks.push(chunk);
-				})
-			).resolves.not.toThrow();
-
-			// Should still process valid chunks
-			expect(provider.parseStreamChunkCalls.length).toBeGreaterThan(0);
+			await expect(provider.streamChat(request, chunk => chunks.push(chunk))).rejects.toThrow();
+			expect(chunks.some(chunk => chunk.done)).toBe(false);
 		});
 
 		it('should handle incomplete SSE lines (buffer management)', async () => {
@@ -425,10 +406,10 @@ describe('BaseStreamingProvider', () => {
 						callIndex++;
 					} else if (callIndex === 1) {
 						// Complete the line
-						controller.enqueue(encoder.encode(': true}\n'));
+						controller.enqueue(encoder.encode(': true}\n\n'));
 						callIndex++;
 					} else if (callIndex === 2) {
-						controller.enqueue(encoder.encode('data: [DONE]\n'));
+						controller.enqueue(encoder.encode('data: [DONE]\n\n'));
 						callIndex++;
 					} else {
 						controller.close();
@@ -452,7 +433,7 @@ describe('BaseStreamingProvider', () => {
 			expect(provider.parseStreamChunkCalls).toContainEqual({ partial: true });
 		});
 
-		it('should emit done when stream ends without explicit signal', async () => {
+		it('rejects a truncated stream without emitting successful completion', async () => {
 			const chunks: StreamChunk[] = [];
 
 			(global.fetch as jest.Mock).mockResolvedValue({
@@ -467,13 +448,8 @@ describe('BaseStreamingProvider', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 			};
 
-			await provider.streamChat(request, (chunk) => {
-				chunks.push(chunk);
-			});
-
-			// Should have automatic done at end
-			const lastChunk = chunks[chunks.length - 1];
-			expect(lastChunk.done).toBe(true);
+			await expect(provider.streamChat(request, chunk => chunks.push(chunk))).rejects.toThrow('before a completion marker');
+			expect(chunks.some(chunk => chunk.done)).toBe(false);
 		});
 	});
 
@@ -520,7 +496,7 @@ describe('BaseStreamingProvider', () => {
 	});
 
 	describe('Edge Cases', () => {
-		it('should handle empty stream', async () => {
+		it('rejects an empty transport stream', async () => {
 			const chunks: StreamChunk[] = [];
 
 			(global.fetch as jest.Mock).mockResolvedValue({
@@ -533,12 +509,8 @@ describe('BaseStreamingProvider', () => {
 				messages: [{ role: 'user', content: 'Test' }],
 			};
 
-			await provider.streamChat(request, (chunk) => {
-				chunks.push(chunk);
-			});
-
-			// Should emit done at end
-			expect(chunks).toContainEqual({ content: '', done: true });
+			await expect(provider.streamChat(request, chunk => chunks.push(chunk))).rejects.toThrow('before a completion marker');
+			expect(chunks).toEqual([]);
 		});
 
 		it('should handle lines without "data: " prefix', async () => {
@@ -620,37 +592,9 @@ describe('BaseStreamingProvider', () => {
 			expect(provider.parseStreamChunkCalls).toHaveLength(100);
 		});
 
-		it('should log errors for malformed JSON but continue processing', async () => {
-			const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-
-			(global.fetch as jest.Mock).mockResolvedValue({
-				ok: true,
-				body: createMockStream([
-					'data: {bad}',
-					'data: {"good": true}',
-					'data: [DONE]',
-				]),
-			});
-
-			provider.mockParseResult = { content: 'good', done: false };
-
-			const request: ChatRequest = {
-				model: 'test:model',
-				messages: [{ role: 'user', content: 'Test' }],
-			};
-
-			await provider.streamChat(request, jest.fn());
-
-			// Should have logged error
-			expect(consoleSpy).toHaveBeenCalledWith(
-				expect.stringContaining('[TestProvider] Failed to parse SSE data:'),
-				expect.any(Error)
-			);
-
-			// But should still have parsed the good chunk
-			expect(provider.parseStreamChunkCalls).toContainEqual({ good: true });
-
-			consoleSpy.mockRestore();
+		it('rejects malformed events before accepting later completion', async () => {
+			(global.fetch as jest.Mock).mockResolvedValue({ ok: true, body: createMockStream(['data: {bad}', 'data: [DONE]']) });
+			await expect(provider.streamChat({ model: 'test:model', messages: [] }, jest.fn())).rejects.toThrow();
 		});
 	});
 
@@ -666,29 +610,10 @@ describe('BaseStreamingProvider', () => {
 			await expect(provider.streamChat(request, jest.fn())).rejects.toThrow('Network error');
 		});
 
-		it('should log stream errors with provider name', async () => {
-			const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+		it('propagates the original transport error to the caller', async () => {
 			const testError = new Error('Test error');
-
 			(global.fetch as jest.Mock).mockRejectedValue(testError);
-
-			const request: ChatRequest = {
-				model: 'test:model',
-				messages: [{ role: 'user', content: 'Test' }],
-			};
-
-			try {
-				await provider.streamChat(request, jest.fn());
-			} catch (e) {
-				// Expected
-			}
-
-			expect(consoleSpy).toHaveBeenCalledWith(
-				'[TestProvider] Stream error:',
-				testError
-			);
-
-			consoleSpy.mockRestore();
+			await expect(provider.streamChat({ model: 'test:model', messages: [] }, jest.fn())).rejects.toBe(testError);
 		});
 
 		it('should release reader lock even on error', async () => {
@@ -697,6 +622,7 @@ describe('BaseStreamingProvider', () => {
 					.mockResolvedValueOnce({ done: false, value: new Uint8Array([]) })
 					.mockRejectedValue(new Error('Read error')),
 				releaseLock: jest.fn(),
+				cancel: jest.fn(async () => undefined),
 			};
 
 			(global.fetch as jest.Mock).mockResolvedValue({

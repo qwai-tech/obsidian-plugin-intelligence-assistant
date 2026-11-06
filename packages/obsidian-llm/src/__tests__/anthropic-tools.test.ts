@@ -12,7 +12,7 @@ const portStreaming = (events: unknown[]) => {
 			requests.push(req);
 			const body = new ReadableStream<Uint8Array>({
 				start(controller) {
-					controller.enqueue(encoder.encode(events.map((e) => `data: ${JSON.stringify(e)}\n`).join('')));
+					controller.enqueue(encoder.encode(events.map((e) => `data: ${JSON.stringify(e)}\n\n`).join('')));
 					controller.close();
 				},
 			});

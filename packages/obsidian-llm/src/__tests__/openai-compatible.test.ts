@@ -6,7 +6,7 @@ import type { StreamChunk } from '../types';
 
 const encoder = new TextEncoder();
 
-const sseBody = (events: unknown[]) => events.map((event) => `data: ${typeof event === 'string' ? event : JSON.stringify(event)}\n`).join('');
+const sseBody = (events: unknown[]) => events.map((event) => `data: ${typeof event === 'string' ? event : JSON.stringify(event)}\n\n`).join('');
 
 const controllableStream = () => {
 	let controller!: ReadableStreamDefaultController<Uint8Array>;
@@ -79,7 +79,7 @@ describe('OpenAI-compatible providers', () => {
 
 	it('shapes each vendor request correctly', async () => {
 		const bodies = [controllableStream(), controllableStream()];
-		bodies.forEach((b) => b.close());
+		bodies.forEach((b) => { b.send(['[DONE]']); b.close(); });
 		const { port, requests } = capturePort(bodies.map((b) => b.body));
 
 		await new OpenAIProvider({ provider: 'openai', apiKey: 'k' }, port).streamChat({ model: 'gpt-4o', messages: [], maxTokens: 50 }, () => undefined);

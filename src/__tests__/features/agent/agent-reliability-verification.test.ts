@@ -1,3 +1,4 @@
+import { bindAgentRegistry, finalAgentReply } from '@/test-support/agent-fixtures';
 /**
  * Autonomous reliability verification for the agent loop's adverse-condition
  * behaviour: the edges NOT covered by agent-engine-loop.test.ts.
@@ -41,7 +42,7 @@ describe('Agent loop reliability under adverse conditions', () => {
 		const onComplete = jest.fn();
 		const onError = jest.fn();
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any, senseService: senseStub() as any,
+			toolRegistry: bindAgentRegistry(registry) as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
@@ -68,7 +69,7 @@ describe('Agent loop reliability under adverse conditions', () => {
 		const registry = { ...oneTool(), executeTool: jest.fn(async () => ({ success: false, error: 'boom' })) };
 		const onError = jest.fn();
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any, senseService: senseStub() as any,
+			toolRegistry: bindAgentRegistry(registry) as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
@@ -92,7 +93,7 @@ describe('Agent loop reliability under adverse conditions', () => {
 		const onComplete = jest.fn();
 		const onError = jest.fn();
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any, senseService: senseStub() as any,
+			toolRegistry: bindAgentRegistry(registry) as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
@@ -120,7 +121,7 @@ describe('Agent loop reliability under adverse conditions', () => {
 		const onComplete = jest.fn();
 		const onError = jest.fn();
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any, senseService: senseStub() as any,
+			toolRegistry: bindAgentRegistry(registry) as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),
@@ -130,7 +131,7 @@ describe('Agent loop reliability under adverse conditions', () => {
 			{ model: 'gpt-4o', mode: 'agent', agentId: 'agent-1', agents: agentWith(10) },
 			{ ...baseCallbacks(), onComplete, onError, signal: controller.signal });
 
-		expect(provider.streamChat.mock.calls[0][0].signal).toBe(controller.signal);
+		expect(provider.streamChat.mock.calls[0][0].signal.aborted).toBe(true);
 		expect(registry.executeTool).not.toHaveBeenCalled();
 		expect(onError).not.toHaveBeenCalled();
 		expect(onComplete).toHaveBeenCalledTimes(1);
@@ -142,15 +143,13 @@ describe('Agent loop reliability under adverse conditions', () => {
 				.mockImplementationOnce(async (_req: any, onChunk: any) => {
 					onChunk({ toolCalls: [{ id: 'call-1', function: { name: 'do_thing', arguments: '{}' } }] });
 				})
-				.mockImplementationOnce(async (_req: any, onChunk: any) => {
-					onChunk({ content: 'recovered and answered' });
-				}),
+				.mockImplementation(finalAgentReply('recovered and answered')),
 		};
 		const registry = { ...oneTool(), executeTool: jest.fn(async () => ({ success: false, error: 'transient' })) };
 		const onToolResult = jest.fn();
 		const onComplete = jest.fn();
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any, senseService: senseStub() as any,
+			toolRegistry: bindAgentRegistry(registry) as any, senseService: senseStub() as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
 			createProvider: jest.fn(() => ({ provider: provider as any, providerId: 'openai' })),

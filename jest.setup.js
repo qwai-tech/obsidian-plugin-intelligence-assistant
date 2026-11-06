@@ -6,13 +6,33 @@
 // Add TextEncoder and TextDecoder polyfills for jsdom
 const { TextEncoder, TextDecoder } = require('util');
 const { ReadableStream, TransformStream, WritableStream } = require('stream/web');
+const { Blob } = require('node:buffer');
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 global.ReadableStream = global.ReadableStream || ReadableStream;
 global.TransformStream = global.TransformStream || TransformStream;
 global.WritableStream = global.WritableStream || WritableStream;
+// jsdom's Blob omits the stream API available in the supported Electron host.
+global.Blob = Blob;
 global.structuredClone = global.structuredClone || ((value) => JSON.parse(JSON.stringify(value)));
+
+// Production installs the notification sink at startup; UI unit tests need the
+// same lifecycle while retaining their existing assertions on Obsidian Notice.
+let releaseNotifications;
+beforeEach(() => {
+	const { Notice } = require('obsidian');
+	const { installNotificationSink } = require('./src/core/notifications');
+	releaseNotifications = installNotificationSink({
+		notify(message, duration) {
+			const notice = duration === undefined ? new Notice(message) : new Notice(message, duration);
+			const handle = { setMessage(value) { notice.setMessage?.(value); return handle; }, hide() { notice.hide?.(); } };
+			return handle;
+		},
+		recent: () => [], dismiss() {}, dispose() {},
+	});
+});
+afterEach(() => releaseNotifications?.());
 
 // Obsidian exposes `activeWindow`/`activeDocument` globals (popout-safe). In jsdom
 // these resolve to the standard `window`/`document`.

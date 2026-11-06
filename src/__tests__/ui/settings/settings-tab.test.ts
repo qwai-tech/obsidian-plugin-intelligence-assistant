@@ -1,4 +1,4 @@
-import { App, type SettingDefinitionItem, type SettingDefinitionPage } from 'obsidian';
+import { App, type SettingDefinitionItem } from 'obsidian';
 import { IntelligenceAssistantSettingTab } from '@/ui/settings/settings-tab';
 import { SectionPage } from '@/ui/settings/section-page';
 import { DEFAULT_SETTINGS } from '@/features/settings/settings-codec';
@@ -16,24 +16,26 @@ const makePlugin = () => {
 	};
 };
 
-const pages = (items: SettingDefinitionItem[]) => items.flatMap(item =>
-	'type' in item && item.type === 'group' ? (item.items ?? []) as SettingDefinitionItem[] : [item]
-).filter((item): item is SettingDefinitionPage => 'type' in item && item.type === 'page');
+const flattened = (items: SettingDefinitionItem[]): SettingDefinitionItem[] => items.flatMap(item =>
+	'type' in item && item.type === 'group' ? flattened((item.items ?? []) as SettingDefinitionItem[]) : [item]
+);
 
 describe('IntelligenceAssistantSettingTab', () => {
-	it('declares the general settings as searchable controls and every other section as a page', () => {
+	it('retains searchable General controls inside the restored nine top-level Tabs', () => {
 		const plugin = makePlugin();
 		const tab = new IntelligenceAssistantSettingTab(new App(), plugin as never);
 
 		const items = tab.getSettingDefinitions();
 
-		const controls = items.filter(item => 'control' in item && item.control).map(item => (item as { control: { key: string } }).control.key);
-		expect(controls).toEqual(['defaultModel', 'conversationTitleMode', 'conversationIconEnabled']);
-		expect(pages(items).map(page => page.name)).toEqual([
-			'settings.tabs.llm', 'settings.tabs.mcp', 'settings.tabs.tools', 'settings.tabs.rag',
-			'settings.tabs.prompts', 'settings.tabs.agents', 'settings.tabs.quickActions', 'settings.tabs.usage',
-		]);
-		expect(pages(items).every(page => page.desc === `settings.${page.name.split('.').pop()}.desc`)).toBe(true);
+		const controls = flattened(items).filter(item => 'control' in item && item.control).map(item => (item as { control: { key: string } }).control.key);
+		expect(controls).toEqual(['conversationTitleMode', 'conversationIconEnabled']);
+		expect(flattened(items)).toContainEqual(expect.objectContaining({ name: 'settings.general.defaultModel.name', render: expect.any(Function) }));
+		expect(items[0]).toMatchObject({
+			aliases: ['settings.tabs.general', 'settings.tabs.llm', 'settings.tabs.mcp', 'settings.tabs.tools', 'settings.tabs.rag', 'settings.tabs.prompts', 'settings.tabs.agents', 'settings.tabs.quickActions', 'settings.tabs.usage'],
+			render: expect.any(Function),
+		});
+		expect(items[1]).toMatchObject({ type: 'group', cls: 'ia-settings-general-group' });
+		expect(flattened(items).some(item => 'type' in item && item.type === 'page')).toBe(false);
 	});
 
 	it('builds its definitions before the plugin has loaded any settings', () => {

@@ -8,6 +8,7 @@ const provider = {
 };
 
 jest.mock('@qwai/obsidian-llm', () => ({
+	...jest.requireActual('@qwai/obsidian-llm'),
 	ModelManager: { findConfigForModelByProvider: jest.fn(() => ({ provider: 'openai' })) },
 	ProviderFactory: { createProvider: jest.fn(() => provider) },
 }));

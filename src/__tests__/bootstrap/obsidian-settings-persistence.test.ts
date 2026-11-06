@@ -27,12 +27,14 @@ function makeHost(files: Record<string, unknown> = {}, data: unknown = null) {
 		mkdir: jest.fn(async () => {}),
 		list: jest.fn(async (folder: string) => ({ files: Object.keys(store).filter(path => path.startsWith(`${folder}/`)), folders: [] })),
 	};
+	if (data !== null) store[`${BASE}/data.json`] = JSON.stringify(data);
 	const app = { vault: { adapter, createFolder: jest.fn(async () => {}) } };
 	const plugin = {
 		app,
+		manifest: { id: 'intelligence-assistant', dir: BASE },
 		data,
 		loadData: jest.fn(async function (this: { data: unknown }) { return this.data; }),
-		saveData: jest.fn(async function (this: { data: unknown }, value: unknown) { this.data = JSON.parse(JSON.stringify(value)); }),
+		saveData: jest.fn(async function (this: { data: unknown }, value: unknown) { this.data = JSON.parse(JSON.stringify(value)); store[`${BASE}/data.json`] = JSON.stringify(value); }),
 	};
 	const dataService = new PluginDataService(app as never, paths);
 	dataService.initialize();
@@ -84,7 +86,7 @@ describe('ObsidianSettingsPersistence', () => {
 		expect(saved.format).toBe(2);
 		expect(saved.config.providers.defaultModel).toBe('old-layout');
 		expect(saved.agents.list.map(agent => agent.id)).toEqual(['a1']);
-		expect(Object.keys(files).filter(path => !path.includes('/cache/'))).toEqual([]);
+		expect(Object.keys(files).filter(path => !path.includes('/cache/') && !path.endsWith('/data.json') && !path.endsWith('/data.json.bak'))).toEqual([]);
 	});
 
 	it('writes a fresh install straight to data.json', async () => {

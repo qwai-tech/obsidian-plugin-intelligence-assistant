@@ -9,7 +9,7 @@ describe('mission runner extensions', () => {
 
   it('toolAccess restricts which tools execute (disallowed tool is denied, not executed)', async () => {
     await mockLLM.toolCall('write_file', { path: 'blocked.md', content: 'X' });
-    await mockLLM.replyWith('I could not write.');
+    await mockLLM.completeWith('I could not write.');
     const app = createHarnessApp({});
     const outcome = await runAgentMission({
       app,
@@ -27,7 +27,7 @@ describe('mission runner extensions', () => {
   it('abortAfterToolCalls stops the run early without error', async () => {
     await mockLLM.toolCall('read_file', { path: 'a.md' });
     await mockLLM.toolCall('read_file', { path: 'b.md' });
-    await mockLLM.replyWith('done');
+    await mockLLM.completeWith('done');
     const app = createHarnessApp({ 'a.md': 'A', 'b.md': 'B' });
     const outcome = await runAgentMission({ app, userMessage: 'Read a then b.', abortAfterToolCalls: 1 });
     expect(outcome.error).toBeUndefined();
@@ -35,7 +35,7 @@ describe('mission runner extensions', () => {
   });
 
   it('injects RAG context into the LLM request when enableRAG + ragResults given', async () => {
-    await mockLLM.replyWith('answer');
+    await mockLLM.completeWith('answer');
     const app = createHarnessApp({});
     await runAgentMission({
       app,
@@ -50,7 +50,7 @@ describe('mission runner extensions', () => {
 
   it('runs a tool from an injected non-builtin tool source', async () => {
     await mockLLM.toolCall('fake_echo', { text: 'hi' });
-    await mockLLM.replyWith('echoed');
+    await mockLLM.completeWith('echoed');
     const app = createHarnessApp({});
     const outcome = await runAgentMission({
       app,
@@ -66,7 +66,7 @@ describe('mission runner extensions', () => {
 
   it('passes a custom maxSteps to the agent', async () => {
     for (let i = 0; i < 5; i++) await mockLLM.toolCall('read_file', { path: 'loop.md' });
-    await mockLLM.replyWith('done');
+    await mockLLM.completeWith('done');
     const app = createHarnessApp({ 'loop.md': 'c' });
     const outcome = await runAgentMission({ app, userMessage: 'loop', maxSteps: 2 });
     expect(outcome.error).toBeUndefined();

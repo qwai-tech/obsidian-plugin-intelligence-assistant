@@ -1,5 +1,9 @@
 import { EditorQuickActions } from '@/ui/editor/editor-quick-actions';
 
+import { reviewReplacement } from '@/ui/modals/replacement-preview-modal';
+
+jest.mock('@/ui/modals/replacement-preview-modal', () => ({ reviewReplacement: jest.fn(async () => true) }));
+
 // Mock obsidian
 jest.mock('obsidian', () => ({
 	Notice: jest.fn().mockImplementation(() => ({ hide: jest.fn() })),
@@ -101,15 +105,16 @@ describe('EditorQuickActions', () => {
 		const qas = new EditorQuickActions({} as any, () => makeConfig({ quickActions: [{ enabled: true, ...action }] }));
 		let click: () => Promise<void> = async () => undefined;
 		const item = { setTitle: () => item, setIcon: () => item, onClick: (handler: () => Promise<void>) => { click = handler; return item; } };
-		(qas as any).addMenuItems({ addSeparator: jest.fn(), addItem: (build: (i: typeof item) => void) => build(item) }, { getSelection: () => 'selected', ...editor }, {});
+		(qas as any).addMenuItems({ addSeparator: jest.fn(), addItem: (build: (i: typeof item) => void) => build(item) }, { getSelection: () => 'selected', getValue: () => 'selected', getCursor: (side: string) => ({ line: 0, ch: side === 'to' ? 8 : 0 }), getRange: () => 'selected', ...editor }, {});
 		await click();
 	}
 
 	describe('executeAction — replace', () => {
-		it('calls editor.replaceSelection with streamed result', async () => {
-			const editor = { replaceSelection: jest.fn() };
+		it('reviews the replacement before applying it to the captured range', async () => {
+			const editor = { replaceRange: jest.fn() };
 			await runFromMenu({ id: 'summarize', name: 'Summarize', prompt: 'Summarize: ', actionType: 'replace' }, editor);
-			expect(editor.replaceSelection).toHaveBeenCalledWith('hello');
+			expect(reviewReplacement).toHaveBeenCalledWith(expect.anything(), 'Summarize', 'selected', 'hello');
+			expect(editor.replaceRange).toHaveBeenCalledWith('hello', { line: 0, ch: 0 }, { line: 0, ch: 8 });
 		});
 	});
 

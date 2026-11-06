@@ -8,7 +8,7 @@ describe('M7 tool-error-recovery', () => {
   it('surfaces a tool failure and lets the agent recover on the next turn', async () => {
     await mockLLM.toolCall('read_file', { path: 'missing.md' });
     await mockLLM.toolCall('read_file', { path: 'exists.md' });
-    await mockLLM.replyWith('Recovered and read exists.md: RECOVER_OK.');
+    await mockLLM.completeWith('Recovered and read exists.md: RECOVER_OK.');
     const app = createHarnessApp({ 'exists.md': 'RECOVER_OK' });
     const outcome = await runAgentMission({ app, userMessage: 'Read missing.md, then recover.' });
     expect(outcome.error).toBeUndefined();

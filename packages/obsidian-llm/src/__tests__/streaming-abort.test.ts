@@ -24,7 +24,7 @@ class EchoProvider extends BaseStreamingProvider {
 	}
 }
 
-const sse = (...texts: string[]) => texts.map((text) => `data: ${JSON.stringify({ text })}\n`).join('');
+const sse = (...texts: string[]) => texts.map((text) => `data: ${JSON.stringify({ text })}\n\n`).join('');
 
 const streamingPort = (pullChunks: () => ReadableStream<Uint8Array>) => {
 	const requests: HttpRequest[] = [];
@@ -43,7 +43,7 @@ describe('streaming cancellation', () => {
 		const encoder = new TextEncoder();
 		const { port, requests } = streamingPort(() => new ReadableStream({
 			start(controller) {
-				controller.enqueue(encoder.encode(sse('hi')));
+				controller.enqueue(encoder.encode(sse('hi') + 'data: [DONE]\n\n'));
 				controller.close();
 			},
 		}));
@@ -73,10 +73,10 @@ describe('streaming cancellation', () => {
 		});
 		await new Promise((resolve) => setTimeout(resolve, 0));
 		push('first');
-		await done;
+		await expect(done).rejects.toThrow();
 
-		expect(chunks.map((c) => c.content)).toEqual(['first', '']);
-		expect(chunks[chunks.length - 1].done).toBe(true);
+		expect(chunks.map((c) => c.content)).toEqual(['first']);
+		expect(chunks.some(c => c.done)).toBe(false);
 		expect(cancel).toHaveBeenCalled();
 	});
 });

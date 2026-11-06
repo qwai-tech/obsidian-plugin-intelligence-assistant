@@ -45,7 +45,8 @@ describe('ModelManager model cache', () => {
 		expect(config.cachedModels?.map((m) => [m.id, m.enabled !== false])).toEqual([['openai:gpt-4o', true], ['openai:gpt-4o-mini', false]]);
 	});
 
-	it('gives each config its own copies of the built-in model list', async () => {
+	it('gives each config independent copies of discovered models', async () => {
+		portListing(['claude-test']);
 		const first: LLMConfig = { provider: 'anthropic', apiKey: 'a1' };
 		const second: LLMConfig = { provider: 'anthropic', apiKey: 'a2' };
 		await ModelManager.getModelsForConfig(first, true);
@@ -76,15 +77,15 @@ describe('ModelManager model cache', () => {
 	});
 
 	it('leaves embedding-only models out of the chat models', async () => {
-		const config: LLMConfig = { provider: 'ollama', cachedModels: [
-			{ id: 'ollama:qwen3.5:0.8b', name: 'qwen3.5:0.8b', provider: 'ollama', capabilities: ['chat', 'streaming'], enabled: true },
-			{ id: 'ollama:qwen3-embedding:4b', name: 'qwen3-embedding:4b', provider: 'ollama', capabilities: ['embedding'], enabled: true },
-			{ id: 'ollama:unknown', name: 'unknown', provider: 'ollama', capabilities: [], enabled: true },
+		const config: LLMConfig = { provider: 'openai', cachedModels: [
+			{ id: 'openai:qwen3.5:0.8b', name: 'qwen3.5:0.8b', provider: 'openai', capabilities: ['chat', 'streaming'], enabled: true },
+			{ id: 'openai:qwen3-embedding:4b', name: 'qwen3-embedding:4b', provider: 'openai', capabilities: ['embedding'], enabled: true },
+			{ id: 'openai:unknown', name: 'unknown', provider: 'openai', capabilities: [], enabled: true },
 		] };
 
 		const models = await ModelManager.getAllChatModels([config]);
 
-		expect(models.map((m) => m.id)).toEqual(['ollama:qwen3.5:0.8b', 'ollama:unknown']);
+		expect(models.map((m) => m.id)).toEqual(['openai:qwen3.5:0.8b', 'openai:unknown']);
 	});
 
 	it.each(['openai', 'custom', 'google', 'deepseek', 'openrouter'])('fails a %s refresh against an endpoint that rejects the request, keeping the stored models', async (provider) => {
@@ -96,7 +97,7 @@ describe('ModelManager model cache', () => {
 
 		await expect(ModelManager.getModelsForConfig(config, true)).rejects.toThrow('404');
 
-		expect(config.cachedModels?.map((m) => m.id)).toEqual(['stored']);
+		expect(config.cachedModels?.map((m) => m.id)).toEqual([provider === 'custom' ? `custom@${config.id}:stored` : 'stored']);
 	});
 
 	it('keeps every model an OpenAI-compatible gateway lists', async () => {

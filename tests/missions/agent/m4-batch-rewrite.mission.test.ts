@@ -16,14 +16,14 @@ const M4: MissionDefinition = {
     { type: 'final', text: 'Reviewed all three notes.' },
   ],
   expect: { toolSequence: ['write_file', 'write_file', 'write_file'], vaultFiles: NOTES.map((p) => ({ path: p, contains: 'REVIEWED: ' })) },
-  budget: { steps: 4 },
+  budget: { steps: 5 },
 };
 
 describe(M4.name, () => {
   beforeEach(async () => { await startMockLLM(); });
   afterEach(async () => { await stopMockLLM(); });
   it('rewrites all three notes within the step budget (efficiency + reliability)', async () => {
-    for (const t of M4.trajectory) { if (t.type === 'tool') await mockLLM.toolCall(t.name, t.args); else await mockLLM.replyWith(t.text); }
+    for (const t of M4.trajectory) { if (t.type === 'tool') await mockLLM.toolCall(t.name, t.args); else await mockLLM.completeWith(t.text); }
     const app = createHarnessApp(M4.seed);
     const outcome = await runAgentMission({ app, userMessage: M4.userMessage, autonomousWrite: true });
     expect(outcome.error).toBeUndefined();

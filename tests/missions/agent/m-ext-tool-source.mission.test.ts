@@ -8,7 +8,7 @@ describe('M-ext non-builtin-tool-source', () => {
   afterEach(async () => { await stopMockLLM(); });
   it('discovers and invokes a tool from an injected non-builtin source', async () => {
     await mockLLM.toolCall('fake_echo', { text: 'NONBUILTIN_OK' });
-    await mockLLM.replyWith('Echoed.');
+    await mockLLM.completeWith('Echoed.');
     const app = createHarnessApp({});
     const outcome = await runAgentMission({
       app, userMessage: 'Echo NONBUILTIN_OK.',

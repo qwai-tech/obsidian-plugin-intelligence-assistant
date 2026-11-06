@@ -17,7 +17,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'single-read',
     run: async () => {
       await mockLLM.toolCall('read_file', { path: 'a.md' });
-      await mockLLM.replyWith('done');
+      await mockLLM.completeWith('done');
       return runAgentMission({ app: createHarnessApp({ 'a.md': 'x' }), userMessage: 'read a' });
     },
   },
@@ -26,7 +26,7 @@ export const SCENARIOS: Scenario[] = [
     run: async () => {
       await mockLLM.toolCall('read_file', { path: 'a.md' });
       await mockLLM.toolCall('write_file', { path: 'b.md', content: 'y' });
-      await mockLLM.replyWith('done');
+      await mockLLM.completeWith('done');
       return runAgentMission({
         app: createHarnessApp({ 'a.md': 'x' }),
         userMessage: 'read a then write b autonomously without confirmation',
@@ -38,7 +38,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'batch-five-writes',
     run: async () => {
       for (let i = 0; i < 5; i++) await mockLLM.toolCall('write_file', { path: `n${i}.md`, content: `v${i}` });
-      await mockLLM.replyWith('done');
+      await mockLLM.completeWith('done');
       return runAgentMission({
         app: createHarnessApp({}),
         userMessage: 'write five notes autonomously without confirmation',

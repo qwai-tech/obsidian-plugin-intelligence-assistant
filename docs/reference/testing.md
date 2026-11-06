@@ -67,7 +67,7 @@ Results for the current preparation are summarized in [0.1.0 status](../releases
 ## CI behavior and publication
 
 - `.github/workflows/e2e.yml` has an every-push mock E2E job and a conditional real-spec job for main/tags.
-- `.github/workflows/verification-gate.yml` contains deterministic/mock verification and mutation jobs for main/master and PRs.
+- `.github/workflows/verification-gate.yml` contains deterministic/mock verification and mutation jobs for main/master and PRs. See the [fixture-contract repair record](verification-gate.md) for the 2026-11-05 failure reproduction and test updates.
 - `.github/workflows/ci-cd.yml` builds and publishes an untagged version on a main/master push. It passes the built artifacts between jobs and checks their hashes instead of rebuilding before publication. Its real-verification job is temporarily removed by explicit approval.
 
 The current publisher's job chain is `check` → `build` → `release`. Lint, both type checks, the production build, file existence and artifact digest checks remain required. The Release notes disclose that fresh real-service verification was not run. The separate E2E Tests and Verification Gate workflows are not release-job dependencies and remain unchanged. A version tag that already exists makes the publisher skip the release; let it create the tag. Tag-only pushes do not trigger this publisher, and it currently has no manual dispatch entry point.

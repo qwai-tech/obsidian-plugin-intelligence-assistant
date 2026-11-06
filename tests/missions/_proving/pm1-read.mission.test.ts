@@ -12,7 +12,7 @@ const PM1: MissionDefinition = {
     { type: 'final', text: 'The note contains AGENT_TOOL_SENTINEL.' },
   ],
   expect: { toolSequence: ['read_file'], finalContains: 'AGENT_TOOL_SENTINEL' },
-  budget: { steps: 2 },
+  budget: { steps: 3 },
 };
 
 describe(PM1.name, () => {
@@ -22,7 +22,7 @@ describe(PM1.name, () => {
   it('completes the mission within its oracle and budget', async () => {
     for (const turn of PM1.trajectory) {
       if (turn.type === 'tool') await mockLLM.toolCall(turn.name, turn.args);
-      else await mockLLM.replyWith(turn.text);
+      else await mockLLM.completeWith(turn.text);
     }
 
     const app = createHarnessApp(PM1.seed);

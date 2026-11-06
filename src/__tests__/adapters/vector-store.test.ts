@@ -47,15 +47,16 @@ const makeConfig = (overrides: Partial<RAGConfig> = {}): RAGConfig => ({
 });
 
 const makeApp = (content = '') => {
+	const files = new Map<string, string>();
+	const folders = new Set<string>();
 	const adapter = {
-		exists: jest.fn(async () => true),
-		read: jest.fn(async (): Promise<string> => {
-			throw new Error('missing');
-		}),
-		write: jest.fn(async () => undefined),
-		remove: jest.fn(async () => undefined),
-		rename: jest.fn(async () => undefined),
-		mkdir: jest.fn(async () => undefined),
+		files,
+		exists: jest.fn(async (path: string) => files.has(path) || folders.has(path)),
+		read: jest.fn(async (path: string): Promise<string> => { if (!files.has(path)) throw new Error('missing'); return files.get(path)!; }),
+		write: jest.fn(async (path: string, body: string) => { files.set(path, body); }),
+		remove: jest.fn(async (path: string) => { files.delete(path); }),
+		rename: jest.fn(async (from: string, to: string) => { files.set(to, files.get(from)!); files.delete(from); }),
+		mkdir: jest.fn(async (path: string) => { folders.add(path); }),
 	};
 	return {
 		vault: {
@@ -76,7 +77,7 @@ describe('VectorStore', () => {
 		(EmbeddingManager.generateEmbedding as jest.Mock).mockImplementation(async () => [1, 0, 0]);
 	});
 
-	it('resolves addFile only after every scheduled chunk batch has been indexed and saved', async () => {
+	it('indexes every chunk batch before resolving and persists the complete index on flush', async () => {
 		const paragraphs = Array.from({ length: 25 }, (_, i) => `paragraph-${i}`).join('\n\n');
 		const app = makeApp(paragraphs);
 		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
@@ -88,6 +89,8 @@ describe('VectorStore', () => {
 		} as any, makeConfig());
 
 		expect(store.getStoredChunks()).toHaveLength(25);
+		expect(app.vault.adapter.write).not.toHaveBeenCalled();
+		await store.flush();
 		expect(app.vault.adapter.write).toHaveBeenCalledTimes(1);
 	});
 
@@ -96,7 +99,8 @@ describe('VectorStore', () => {
 		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 		const file = { path: 'a.md', basename: 'a', stat: { mtime: 1 } } as any;
 		(EmbeddingManager.generateEmbedding as jest.Mock).mockRejectedValue(new Error('offline'));
-		await store.addFile(file, makeConfig());
+		await expect(store.addFile(file, makeConfig())).rejects.toThrow('offline');
+		expect(store.getStoredChunks()).toEqual([]);
 		(EmbeddingManager.generateEmbedding as jest.Mock).mockReset().mockResolvedValue([1, 0, 0]);
 
 		await store.addFile(file, makeConfig());
@@ -200,35 +204,38 @@ describe('VectorStore', () => {
 
 	it('keeps chunks already on disk when a file is indexed before any explicit load', async () => {
 		const app = makeApp('fresh note');
-		app.vault.adapter.read.mockImplementation(async () => persisted(['kept.md']));
+		app.vault.adapter.files.set(STORE_PATH, persisted(['kept.md']));
 		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 
 		await store.addFile({ path: 'new.md', basename: 'new', stat: { mtime: 2 } } as any, makeConfig());
 
+		await store.flush();
 		expect(lastWrittenPaths(app)).toEqual(expect.arrayContaining(['kept.md', 'new.md']));
 	});
 
 	it('keeps chunks already on disk when a file is removed before any explicit load', async () => {
 		const app = makeApp();
-		app.vault.adapter.read.mockImplementation(async () => persisted(['kept.md', 'gone.md']));
+		app.vault.adapter.files.set(STORE_PATH, persisted(['kept.md', 'gone.md']));
 		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 
 		await store.removeFile('gone.md');
 
+		await store.flush();
 		expect(lastWrittenPaths(app)).toEqual(['kept.md']);
 	});
 
 	it('loads from disk once, so a later load cannot discard newer in-memory chunks', async () => {
 		const app = makeApp('fresh note');
-		app.vault.adapter.read.mockImplementation(async () => persisted(['kept.md']));
+		app.vault.adapter.files.set(STORE_PATH, persisted(['kept.md']));
 		const store = new VectorStore(app as any, STORE_PATH, [{ provider: 'openai', apiKey: 'k' }] as any);
 		await store.load();
 		await store.addFile({ path: 'new.md', basename: 'new', stat: { mtime: 2 } } as any, makeConfig());
 
+		const readsBeforeReload = app.vault.adapter.read.mock.calls.length;
 		await store.load();
 
 		expect(store.getStoredChunks().map((c) => c.metadata.path)).toEqual(expect.arrayContaining(['kept.md', 'new.md']));
-		expect(app.vault.adapter.read).toHaveBeenCalledTimes(1);
+		expect(app.vault.adapter.read).toHaveBeenCalledTimes(readsBeforeReload);
 	});
 });
 

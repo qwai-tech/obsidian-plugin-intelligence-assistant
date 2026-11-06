@@ -14,7 +14,7 @@ describe('mission runner walking skeleton', () => {
 
   it('runs a one-tool agent trajectory headless and reports the sentinel', async () => {
     await mockLLM.toolCall('read_file', { path: 'test-note.md' });
-    await mockLLM.replyWith('The note contains AGENT_TOOL_SENTINEL from the vault.');
+    await mockLLM.completeWith('The note contains AGENT_TOOL_SENTINEL from the vault.');
 
     const app = createHarnessApp({ 'test-note.md': 'AGENT_TOOL_SENTINEL' });
 
@@ -30,7 +30,7 @@ describe('mission runner walking skeleton', () => {
     const streamCalls = (await mockLLM.getCalls())
       .map((c) => c.body as StreamChatRequest | null)
       .filter((b) => b?.stream === true);
-    expect(streamCalls).toHaveLength(2);
+    expect(streamCalls).toHaveLength(3);
     expect(streamCalls[0]?.tools?.map((t) => t.function.name)).toContain('read_file');
     expect(streamCalls[1]?.messages).toEqual(
       expect.arrayContaining([

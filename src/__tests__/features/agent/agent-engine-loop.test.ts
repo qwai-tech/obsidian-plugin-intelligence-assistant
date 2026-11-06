@@ -1,3 +1,4 @@
+import { bindAgentRegistry, finalAgentReply } from '@/test-support/agent-fixtures';
 import { AgentEngineLoop } from '@/features/agent/agent-engine-loop';
 import { HistoryCompactor } from '@/features/agent/history-compactor';
 import type { KernelEvent } from '@/features/agent/types/agent-run';
@@ -9,7 +10,7 @@ describe('AgentEngineLoop', () => {
 	it('injects sense context and completes when no tools are requested', async () => {
 		const provider = {
 			streamChat: jest.fn(async (_request, onChunk) => {
-				onChunk({ content: 'final answer' });
+				onChunk({ content: 'final answer\n<!-- AGENT_STATUS: complete -->' });
 				onChunk({ usage: { promptTokens: 10, completionTokens: 3, totalTokens: 13 } });
 			}),
 		};
@@ -30,7 +31,7 @@ describe('AgentEngineLoop', () => {
 			executeTool: jest.fn(),
 		};
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any,
+			toolRegistry: bindAgentRegistry(registry) as any,
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -67,9 +68,7 @@ describe('AgentEngineLoop', () => {
 						}],
 					});
 				})
-				.mockImplementationOnce(async (_request, onChunk) => {
-					onChunk({ content: 'I read A.md' });
-				}),
+				.mockImplementation(finalAgentReply('I read A.md')),
 		};
 		const registry = {
 			resolveForAgent: jest.fn(() => [{ llmName: 'read_file', toolId: 'builtin:builtin:read_file', definition: { description: 'Read file' } }]),
@@ -82,7 +81,7 @@ describe('AgentEngineLoop', () => {
 		};
 		const onToolResult = jest.fn();
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any,
+			toolRegistry: bindAgentRegistry(registry) as any,
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -104,7 +103,7 @@ describe('AgentEngineLoop', () => {
 
 		expect(registry.executeTool).toHaveBeenCalledWith('read_file', { path: 'A.md' });
 		expect(onToolResult).toHaveBeenCalledWith('read_file', true, JSON.stringify('file contents'), 'act');
-		expect(provider.streamChat).toHaveBeenCalledTimes(2);
+		expect(provider.streamChat).toHaveBeenCalledTimes(3);
 		const secondRequestMessages = provider.streamChat.mock.calls[1][0].messages as any[];
 		expect(secondRequestMessages.some(message => message.role === 'assistant' && message.tool_calls?.[0]?.id === 'call-1')).toBe(true);
 		expect(secondRequestMessages.some(message => message.role === 'tool' && message.tool_call_id === 'call-1')).toBe(true);
@@ -127,9 +126,7 @@ describe('AgentEngineLoop', () => {
 						],
 					});
 				})
-				.mockImplementationOnce(async (_request, onChunk) => {
-					onChunk({ content: 'I used both tools' });
-				}),
+				.mockImplementation(finalAgentReply('I used both tools')),
 		};
 		const registry = {
 			resolveForAgent: jest.fn(() => [
@@ -150,7 +147,7 @@ describe('AgentEngineLoop', () => {
 			formatSenseContext: jest.fn(() => 'sense context'),
 		};
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any,
+			toolRegistry: bindAgentRegistry(registry) as any,
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -171,7 +168,7 @@ describe('AgentEngineLoop', () => {
 		);
 
 		expect(registry.executeTool).toHaveBeenCalledTimes(2);
-		expect(provider.streamChat).toHaveBeenCalledTimes(2);
+		expect(provider.streamChat).toHaveBeenCalledTimes(3);
 		const secondRequestMessages = provider.streamChat.mock.calls[1][0].messages as any[];
 		const assistantWithCalls = secondRequestMessages.find(message => message.role === 'assistant' && message.tool_calls?.length === 2);
 		expect(assistantWithCalls?.tool_calls.map((call: any) => call.id)).toEqual(['call-1', 'call-2']);
@@ -209,9 +206,7 @@ describe('AgentEngineLoop', () => {
 						}],
 					});
 				})
-				.mockImplementationOnce(async (_request, onChunk) => {
-					onChunk({ content: 'Prepared the write proposal.' });
-				}),
+				.mockImplementation(finalAgentReply('Prepared the write proposal.')),
 		};
 		const registry = {
 			resolveForAgent: jest.fn(() => [{
@@ -236,7 +231,7 @@ describe('AgentEngineLoop', () => {
 		const onToolResult = jest.fn();
 		const completed: Message[] = [];
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any,
+			toolRegistry: bindAgentRegistry(registry) as any,
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -251,7 +246,7 @@ describe('AgentEngineLoop', () => {
 					'Prepare the final research brief as a write proposal inside folder "Agentic Agent".',
 				].join('\n'),
 			}],
-			{ model: 'deepseek:deepseek-v4-flash', mode: 'agent', agentId: 'agent-1', agents: [{ id: 'agent-1', maxSteps: 4, contextWindow: 20, toolAccess: { sources: { 'builtin:builtin': 'all' } } } as any] },
+			{ model: 'deepseek:deepseek-v4-flash', mode: 'agent', expectsWriteProposal: true, agentId: 'agent-1', agents: [{ id: 'agent-1', maxSteps: 4, contextWindow: 20, toolAccess: { sources: { 'builtin:builtin': 'all' } } } as any] },
 			{
 				onChunk: jest.fn(),
 				onToolCall: jest.fn(),
@@ -262,7 +257,7 @@ describe('AgentEngineLoop', () => {
 			},
 		);
 
-		expect(provider.streamChat).toHaveBeenCalledTimes(3);
+		expect(provider.streamChat).toHaveBeenCalledTimes(4);
 		const forcedRequest = provider.streamChat.mock.calls[1][0] as any;
 		expect(forcedRequest.toolChoice).toEqual({ type: 'function', function: { name: 'create_note' } });
 		expect(JSON.stringify(forcedRequest.messages)).toContain('You ended the previous turn without creating the required write proposal.');
@@ -278,7 +273,7 @@ describe('AgentEngineLoop', () => {
 	it('strips incomplete tool call history before sending provider requests', async () => {
 		const provider = {
 			streamChat: jest.fn(async (_request, onChunk) => {
-				onChunk({ content: 'safe answer' });
+				onChunk({ content: 'safe answer\n<!-- AGENT_STATUS: complete -->' });
 			}),
 		};
 		const registry = {
@@ -291,7 +286,7 @@ describe('AgentEngineLoop', () => {
 			formatSenseContext: jest.fn(() => 'sense context'),
 		};
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any,
+			toolRegistry: bindAgentRegistry(registry) as any,
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -331,7 +326,7 @@ describe('AgentEngineLoop', () => {
 	it('journals every kernel event of the run, ending with run_finished', async () => {
 		const provider = {
 			streamChat: jest.fn(async (_request, onChunk) => {
-				onChunk({ content: 'persistent answer' });
+				onChunk({ content: 'persistent answer\n<!-- AGENT_STATUS: complete -->' });
 			}),
 		};
 		const registry = {
@@ -345,7 +340,7 @@ describe('AgentEngineLoop', () => {
 		};
 		const journaled: Array<{ runId: string; event: KernelEvent }> = [];
 		const loop = new AgentEngineLoop({
-			toolRegistry: registry as any,
+			toolRegistry: bindAgentRegistry(registry) as any,
 			senseService: senseService as any,
 			historyCompactor: new HistoryCompactor(),
 			webSearchService: { search: jest.fn(), formatResultsAsContext: jest.fn() } as any,
@@ -367,14 +362,14 @@ describe('AgentEngineLoop', () => {
 		);
 
 		expect(new Set(journaled.map((entry) => entry.runId)).size).toBe(1);
-		expect(journaled.map((entry) => entry.event.type)).toEqual(['run_started', 'turn_started', 'text_delta', 'run_finished']);
+		expect(journaled.map((entry) => entry.event.type)).toEqual(['run_started', 'turn_started', 'text_delta', 'guard_triggered', 'turn_started', 'text_delta', 'run_finished']);
 		expect(journaled[journaled.length - 1].event).toEqual({ type: 'run_finished', reason: { kind: 'answered' }, answer: 'persistent answer' });
 	});
 
 	it('uses structured non-streaming JSON for memory consolidation', async () => {
 		const provider = {
 			streamChat: jest.fn(async (_request, onChunk) => {
-				onChunk({ content: 'remember this answer' });
+				onChunk({ content: 'remember this answer\n<!-- AGENT_STATUS: complete -->' });
 			}),
 			chat: jest.fn(async (_request: ChatRequest) => ({
 				content: JSON.stringify({
@@ -426,16 +421,16 @@ describe('AgentEngineLoop', () => {
 			model: 'gpt-4o',
 			responseFormat: { type: 'json_object' },
 		}));
-		expect(provider.streamChat).toHaveBeenCalledTimes(1);
-		expect(memoryWriter.setPreference).toHaveBeenCalledWith('agent-1', 'tone', 'concise');
-		expect(memoryWriter.appendResearchLog).toHaveBeenCalledWith('agent-1', 'Finding A');
-		expect(memoryIndex.indexMemory).toHaveBeenCalledWith('agent-1', 'Finding A');
+		expect(provider.streamChat).toHaveBeenCalledTimes(2);
+		expect(memoryWriter.setPreference).toHaveBeenCalledWith('agent-1', 'tone', 'concise', expect.objectContaining({ mode: 'long-term', maxEntries: 50, signal: expect.anything() }));
+		expect(memoryWriter.appendResearchLog).toHaveBeenCalledWith('agent-1', 'Finding A', expect.objectContaining({ mode: 'long-term', maxEntries: 50, signal: expect.anything() }));
+		expect(memoryIndex.indexMemory).toHaveBeenCalledWith('agent-1', 'Finding A', expect.objectContaining({ mode: 'long-term', maxEntries: 50, signal: expect.anything() }));
 	});
 
 	it('neither reads nor writes memory for an agent whose memory is none', async () => {
 		const provider = {
 			streamChat: jest.fn(async (_request, onChunk) => {
-				onChunk({ content: 'Spanish noted' });
+				onChunk({ content: 'Spanish noted\n<!-- AGENT_STATUS: complete -->' });
 			}),
 			chat: jest.fn(async () => ({ content: JSON.stringify({ preferences: { language: 'Spanish' }, newResearchEntries: ['QA_NONE_FIXED_9128'] }) })),
 		};

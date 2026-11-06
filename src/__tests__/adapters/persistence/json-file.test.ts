@@ -66,10 +66,12 @@ describe('JsonFile', () => {
 		expect(await file.read()).toEqual({ n: 3 });
 	});
 
-	it('returns the fallback for a corrupt file', async () => {
-		const file = new JsonFile(makeAdapter({ 'data/a.json': '{not json' }) as never, 'data/a.json', () => ({ n: 0 }));
+	it('rejects corrupt JSON and preserves it instead of silently returning an empty document', async () => {
+		const adapter = makeAdapter({ 'data/a.json': '{not json' });
+		const file = new JsonFile(adapter as never, 'data/a.json', () => ({ n: 0 }));
 
-		expect(await file.read()).toEqual({ n: 0 });
+		await expect(file.read()).rejects.toThrow('existing file was preserved');
+		expect(adapter.files.get('data/a.json')).toBe('{not json');
 	});
 
 	it('serializes concurrent updates so none are lost', async () => {

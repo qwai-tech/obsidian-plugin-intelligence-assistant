@@ -61,14 +61,15 @@ describe('ConversationNamer', () => {
 		expect(provider.chat).not.toHaveBeenCalled();
 	});
 
-	it('records the token usage of its model requests', async () => {
+	it('labels naming requests for centralized usage accounting without counting twice', async () => {
 		const provider = { chat: jest.fn(async () => ({ content: 'Q3 notes', usage: { promptTokens: 5, completionTokens: 2, totalTokens: 7 } })) };
 		const recordUsage = jest.fn();
 		const namer = new ConversationNamer(() => settings(), { createProvider: () => provider as never, recordUsage });
 
 		await namer.title(messages, 'x');
 
-		expect(recordUsage).toHaveBeenCalledWith(expect.objectContaining({ model: 'openai:gpt-4o-mini', provider: 'openai', totalTokens: 7 }));
+		expect(provider.chat).toHaveBeenCalledWith(expect.objectContaining({ model: 'openai:gpt-4o-mini', purpose: 'conversation-name' }));
+		expect(recordUsage).not.toHaveBeenCalled();
 	});
 });
 
