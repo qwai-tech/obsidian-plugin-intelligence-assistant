@@ -56,15 +56,15 @@ export class OllamaModelManagerModal extends Modal {
 		const status = await this.admin.status(baseUrl);
 		if (status.online) {
 				statusEl.empty();
-				statusEl.createEl('span', {
+				statusEl.createSpan({
 					text: t('modals.ollamaManager.serverOnline'),
 					cls: 'ia-server-status-online'
 				});
-				statusEl.createEl('span', {
+				statusEl.createSpan({
 					text: t('modals.ollamaManager.versionLabel', { version: status.version || 'unknown' }),
 					cls: 'ia-server-status-meta'
 				});
-				statusEl.createEl('span', {
+				statusEl.createSpan({
 					text: t('modals.ollamaManager.urlLabel', { url: baseUrl }),
 					cls: 'ia-server-status-url'
 				});
@@ -136,13 +136,13 @@ export class OllamaModelManagerModal extends Modal {
 			const modelRow = modelList.createDiv('ia-model-row');
 
 			const modelInfo = modelRow.createDiv();
-			modelInfo.createEl('div', {
+			modelInfo.createDiv({
 				text: model.id,
 				cls: 'ia-model-name'
 			});
 
 			const capabilities = model.capabilities?.join(', ') || 'unknown';
-			modelInfo.createEl('div', {
+			modelInfo.createDiv({
 				text: t('modals.ollamaManager.capabilities', { caps: capabilities }),
 				cls: 'ia-model-capabilities'
 			});

@@ -42,7 +42,7 @@ export class AgentContextAssembler implements ContextAssembler {
 			// These facts are recomputed AFTER the tool history below. Placing a
 			// live counter before recent results makes it look like a stale boundary
 			// to which those results should be added a second time.
-			messages: sanitizeToolCallHistory([...systemMessages, ...retained, ...(this.run ? [runStartContext(this.run, history)] : []), ...omittedToolRecords(history, window, this.run?.historyLength), ...window, ...(this.context.executionContext?.() ?? [])]) as Message[],
+			messages: sanitizeToolCallHistory([...systemMessages, ...retained, ...(this.run ? [runStartContext(this.run, history)] : []), ...omittedToolRecords(history, window, this.run?.historyLength), ...window, ...(this.context.executionContext?.() ?? [])]),
 			model: options.model,
 			inputTokenBudget: options.inputTokenBudget,
 			conversationId: options.conversationId,

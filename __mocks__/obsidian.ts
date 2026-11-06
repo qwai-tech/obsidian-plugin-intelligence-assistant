@@ -177,6 +177,22 @@ if (typeof HTMLElement !== 'undefined') {
 	HTMLElement.prototype.toggleClass = function(cls: string, state?: boolean) {
 		this.classList.toggle(cls, state);
 	};
+
+	// Obsidian also exposes detached DOM helpers on the host window.
+	globalThis.createEl = (tag, options, callback) => {
+		const host = document.createElement('div');
+		const element = host.createEl(tag, options);
+		element.remove();
+		callback?.(element);
+		return element;
+	};
+	globalThis.createDiv = (options, callback) => createEl('div', options, callback);
+	globalThis.createSpan = (options, callback) => createEl('span', options, callback);
+	globalThis.createFragment = (callback) => {
+		const fragment = document.createDocumentFragment();
+		callback?.(fragment);
+		return fragment;
+	};
 }
 
 export class Events {
@@ -701,6 +717,10 @@ export class ButtonComponent {
 	setWarning(): this {
 		this.buttonEl.classList.add('mod-warning');
 		return this;
+	}
+
+	setDestructive(): this {
+		return this.setWarning();
 	}
 
 	setTooltip(tooltip: string): this {

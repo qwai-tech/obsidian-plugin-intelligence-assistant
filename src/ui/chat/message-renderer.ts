@@ -320,16 +320,16 @@ function renderMessageContent(target: HTMLElement, message: Message) {
 			const lang = langClass ? langClass.replace('language-', '') : '';
 
 			// Wrap pre in a container
-			const wrapper = createEl('div');
+			const wrapper = createDiv();
 			wrapper.className = 'ia-code-block';
 			pre.parentNode?.insertBefore(wrapper, pre);
 			wrapper.appendChild(pre);
 
 			// Add header bar
-			const header = createEl('div');
+			const header = createDiv();
 			header.className = 'ia-code-block__header';
 
-			const langLabel = createEl('span');
+			const langLabel = createSpan();
 			langLabel.className = 'ia-code-block__lang';
 			langLabel.textContent = lang || 'code';
 			header.appendChild(langLabel);

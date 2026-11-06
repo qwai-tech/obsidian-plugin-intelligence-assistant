@@ -43,14 +43,14 @@ export class ChatHeaderComponent {
 			void this.callbacks.onToggleConversations();
 		});
 
-		this.conversationTitleEl = header.createEl('span', {
+		this.conversationTitleEl = header.createSpan({
 			text: t('chat.currentConversation'),
 			cls: 'chat-header-title'
 		});
 
-		this.agentHeaderBadgeEl = header.createEl('span', { cls: 'chat-agent-header-badge ia-hidden' });
+		this.agentHeaderBadgeEl = header.createSpan({ cls: 'chat-agent-header-badge ia-hidden' });
 
-		this.tokenSummaryEl = header.createEl('span', { cls: 'chat-header-token-summary ia-hidden' });
+		this.tokenSummaryEl = header.createSpan({ cls: 'chat-header-token-summary ia-hidden' });
 
 		const capabilitiesBtn = createIconButton('shield-check', 'Tools & permissions');
 		capabilitiesBtn.setAttribute('data-testid', TestIds.chat.agentCapabilitiesBtn);

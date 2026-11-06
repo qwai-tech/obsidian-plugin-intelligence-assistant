@@ -202,7 +202,7 @@ function mapSchemaType(schema?: Record<string, unknown>): ToolParameter['type'] 
 function describeSchema(schema: Record<string, unknown>): string {
 	const type = typeof schema.type === 'string' ? schema.type : 'object';
 	if (type === 'object' && schema.properties && typeof schema.properties === 'object') {
-		const keys = Object.keys(schema.properties as Record<string, unknown>);
+		const keys = Object.keys(schema.properties);
 		return `object{${keys.slice(0, 5).join(', ')}}`;
 	}
 	if (type === 'array' && schema.items && typeof schema.items === 'object') {

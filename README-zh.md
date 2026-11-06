@@ -6,7 +6,7 @@
 
 <p>
   <a href="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml"><img src="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml/badge.svg?branch=main" alt="Build and Publish workflow status"></a>
-  <a href="docs/releases/0.1.0.md"><img src="https://img.shields.io/badge/source-0.1.0-7C3AED" alt="Source version 0.1.0"></a>
+  <a href="docs/releases/0.1.1.md"><img src="https://img.shields.io/badge/source-0.1.1-7C3AED" alt="Source version 0.1.1"></a>
   <img src="https://img.shields.io/badge/Obsidian-1.13%2B-7C3AED" alt="Requires Obsidian 1.13 or later">
   <img src="https://img.shields.io/badge/locales-49-0F766E" alt="49 bundled UI locales">
 </p>
@@ -58,7 +58,7 @@
 2. 搜索 **Intelligence Assistant**，安装并启用。
 3. 在 **设置 → Intelligence Assistant → 通用** 中确认安装的版本。
 
-插件已列入[官方社区目录](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json)。社区安装取得的是已发布的版本，可能与当前检出的源码不同。已发布文件见 [Releases](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases)，0.1.0 的发布进度与验证范围见[版本记录](docs/releases/0.1.0.md)。
+插件已列入[官方社区目录](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json)。社区安装取得的是已发布的版本，可能与当前检出的源码不同。已发布文件见 [Releases](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases)；[0.1.1 说明](docs/releases/0.1.1.md)包含 0.1.0 的完整变更清单，原始验证范围仍见 [0.1.0 记录](docs/releases/0.1.0.md)。
 
 ### 从源码或发布文件安装
 

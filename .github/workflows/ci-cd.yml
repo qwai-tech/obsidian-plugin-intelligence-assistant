@@ -34,6 +34,7 @@ jobs:
         else
           echo "tag_exists=false" >> "$GITHUB_OUTPUT"
           echo "Tag $VERSION not found — will build and release."
+          node scripts/release-notes.js "$RUNNER_TEMP/release-notes-preview.md"
         fi
 
   build:
@@ -145,27 +146,18 @@ jobs:
       with:
         subject-path: release/${{ env.MANIFEST_FILE }}
 
+    - name: Prepare release notes from version changelog
+      env:
+        RELEASE_VERSION: ${{ needs.check.outputs.version }}
+      run: node scripts/release-notes.js "$RUNNER_TEMP/release-notes.md"
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ needs.check.outputs.version }}
         target_commitish: ${{ github.sha }}
         name: Intelligence Assistant ${{ needs.check.outputs.version }}
-        body: |
-          ## Intelligence Assistant ${{ needs.check.outputs.version }}
-
-          ### Installation
-          Download and install via Obsidian's community plugins browser, or manually copy the files below to your vault's `.obsidian/plugins/intelligence-assistant/` folder.
-
-          ### Release assets
-          - `main.js` — plugin bundle
-          - `styles.css` — plugin styles
-          - `manifest.json` — plugin metadata
-
-          ### Verification scope
-          Fresh real-service verification is temporarily removed by release-owner approval. Lint, type checks, the production build and artifact digest checks remain required. Earlier local acceptance retains its original version scope; no new full real-gate pass is claimed.
-
-          [CI/CD run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) · Source: `${{ github.sha }}`
+        body_path: ${{ runner.temp }}/release-notes.md
         files: |
           release/${{ env.MAIN_FILE }}
           release/${{ env.STYLE_FILE }}

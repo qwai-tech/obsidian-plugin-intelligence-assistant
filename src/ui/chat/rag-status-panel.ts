@@ -187,7 +187,7 @@ export class RagStatusPanel {
 						}
 					})();
 				});
-				fileItem.createEl('span', { text: filePath, cls: 'rag-file-path' });
+				fileItem.createSpan({ text: filePath, cls: 'rag-file-path' });
 			});
 		} else {
 			const noFiles = content.createDiv('rag-no-files');

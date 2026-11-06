@@ -30,7 +30,7 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 		try {
 			const stats = await ragManager.getDetailedStats();
 
-			statsContainer.createEl('div', {
+			statsContainer.createDiv({
 				text: t('settings.rag.indexMgmt.statsTitle'),
 				cls: 'ia-rag-stats-title'
 			});
@@ -39,11 +39,11 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 
 			const addStat = (label: string, value: string | number | undefined) => {
 				const statItem = statsGrid.createDiv('ia-stat-item');
-				statItem.createEl('span', {
+				statItem.createSpan({
 					text: label,
 					cls: 'ia-stat-label'
 				});
-				statItem.createEl('span', {
+				statItem.createSpan({
 					text: (value ?? 0).toString(),
 					cls: 'ia-stat-value'
 				});
@@ -64,13 +64,13 @@ export function renderIndexManagement(containerEl: HTMLElement, plugin: PluginHo
 
 			// Show empty index message if no data
 			if (chunkCount === 0) {
-				statsContainer.createEl('div', {
+				statsContainer.createDiv({
 					text: t('settings.rag.indexMgmt.empty'),
 					cls: 'ia-rag-empty-notice'
 				});
 			}
 		} catch (error) {
-			statsContainer.createEl('div', {
+			statsContainer.createDiv({
 				text: t('settings.rag.indexMgmt.error'),
 				cls: 'ia-rag-stats-error'
 			});

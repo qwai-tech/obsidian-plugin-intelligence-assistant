@@ -29,7 +29,7 @@ export function linkifyWikilinks(root: HTMLElement): void {
 		if (!WIKILINK.test(text)) continue;
 
 		WIKILINK.lastIndex = 0;
-		const frag = doc.createDocumentFragment();
+		const frag = createFragment();
 		let lastIndex = 0;
 		let match: RegExpExecArray | null;
 		while ((match = WIKILINK.exec(text)) !== null) {
@@ -37,7 +37,7 @@ export function linkifyWikilinks(root: HTMLElement): void {
 			if (match.index > lastIndex) {
 				frag.appendChild(doc.createTextNode(text.slice(lastIndex, match.index)));
 			}
-			const anchor = doc.createElement('a');
+			const anchor = createEl('a');
 			anchor.className = 'internal-link';
 			anchor.setAttribute('data-href', target.trim());
 			anchor.setAttribute('href', target.trim());
@@ -84,7 +84,7 @@ export async function renderMermaidBlocks(root: HTMLElement): Promise<number> {
 		try {
 			const id = `ia-mermaid-${mermaidIdCounter++}`;
 			const { svg } = await mermaid.render(id, code);
-			const container = doc.createElement('div');
+			const container = createDiv();
 			container.className = 'ia-mermaid';
 			// Parse the SVG string into a real node tree rather than assigning
 			// innerHTML, so we never write untrusted markup to the DOM directly.

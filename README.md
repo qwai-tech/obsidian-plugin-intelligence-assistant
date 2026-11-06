@@ -6,7 +6,7 @@
 
 <p>
   <a href="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml"><img src="https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/actions/workflows/ci-cd.yml/badge.svg?branch=main" alt="Build and Publish workflow status"></a>
-  <a href="docs/releases/0.1.0.md"><img src="https://img.shields.io/badge/source-0.1.0-7C3AED" alt="Source version 0.1.0"></a>
+  <a href="docs/releases/0.1.1.md"><img src="https://img.shields.io/badge/source-0.1.1-7C3AED" alt="Source version 0.1.1"></a>
   <img src="https://img.shields.io/badge/Obsidian-1.13%2B-7C3AED" alt="Requires Obsidian 1.13 or later">
   <img src="https://img.shields.io/badge/locales-49-0F766E" alt="49 bundled UI locales">
 </p>
@@ -58,7 +58,7 @@ Actual Obsidian captures. [Screenshot provenance and validation scope](docs/imag
 2. Find **Intelligence Assistant**, install it and enable it.
 3. Check **Settings → Intelligence Assistant → General** for the installed version.
 
-The plugin is listed in the [official community registry](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json). Community installation uses published release assets; it may install a different version from this checkout. See [Releases](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases) for published assets and the [0.1.0 record](docs/releases/0.1.0.md) for publication status and validation scope.
+The plugin is listed in the [official community registry](https://github.com/obsidianmd/obsidian-releases/blob/master/community-plugins.json). Community installation uses published release assets; it may install a different version from this checkout. See [Releases](https://github.com/qwai-tech/obsidian-plugin-intelligence-assistant/releases) for published assets, the [0.1.1 notes](docs/releases/0.1.1.md) for cumulative changes including 0.1.0, and the [0.1.0 record](docs/releases/0.1.0.md) for its original validation scope.
 
 ### From source or release files
 

@@ -52,7 +52,7 @@ export class CLIToolPresetModal extends Modal {
 
 				const infoDiv = presetDiv.createDiv();
 				infoDiv.createEl('strong', { text: t(`settings.tools.cli.presets.names.${preset.id}`, { defaultValue: preset.name }) });
-				infoDiv.createEl('div', {
+				infoDiv.createDiv({
 					text: preset.config.description,
 					cls: 'ia-table-subtext'
 				});
@@ -93,7 +93,7 @@ export class CLIToolPresetModal extends Modal {
 			...preset.config,
 			id,
 			enabled: false // Start disabled so user can review
-		} as CLIToolConfig;
+		};
 
 		await this.plugin.updateSettings((settings) => {
 			settings.cliTools.push(newConfig);

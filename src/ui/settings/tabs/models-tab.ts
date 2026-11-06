@@ -202,7 +202,7 @@ export function displayModelsTab(
 		};
 
 		(model.capabilities ?? []).forEach(cap => {
-			const badge = capsDiv.createEl('span', { text: cap });
+			const badge = capsDiv.createSpan({ text: cap });
 			badge.addClass('ia-tag');
 			badge.addClass('ia-tag--dyn-bg');
 			badge.setCssProps({ '--ia-badge-bg': capabilityColors[cap] || 'var(--background-modifier-border)' });

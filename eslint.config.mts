@@ -157,6 +157,7 @@ export default defineConfig([
 
       "eslint-comments/no-unused-disable": "error",
       "eslint-comments/require-description": "error",
+      "eslint-comments/no-restricted-disable": ["error", "obsidianmd/prefer-window-timers", "@typescript-eslint/no-deprecated"],
       "eslint-comments/disable-enable-pair": "error",
       "@typescript-eslint/no-redundant-type-constituents": "error",
 

@@ -131,5 +131,5 @@ function replaceContents(target: PluginSettings, source: PluginSettings): Plugin
 }
 
 function asLegacySettings(data: unknown): Partial<PluginSettings> | null {
-	return data && typeof data === 'object' ? data as Partial<PluginSettings> : null;
+	return data && typeof data === 'object' ? data : null;
 }

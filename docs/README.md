@@ -1,6 +1,6 @@
 # Intelligence Assistant documentation
 
-Current source version: **0.1.0**. Published assets, source preparation and test evidence have separate version scopes; start with the [status record](releases/0.1.0.md).
+Current source version: **0.1.1**. Start with the [cumulative release notes](releases/0.1.1.md) and [changelog](../CHANGELOG.md). Published assets, source preparation and test evidence have separate version scopes.
 
 ## Current guides
 
@@ -14,6 +14,7 @@ Current source version: **0.1.0**. Published assets, source preparation and test
 | [Source map](reference/project-structure.md) | Directory ownership and selected entry points |
 | [Testing](reference/testing.md) | Real versus mock routes, frozen-bundle gates and CI |
 | [Performance](reference/performance.md) | Separately scoped current artifact measurements and historical notes |
+| [0.1.1 notes](releases/0.1.1.md) | Patch changes, the inherited 0.1.0 change list and automatic release-note generation |
 | [0.1.0 status](releases/0.1.0.md) | Changes, actual validation scope, exclusions and publication state |
 
 ## Decisions and preparation records

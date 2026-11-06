@@ -154,5 +154,5 @@ function createDefaultCLIToolConfig(): CLIToolConfig {
 		description: 'A command-line tool',
 		command: '',
 		enabled: false
-	} as CLIToolConfig;
+	};
 }

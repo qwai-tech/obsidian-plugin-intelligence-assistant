@@ -78,12 +78,15 @@ The current instruction is to update documentation and push normally **without C
 
 The skip marker does not disable independently triggered checks. GitHub's dynamic CodeQL workflow can still perform static analysis on the pushed commit; it does not run the repository's mock suites or publish the plugin. Inspect workflow identity and jobs before classifying a remote run.
 
+Starting with the 0.1.1 preparation, the publisher also requires a nonempty entry for the manifest version in `CHANGELOG.md`. `scripts/release-notes.js` renders that entry into the Release body and appends installation, assets, verification scope and actual CI source/run identity. The 0.1.1 entry explicitly contains the complete inherited 0.1.0 change list. A missing entry or a mismatched release version fails before publication; the workflow passes the generated file through `body_path`.
+
 ## Test locations and useful rules
 
 - `src/**/__tests__/`, `packages/obsidian-llm/src/__tests__/`: unit tests.
 - `tests/harness/`, `tests/missions/`, `tests/perf/`, `tests/mutation/`: deterministic/mock infrastructure and checks.
 - [E2E guide](../../tests/e2e/README.md): actual host fixtures, page objects, release cases and diagnostics.
 - [Real script notes](../../tests/real/README.txt): real filesystem/process/network experiments and captured-evidence audits.
+- [Obsidian source-review record](obsidian-review.md): corrected review findings and retained capability notices; `node tests/real/source-review.mjs` runs focused real timer/process checks without credentials or model calls.
 
 Use specific observable outcomes and persisted state, not merely a completion sentence. Preserve failed attempts as failed evidence. Distinguish an actual new service call, a real process/file operation and a replay of captured data. For settings assertions, use current `data.json`; the legacy template is migrated during startup. The count guard does not certify arbitrary prose/numbers, and a screenshot does not substitute for an execution or artifact oracle.
 
